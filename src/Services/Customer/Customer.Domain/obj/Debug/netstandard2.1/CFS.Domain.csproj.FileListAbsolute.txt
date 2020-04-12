@@ -1,0 +1,8 @@
+D:\Code\GitCode\myeshop\src\Services\Customer\Customer.Domain\bin\Debug\netstandard2.1\CFS.Domain.deps.json
+D:\Code\GitCode\myeshop\src\Services\Customer\Customer.Domain\bin\Debug\netstandard2.1\CFS.Domain.dll
+D:\Code\GitCode\myeshop\src\Services\Customer\Customer.Domain\bin\Debug\netstandard2.1\CFS.Domain.pdb
+D:\Code\GitCode\myeshop\src\Services\Customer\Customer.Domain\obj\Debug\netstandard2.1\CFS.Domain.AssemblyInfoInputs.cache
+D:\Code\GitCode\myeshop\src\Services\Customer\Customer.Domain\obj\Debug\netstandard2.1\CFS.Domain.AssemblyInfo.cs
+D:\Code\GitCode\myeshop\src\Services\Customer\Customer.Domain\obj\Debug\netstandard2.1\CFS.Domain.dll
+D:\Code\GitCode\myeshop\src\Services\Customer\Customer.Domain\obj\Debug\netstandard2.1\CFS.Domain.pdb
+D:\Code\GitCode\myeshop\src\Services\Customer\Customer.Domain\obj\Debug\netstandard2.1\CFS.Domain.csprojAssemblyReference.cache
