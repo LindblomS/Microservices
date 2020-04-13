@@ -1,7 +1,0 @@
-D:\Code\GitCode\myeshop\src\Services\Customer\Customer.Domain\bin\Debug\netstandard2.1\Customer.Domain.deps.json
-D:\Code\GitCode\myeshop\src\Services\Customer\Customer.Domain\bin\Debug\netstandard2.1\Customer.Domain.dll
-D:\Code\GitCode\myeshop\src\Services\Customer\Customer.Domain\bin\Debug\netstandard2.1\Customer.Domain.pdb
-D:\Code\GitCode\myeshop\src\Services\Customer\Customer.Domain\obj\Debug\netstandard2.1\Customer.Domain.AssemblyInfoInputs.cache
-D:\Code\GitCode\myeshop\src\Services\Customer\Customer.Domain\obj\Debug\netstandard2.1\Customer.Domain.AssemblyInfo.cs
-D:\Code\GitCode\myeshop\src\Services\Customer\Customer.Domain\obj\Debug\netstandard2.1\Customer.Domain.dll
-D:\Code\GitCode\myeshop\src\Services\Customer\Customer.Domain\obj\Debug\netstandard2.1\Customer.Domain.pdb
