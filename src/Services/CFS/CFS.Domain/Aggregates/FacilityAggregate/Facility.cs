@@ -12,15 +12,18 @@ namespace CFS.Domain.Aggregates.FacilityAggregate
 {
     public class Facility : Entity, IAggregateRoot
     {
+        private int _customerId;
         private Address _address;
         private List<Service> _services;
 
+        public int CustomerId => _customerId;
         public Address Address => _address;
         public IReadOnlyList<Service> Services => _services;
 
-        public Facility(int id, Address address)
+        public Facility(int facilityId, int customerId, Address address)
         {
-            Id = id;
+            Id = facilityId;
+            _customerId = customerId;
             _address = address ?? throw new ArgumentNullException(nameof(address));
             _services = new List<Service>();
         }

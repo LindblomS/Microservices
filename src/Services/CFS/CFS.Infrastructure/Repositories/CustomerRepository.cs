@@ -2,6 +2,7 @@
 using CFS.Domain.SeedWork;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CFS.Infrastructure.Repositories
 {
@@ -15,7 +16,7 @@ namespace CFS.Infrastructure.Repositories
             _context = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
         }
 
-        public void Add(Customer customer)
+        public async Task Add(Customer customer)
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendLine("INSERT INTO CFS.Customers (firstName, lastName, phoneNumber, email, street, city, state, country, zipCode)");
@@ -30,16 +31,16 @@ namespace CFS.Infrastructure.Repositories
                 customer.Address.Country, 
                 customer.Address.ZipCode));
 
-            _context.Execute(sql.ToString());
+            await _context.ExecuteAsync(sql.ToString());
         }
 
-        public Customer GetCustomer(int customerId)
+        public async Task<Customer> GetCustomer(int customerId)
         {
             var sql = $"SELECT * FROM CFS.Customers WHERE customerId = {customerId}";
-            return _context.Query<Customer>(sql);
+            return await _context.QueryAsync<Customer>(sql);
         }
 
-        public void Update(Customer customer)
+        public async Task Update(Customer customer)
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendLine("UPDATE CFS.Customers SET");
@@ -55,7 +56,7 @@ namespace CFS.Infrastructure.Repositories
 
             sql.AppendLine($"WHERE customerId = {customer.Id}");
 
-            _context.Execute(sql.ToString());
+            await _context.ExecuteAsync(sql.ToString());
         }
     }
 }

@@ -5,8 +5,8 @@ namespace CFS.Domain.Aggregates.CustomerAggregate
 {
     public interface ICustomerRepository : IRepository<Customer>
     {
-        void Add(Customer customer);
-        void Update(Customer customer);
-        Customer GetCustomer(int customerId);
+        Task Add(Customer customer);
+        Task Update(Customer customer);
+        Task<Customer> GetCustomer(int customerId);
     }
 }

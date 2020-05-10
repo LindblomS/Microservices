@@ -2,6 +2,7 @@
 using CFS.Domain.SeedWork;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CFS.Infrastructure.Repositories
 {
@@ -15,33 +16,35 @@ namespace CFS.Infrastructure.Repositories
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public void Add(Service service)
+        public async Task Add(Service service)
         {
             StringBuilder sql = new StringBuilder();
-            sql.AppendLine("INSERT INTO CFS.Services (startDate, stopDate)");
-            sql.AppendLine(string.Format("VALUES ('{0}', '{1}')",
+            sql.AppendLine("INSERT INTO CFS.Services (facilityId, startDate, stopDate)");
+            sql.AppendLine(string.Format("VALUES ('{0}', '{1}', '{2}')",
+                service.FacilityId,
                 service.StartDate,
                 service.StopDate));
 
-            _context.Execute(sql.ToString());
+            await _context.ExecuteAsync(sql.ToString());
         }
 
-        public void Update(Service service)
+        public async Task Update(Service service)
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendLine("UPDATE CFS.Services SET");
+            sql.AppendLine($"facilityId = {service.FacilityId}");
             sql.AppendLine($"startDate = '{service.StartDate}'");
             sql.AppendLine($"stopDate = '{service.StopDate}'");
 
             sql.AppendLine($"WHERE serviceId = {service.Id}");
 
-            _context.Execute(sql.ToString());
+            await _context.ExecuteAsync(sql.ToString());
         }
 
-        public Service GetService(int serviceId)
+        public async Task<Service> GetService(int serviceId)
         {
             var sql = $"SELECT * FROM CFS.Services WHERE serviceId = {serviceId}";
-            return _context.Query<Service>(sql);
+            return await _context.QueryAsync<Service>(sql);
         }
     }
 }

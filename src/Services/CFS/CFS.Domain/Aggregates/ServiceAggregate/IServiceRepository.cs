@@ -5,8 +5,8 @@ namespace CFS.Domain.Aggregates.ServiceAggregate
 {
     public interface IServiceRepository : IRepository<Service>
     {
-        void Add(Service service);
-        void Update(Service service);
-        Service GetService(int serviceId);
+        Task Add(Service service);
+        Task Update(Service service);
+        Task<Service> GetService(int serviceId);
     }
 }

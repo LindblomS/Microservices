@@ -2,6 +2,7 @@
 using CFS.Domain.SeedWork;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CFS.Infrastructure.Repositories
 {
@@ -15,24 +16,26 @@ namespace CFS.Infrastructure.Repositories
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public void Add(Facility facility)
+        public async Task Add(Facility facility)
         {
             StringBuilder sql = new StringBuilder();
-            sql.AppendLine("INSERT INTO CFS.Facilities (street, city, state, country, zipCode)");
-            sql.AppendLine(string.Format("VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')", 
+            sql.AppendLine("INSERT INTO CFS.Facilities (customerId, street, city, state, country, zipCode)");
+            sql.AppendLine(string.Format("VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')", 
+                facility.CustomerId,
                 facility.Address.Street,
                 facility.Address.City,
                 facility.Address.State,
                 facility.Address.Country,
                 facility.Address.ZipCode));
 
-            _context.Execute(sql.ToString());
+            await _context.ExecuteAsync(sql.ToString());
         }
 
-        public void Update(Facility facility)
+        public async Task Update(Facility facility)
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendLine("UPDATE CFS.Facilities SET");
+            sql.AppendLine($"customerId = '{facility.CustomerId}'");
             sql.AppendLine($"street = '{facility.Address.Street}'");
             sql.AppendLine($"city = '{facility.Address.City}'");
             sql.AppendLine($"state = '{facility.Address.State}'");
@@ -41,13 +44,13 @@ namespace CFS.Infrastructure.Repositories
 
             sql.AppendLine($"WHERE facilityId = {facility.Id}");
 
-            _context.Execute(sql.ToString());
+            await _context.ExecuteAsync(sql.ToString());
         }
 
-        public Facility GetFacility(int facilityId)
+        public async Task<Facility> GetFacility(int facilityId)
         {
             var sql = $"SELECT * FROM CFS.Facilities WHERE facilityId = {facilityId}";
-            return _context.Query<Facility>(sql);
+            return await _context.QueryAsync<Facility>(sql);
         }
     }
 }

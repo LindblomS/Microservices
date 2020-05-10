@@ -42,7 +42,7 @@ namespace Ordering.API.Application.Behaviours
                 }
 
                 var strategy = _orderingContext.Database.CreateExecutionStrategy();
-
+                
                 await strategy.ExecuteAsync(async () =>
                 {
                     Guid transactionId;

@@ -41,6 +41,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CFS.Domain", "Services\CFS\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CFS.Infrastructure", "Services\CFS\CFS.Infrastructure\CFS.Infrastructure.csproj", "{CCFDEF6F-2396-4289-83CB-6AFF3F5DE59F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFS.Application", "Services\CFS\CFS.Application\CFS.Application.csproj", "{A5FAB1DE-4439-435A-A0A8-A744DA7ED05F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{CCFDEF6F-2396-4289-83CB-6AFF3F5DE59F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCFDEF6F-2396-4289-83CB-6AFF3F5DE59F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCFDEF6F-2396-4289-83CB-6AFF3F5DE59F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5FAB1DE-4439-435A-A0A8-A744DA7ED05F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5FAB1DE-4439-435A-A0A8-A744DA7ED05F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5FAB1DE-4439-435A-A0A8-A744DA7ED05F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5FAB1DE-4439-435A-A0A8-A744DA7ED05F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,6 +114,7 @@ Global
 		{42989639-692E-4E5D-94AE-7DACB25B74D7} = {B1886BA9-B85A-48D9-A7FC-ECA73C0E70AB}
 		{058899BE-5D75-4177-8B21-6CB795E6F9A1} = {B1886BA9-B85A-48D9-A7FC-ECA73C0E70AB}
 		{CCFDEF6F-2396-4289-83CB-6AFF3F5DE59F} = {B1886BA9-B85A-48D9-A7FC-ECA73C0E70AB}
+		{A5FAB1DE-4439-435A-A0A8-A744DA7ED05F} = {B1886BA9-B85A-48D9-A7FC-ECA73C0E70AB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1D4A3E-BC3E-4F19-BCB1-8FF69F3FCCDD}

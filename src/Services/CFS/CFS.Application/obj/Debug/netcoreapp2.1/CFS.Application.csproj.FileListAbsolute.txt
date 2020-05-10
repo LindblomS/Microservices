@@ -1,0 +1,11 @@
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\bin\Debug\netcoreapp2.1\Properties\launchSettings.json
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\bin\Debug\netcoreapp2.1\CFS.Application.deps.json
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\bin\Debug\netcoreapp2.1\CFS.Application.runtimeconfig.json
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\bin\Debug\netcoreapp2.1\CFS.Application.runtimeconfig.dev.json
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\bin\Debug\netcoreapp2.1\CFS.Application.dll
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\obj\Debug\netcoreapp2.1\CFS.Application.csprojAssemblyReference.cache
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\obj\Debug\netcoreapp2.1\CFS.Application.RazorAssemblyInfo.cache
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\obj\Debug\netcoreapp2.1\CFS.Application.RazorAssemblyInfo.cs
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\obj\Debug\netcoreapp2.1\CFS.Application.AssemblyInfoInputs.cache
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\obj\Debug\netcoreapp2.1\CFS.Application.AssemblyInfo.cs
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\obj\Debug\netcoreapp2.1\CFS.Application.RazorTargetAssemblyInfo.cache

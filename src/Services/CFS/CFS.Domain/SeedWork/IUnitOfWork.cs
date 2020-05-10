@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Data;
-using System.Threading;
+using System.Data.Common;
 using System.Threading.Tasks;
 
 namespace CFS.Domain.SeedWork
 {
     public interface IUnitOfWork : IDisposable
     {
-        void CommitTransaction(IDbTransaction transaction);
+        IDbTransaction BeginTransaction();
+        Task<bool> CommitTransaction(IDbTransaction transaction);
+        bool HasActiveTransaction();
     }
 }

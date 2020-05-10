@@ -4,49 +4,65 @@ using System;
 using System.Data;
 using Dapper;
 using CFS.Domain.Aggregates.CustomerAggregate;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Data.Common;
 
 namespace CFS.Infrastructure
 {
     public class DataContext : IUnitOfWork
     {
-        private readonly IMediator _mediator;
         private IDbTransaction _currentTransaction;
         private readonly IConnectionFactory _connectionFactory;
         private bool _disposed;
 
-        public DataContext(IMediator mediator, IConnectionFactory connectionFactory)
+        public DataContext(IConnectionFactory connectionFactory)
         {
-            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
         }
 
-        public int Execute(string sql)
+        public async Task<int> ExecuteAsync(string sql)
         {
-            var affectedRows =_currentTransaction.Connection.Execute(sql);
+            if (_currentTransaction == null) throw new InvalidOperationException($"Transaction is null");
+
+            var affectedRows = await _currentTransaction.Connection.ExecuteAsync(sql);
             return affectedRows;
         }
 
-        public T Query<T>(string sql)
+        public async Task<List<T>> ListQueryAsync<T>(string sql)
         {
-            T result = default(T);
-
             try
             {
                 using (var connection = _connectionFactory.GetConnection())
                 {
-                    result = (T)connection.Query<T>(sql);
-
+                    List<T> result = (List<T>)await connection.QueryAsync<List<T>>(sql);
+                    return result;
                 }
             }
             catch (Exception)
             {
                 // Log exception
+                return new List<T>();
             }
-
-            return result;
         }
 
-        public IDbTransaction GetCurrentTransaction() => _currentTransaction;
+        public async Task<T> QueryAsync<T>(string sql)
+        {
+            try
+            {
+                using (var connection = _connectionFactory.GetConnection())
+                {
+                    T result = (T)await connection.QueryAsync<T>(sql);
+                    return result;
+                }
+            }
+            catch (Exception)
+            {
+                // Log exception
+                return default(T);
+            }
+        }
+
         public bool HasActiveTransaction() => _currentTransaction != null;
 
         public IDbTransaction BeginTransaction()
@@ -56,18 +72,21 @@ namespace CFS.Infrastructure
             return _currentTransaction;
         }
 
-        public void CommitTransaction(IDbTransaction transaction)
+        public async Task<bool> CommitTransaction(IDbTransaction transaction)
         {
             if (transaction == null) throw new ArgumentNullException(nameof(transaction));
             if (transaction != _currentTransaction) throw new InvalidOperationException($"Transaction is not current");
+            bool success;
 
             try
             {
-                transaction.Commit();
+                await ((DbTransaction)transaction).CommitAsync();
+                success = true;
             }
             catch
             {
                 RollbackTransaction();
+                success = false;
                 throw;
             }
             finally
@@ -78,6 +97,8 @@ namespace CFS.Infrastructure
                     _currentTransaction = null;
                 }
             }
+
+            return success;
         }
 
         public void RollbackTransaction()
