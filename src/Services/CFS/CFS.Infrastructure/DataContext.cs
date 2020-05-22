@@ -10,9 +10,8 @@ using System.Data.Common;
 
 namespace CFS.Infrastructure
 {
-    public class DataContext : IUnitOfWork
+    public class DataContext
     {
-        private IDbTransaction _currentTransaction;
         private readonly IConnectionFactory _connectionFactory;
         private bool _disposed;
 
@@ -23,9 +22,7 @@ namespace CFS.Infrastructure
 
         public async Task<int> ExecuteAsync(string sql)
         {
-            if (_currentTransaction == null) throw new InvalidOperationException($"Transaction is null");
-
-            var affectedRows = await _currentTransaction.Connection.ExecuteAsync(sql);
+            var affectedRows = await _connectionFactory.GetConnection().ExecuteAsync(sql);
             return affectedRows;
         }
 
@@ -61,79 +58,6 @@ namespace CFS.Infrastructure
                 // Log exception
                 return default(T);
             }
-        }
-
-        public bool HasActiveTransaction() => _currentTransaction != null;
-
-        public IDbTransaction BeginTransaction()
-        {
-            if (_currentTransaction != null) return null;
-            _currentTransaction = _connectionFactory.GetConnection().BeginTransaction();
-            return _currentTransaction;
-        }
-
-        public async Task<bool> CommitTransaction(IDbTransaction transaction)
-        {
-            if (transaction == null) throw new ArgumentNullException(nameof(transaction));
-            if (transaction != _currentTransaction) throw new InvalidOperationException($"Transaction is not current");
-            bool success;
-
-            try
-            {
-                await ((DbTransaction)transaction).CommitAsync();
-                success = true;
-            }
-            catch
-            {
-                RollbackTransaction();
-                success = false;
-                throw;
-            }
-            finally
-            {
-                if (_currentTransaction != null)
-                {
-                    _currentTransaction.Dispose();
-                    _currentTransaction = null;
-                }
-            }
-
-            return success;
-        }
-
-        public void RollbackTransaction()
-        {
-            try
-            {
-                _currentTransaction?.Rollback();
-            }
-            finally
-            {
-                if (_currentTransaction != null)
-                {
-                    _currentTransaction.Dispose();
-                    _currentTransaction = null;
-                }
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void Dispose(bool disposing)
-        {
-            if (_disposed)
-                return;
-
-            if (disposing)
-            {
-                _currentTransaction?.Dispose();
-            }
-
-            _disposed = true;
         }
     }
 }

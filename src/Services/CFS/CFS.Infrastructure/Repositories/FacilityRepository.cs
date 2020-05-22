@@ -9,7 +9,6 @@ namespace CFS.Infrastructure.Repositories
     public class FacilityRepository : IFacilityRepository
     {
         private readonly DataContext _context;
-        public IUnitOfWork UnitOfWork => _context;
 
         public FacilityRepository(DataContext context)
         {
@@ -51,6 +50,12 @@ namespace CFS.Infrastructure.Repositories
         {
             var sql = $"SELECT * FROM CFS.Facilities WHERE facilityId = {facilityId}";
             return await _context.QueryAsync<Facility>(sql);
+        }
+
+        public async Task Delete(int facilityId)
+        {
+            string sql = $"DELETE FROM CFS.Facilities WHERE facilityId = {facilityId}";
+            await _context.ExecuteAsync(sql);
         }
     }
 }

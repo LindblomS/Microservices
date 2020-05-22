@@ -4,7 +4,6 @@ using CFS.Domain.Aggregates.SharedValueObjects;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,13 +12,11 @@ namespace CFS.Application.Application.Commands.CommandHandlers
     public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, bool>
     {
         private readonly ICustomerRepository _repository;
-        private readonly IMediator _mediator;
         private readonly ILogger<CreateCustomerCommandHandler> _logger;
 
-        public CreateCustomerCommandHandler(ICustomerRepository repository, IMediator mediator, ILogger<CreateCustomerCommandHandler> logger)
+        public CreateCustomerCommandHandler(ICustomerRepository repository, ILogger<CreateCustomerCommandHandler> logger)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -34,17 +31,18 @@ namespace CFS.Application.Application.Commands.CommandHandlers
 
             var customer = new Customer(-1, request.FirstName, request.LastName, request.PhoneNumber, request.Email, address);
 
-            _logger.LogInformation("----- Creating Order - Order: {order}", customer);
+            _logger.LogInformation("----- Creating customer - Customer: {customer}", customer);
 
-            IDbTransaction transaction = null;
-
-            while (!_repository.UnitOfWork.HasActiveTransaction())
+            try
             {
-                 transaction = _repository.UnitOfWork.BeginTransaction();
+                await _repository.Add(customer);
+                return true;
             }
-
-            await _repository.Add(customer);
-            return await _repository.UnitOfWork.CommitTransaction(transaction);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ERROR creating customer: {AppName} - ({@Customer})", Program.AppName, customer);
+                return false;
+            }
         }
     }
 }

@@ -9,7 +9,6 @@ namespace CFS.Infrastructure.Repositories
     public class ServiceRepository : IServiceRepository
     {
         private readonly DataContext _context;
-        public IUnitOfWork UnitOfWork => _context;
 
         public ServiceRepository(DataContext context)
         {
@@ -45,6 +44,12 @@ namespace CFS.Infrastructure.Repositories
         {
             var sql = $"SELECT * FROM CFS.Services WHERE serviceId = {serviceId}";
             return await _context.QueryAsync<Service>(sql);
+        }
+
+        public async Task Delete(int serviceId)
+        {
+            string sql = $"DELETE FROM CFS.Services WHERE serviceId = {serviceId}";
+            await _context.ExecuteAsync(sql);
         }
     }
 }

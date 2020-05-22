@@ -7,6 +7,7 @@ namespace CFS.Domain.Aggregates.FacilityAggregate
     {
         Task Add(Facility facility);
         Task Update(Facility facility);
+        Task Delete(int facilityId);
         Task<Facility> GetFacility(int facilityId);
     }
 }

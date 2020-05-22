@@ -8,7 +8,7 @@ namespace CFS.Application.Application.Commands.Commands
     public class UpdateCustomerCommand : IRequest<bool>
     {
         [DataMember]
-        public int Id { get; private set; }
+        public int CustomerId { get; private set; }
 
         [DataMember]
         public string FirstName { get; private set; }

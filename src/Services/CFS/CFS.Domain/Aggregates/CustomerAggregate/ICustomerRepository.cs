@@ -7,6 +7,7 @@ namespace CFS.Domain.Aggregates.CustomerAggregate
     {
         Task Add(Customer customer);
         Task Update(Customer customer);
+        Task Delete(int customerId);
         Task<Customer> GetCustomer(int customerId);
     }
 }

@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 
 namespace CFS.Domain.SeedWork
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork
     {
-        IDbTransaction BeginTransaction();
-        Task<bool> CommitTransaction(IDbTransaction transaction);
-        bool HasActiveTransaction();
+
     }
 }
