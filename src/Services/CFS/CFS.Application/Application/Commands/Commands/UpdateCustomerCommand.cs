@@ -25,9 +25,9 @@ namespace CFS.Application.Application.Commands.Commands
         [DataMember]
         public Address Address { get; private set; }
 
-        public UpdateCustomerCommand(int id, string firstName, string lastName, string phoneNumber, string email, Address address)
+        public UpdateCustomerCommand(int customerId, string firstName, string lastName, string phoneNumber, string email, Address address)
         {
-            Id = id;
+            CustomerId = customerId;
             FirstName = firstName;
             LastName = lastName;
             PhoneNumber = phoneNumber;

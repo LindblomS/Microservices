@@ -13,14 +13,13 @@ namespace CFS.Infrastructure
     public class DataContext
     {
         private readonly IConnectionFactory _connectionFactory;
-        private bool _disposed;
 
         public DataContext(IConnectionFactory connectionFactory)
         {
             _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
         }
 
-        public async Task<int> ExecuteAsync(string sql)
+        public async Task<int> ExecuteNonQueryAsync(string sql)
         {
             var affectedRows = await _connectionFactory.GetConnection().ExecuteAsync(sql);
             return affectedRows;

@@ -1,5 +1,4 @@
 ﻿using CFS.Domain.Aggregates.ServiceAggregate;
-using CFS.Domain.SeedWork;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,7 +23,7 @@ namespace CFS.Infrastructure.Repositories
                 service.StartDate,
                 service.StopDate));
 
-            await _context.ExecuteAsync(sql.ToString());
+            await _context.ExecuteNonQueryAsync(sql.ToString());
         }
 
         public async Task Update(Service service)
@@ -37,7 +36,7 @@ namespace CFS.Infrastructure.Repositories
 
             sql.AppendLine($"WHERE serviceId = {service.Id}");
 
-            await _context.ExecuteAsync(sql.ToString());
+            await _context.ExecuteNonQueryAsync(sql.ToString());
         }
 
         public async Task<Service> GetService(int serviceId)
@@ -49,7 +48,7 @@ namespace CFS.Infrastructure.Repositories
         public async Task Delete(int serviceId)
         {
             string sql = $"DELETE FROM CFS.Services WHERE serviceId = {serviceId}";
-            await _context.ExecuteAsync(sql);
+            await _context.ExecuteNonQueryAsync(sql);
         }
     }
 }

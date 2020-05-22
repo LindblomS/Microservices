@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace CFS.Domain.Aggregates.ServiceAggregate
 {
-    public interface IServiceRepository : IRepository<Service>
+    public interface IServiceRepository
     {
         Task Add(Service service);
         Task Update(Service service);

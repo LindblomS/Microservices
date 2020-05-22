@@ -1,5 +1,4 @@
 ﻿using CFS.Domain.Aggregates.FacilityAggregate;
-using CFS.Domain.SeedWork;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +26,7 @@ namespace CFS.Infrastructure.Repositories
                 facility.Address.Country,
                 facility.Address.ZipCode));
 
-            await _context.ExecuteAsync(sql.ToString());
+            await _context.ExecuteNonQueryAsync(sql.ToString());
         }
 
         public async Task Update(Facility facility)
@@ -43,7 +42,7 @@ namespace CFS.Infrastructure.Repositories
 
             sql.AppendLine($"WHERE facilityId = {facility.Id}");
 
-            await _context.ExecuteAsync(sql.ToString());
+            await _context.ExecuteNonQueryAsync(sql.ToString());
         }
 
         public async Task<Facility> GetFacility(int facilityId)
@@ -55,7 +54,7 @@ namespace CFS.Infrastructure.Repositories
         public async Task Delete(int facilityId)
         {
             string sql = $"DELETE FROM CFS.Facilities WHERE facilityId = {facilityId}";
-            await _context.ExecuteAsync(sql);
+            await _context.ExecuteNonQueryAsync(sql);
         }
     }
 }

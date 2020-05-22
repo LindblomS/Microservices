@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace CFS.Domain.Aggregates.FacilityAggregate
 {
-    public interface IFacilityRepository : IRepository<Facility>
+    public interface IFacilityRepository
     {
         Task Add(Facility facility);
         Task Update(Facility facility);

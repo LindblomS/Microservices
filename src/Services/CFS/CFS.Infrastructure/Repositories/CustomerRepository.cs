@@ -1,5 +1,4 @@
 ﻿using CFS.Domain.Aggregates.CustomerAggregate;
-using CFS.Domain.SeedWork;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +29,7 @@ namespace CFS.Infrastructure.Repositories
                 customer.Address.Country, 
                 customer.Address.ZipCode));
 
-            await _context.ExecuteAsync(sql.ToString());
+            await _context.ExecuteNonQueryAsync(sql.ToString());
         }
 
         public async Task<Customer> GetCustomer(int customerId)
@@ -55,13 +54,13 @@ namespace CFS.Infrastructure.Repositories
 
             sql.AppendLine($"WHERE customerId = {customer.Id}");
 
-            await _context.ExecuteAsync(sql.ToString());
+            await _context.ExecuteNonQueryAsync(sql.ToString());
         }
 
         public async Task Delete(int customerId)
         {
             string sql = $"DELETE FROM CFS.Customers WHERE customerId = {customerId}";
-            await _context.ExecuteAsync(sql);
+            await _context.ExecuteNonQueryAsync(sql);
         }
     }
 }
