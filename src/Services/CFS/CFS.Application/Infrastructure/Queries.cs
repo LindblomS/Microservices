@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CFS.Application.Infrastructure
+namespace Application.Infrastructure
 {
     public class Queries : IQueries
     {
@@ -18,51 +18,51 @@ namespace CFS.Application.Infrastructure
 
         public async Task<CustomerViewModel> GetCustomer(int customerId)
         {
-            var sql = $"SELECT * FROM CFS.Customers WHERE customerId = {customerId}";
+            var sql = $"SELECT * FROM Customers WHERE customerId = {customerId}";
             return await _context.QueryAsync<CustomerViewModel>(sql);
         }
 
         public async Task<List<CustomerViewModel>> GetCustomers()
         {
-            var sql = $"SELECT * FROM CFS.Customers";
+            var sql = $"SELECT * FROM Customers";
             return await _context.ListQueryAsync<CustomerViewModel>(sql);
         }
 
         public async Task<List<FacilityViewModel>> GetFacilities()
         {
-            var sql = $"SELECT * FROM CFS.Facilities";
+            var sql = $"SELECT * FROM Facilities";
             return await _context.ListQueryAsync<FacilityViewModel>(sql);
         }
 
         public async Task<List<FacilityViewModel>> GetFacilitiesOnCustomer(int customerId)
         {
-            var sql = $"SELECT * FROM CFS.Facilities WHERE customerId = {customerId}";
+            var sql = $"SELECT * FROM Facilities WHERE customerId = {customerId}";
             return await _context.ListQueryAsync<FacilityViewModel>(sql);
         }
 
         public async Task<FacilityViewModel> GetFacility(int facilityId)
         {
-            var sql = $"SELECT * FROM CFS.Facilities WHERE facilityId = {facilityId}";
+            var sql = $"SELECT * FROM Facilities WHERE facilityId = {facilityId}";
             return await _context.QueryAsync<FacilityViewModel>(sql);
         }
 
         public async Task<ServiceViewModel> GetService(int serviceId)
         {
-            var sql = $"SELECT * FROM CFS.Services WHERE serviceId = {serviceId}";
+            var sql = $"SELECT * FROM Services WHERE serviceId = {serviceId}";
             return await _context.QueryAsync<ServiceViewModel>(sql);
         }
 
         public async Task<List<ServiceViewModel>> GetServices()
         {
-            var sql = $"SELECT * FROM CFS.Services";
+            var sql = $"SELECT * FROM Services";
             return await _context.ListQueryAsync<ServiceViewModel>(sql);
         }
 
         public async Task<List<ServiceViewModel>> GetServicesOnCustomer(int customerId)
         {
             StringBuilder sql = new StringBuilder();
-            sql.AppendLine("SELECT * FROM CFS.Services s");
-            sql.AppendLine("JOIN CFS.Facilities f ON f.facilityId = s.facilityId");
+            sql.AppendLine("SELECT * FROM Services s");
+            sql.AppendLine("JOIN Facilities f ON f.facilityId = s.facilityId");
             sql.AppendLine($"WHERE f.customerId =  {customerId}");
 
             return await _context.ListQueryAsync<ServiceViewModel>(sql.ToString());

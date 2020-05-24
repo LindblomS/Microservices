@@ -52,3 +52,5 @@ D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\obj\Debug\netcoreapp3.1
 D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\obj\Debug\netcoreapp3.1\CFS.Application.csproj.CopyComplete
 D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\obj\Debug\netcoreapp3.1\CFS.Application.dll
 D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\obj\Debug\netcoreapp3.1\CFS.Application.pdb
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\bin\Debug\netcoreapp3.1\Autofac.Extensions.DependencyInjection.dll
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\bin\Debug\netcoreapp3.1\appsettings.json

@@ -17,7 +17,7 @@ namespace CFS.Infrastructure.Repositories
         public async Task Add(Service service)
         {
             StringBuilder sql = new StringBuilder();
-            sql.AppendLine("INSERT INTO CFS.Services (facilityId, startDate, stopDate)");
+            sql.AppendLine("INSERT INTO Services (facilityId, startDate, stopDate)");
             sql.AppendLine(string.Format("VALUES ('{0}', '{1}', '{2}')",
                 service.FacilityId,
                 service.StartDate,
@@ -29,7 +29,7 @@ namespace CFS.Infrastructure.Repositories
         public async Task Update(Service service)
         {
             StringBuilder sql = new StringBuilder();
-            sql.AppendLine("UPDATE CFS.Services SET");
+            sql.AppendLine("UPDATE Services SET");
             sql.AppendLine($"facilityId = {service.FacilityId}");
             sql.AppendLine($"startDate = '{service.StartDate}'");
             sql.AppendLine($"stopDate = '{service.StopDate}'");
@@ -41,13 +41,13 @@ namespace CFS.Infrastructure.Repositories
 
         public async Task<Service> GetService(int serviceId)
         {
-            var sql = $"SELECT * FROM CFS.Services WHERE serviceId = {serviceId}";
+            var sql = $"SELECT * FROM CFS_Services WHERE serviceId = {serviceId}";
             return await _context.QueryAsync<Service>(sql);
         }
 
         public async Task Delete(int serviceId)
         {
-            string sql = $"DELETE FROM CFS.Services WHERE serviceId = {serviceId}";
+            string sql = $"DELETE FROM Services WHERE serviceId = {serviceId}";
             await _context.ExecuteNonQueryAsync(sql);
         }
     }

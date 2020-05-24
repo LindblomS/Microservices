@@ -24,6 +24,7 @@
     ".NETCoreApp,Version=v3.1": {
       "CFS.Application/1.0.0": {
         "dependencies": {
+          "Autofac.Extensions.DependencyInjection": "5.0.1",
           "CFS.Domain": "1.0.0",
           "CFS.Infrastructure": "1.0.0",
           "EventBus": "1.0.0",
@@ -331,6 +332,21 @@
         },
         "compile": {
           "lib/netstandard2.0/Autofac.dll": {}
+        }
+      },
+      "Autofac.Extensions.DependencyInjection/5.0.1": {
+        "dependencies": {
+          "Autofac": "4.9.4",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Autofac.Extensions.DependencyInjection.dll": {
+            "assemblyVersion": "5.0.1.0",
+            "fileVersion": "5.0.1.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/Autofac.Extensions.DependencyInjection.dll": {}
         }
       },
       "Dapper/2.0.35": {
@@ -3020,6 +3036,13 @@
       "sha512": "sha512-dYiDG4yoV7GDCoOc66d1sqMmg2gwDyomHKgATuMfhFzYxVpWEltToHVHXI3I9vOEvIXE55S4OZPY0ldiZmZtpA==",
       "path": "autofac/4.9.4",
       "hashPath": "autofac.4.9.4.nupkg.sha512"
+    },
+    "Autofac.Extensions.DependencyInjection/5.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-92/AmuykrdvaLlE8Y4sc4SlX2RrCeClUqddjNi7cAYsOsVD/jq5JXDP1ZhHSBan4P/o7AKjpxjD/MrPTO0DHRw==",
+      "path": "autofac.extensions.dependencyinjection/5.0.1",
+      "hashPath": "autofac.extensions.dependencyinjection.5.0.1.nupkg.sha512"
     },
     "Dapper/2.0.35": {
       "type": "package",

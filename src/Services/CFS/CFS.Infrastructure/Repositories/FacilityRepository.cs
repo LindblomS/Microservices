@@ -17,7 +17,7 @@ namespace CFS.Infrastructure.Repositories
         public async Task Add(Facility facility)
         {
             StringBuilder sql = new StringBuilder();
-            sql.AppendLine("INSERT INTO CFS.Facilities (customerId, street, city, state, country, zipCode)");
+            sql.AppendLine("INSERT INTO Facilities (customerId, street, city, state, country, zipCode)");
             sql.AppendLine(string.Format("VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')", 
                 facility.CustomerId,
                 facility.Address.Street,
@@ -32,7 +32,7 @@ namespace CFS.Infrastructure.Repositories
         public async Task Update(Facility facility)
         {
             StringBuilder sql = new StringBuilder();
-            sql.AppendLine("UPDATE CFS.Facilities SET");
+            sql.AppendLine("UPDATE Facilities SET");
             sql.AppendLine($"customerId = '{facility.CustomerId}'");
             sql.AppendLine($"street = '{facility.Address.Street}'");
             sql.AppendLine($"city = '{facility.Address.City}'");
@@ -47,13 +47,13 @@ namespace CFS.Infrastructure.Repositories
 
         public async Task<Facility> GetFacility(int facilityId)
         {
-            var sql = $"SELECT * FROM CFS.Facilities WHERE facilityId = {facilityId}";
+            var sql = $"SELECT * FROM Facilities WHERE facilityId = {facilityId}";
             return await _context.QueryAsync<Facility>(sql);
         }
 
         public async Task Delete(int facilityId)
         {
-            string sql = $"DELETE FROM CFS.Facilities WHERE facilityId = {facilityId}";
+            string sql = $"DELETE FROM Facilities WHERE facilityId = {facilityId}";
             await _context.ExecuteNonQueryAsync(sql);
         }
     }

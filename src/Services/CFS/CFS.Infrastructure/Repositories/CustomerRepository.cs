@@ -17,7 +17,7 @@ namespace CFS.Infrastructure.Repositories
         public async Task Add(Customer customer)
         {
             StringBuilder sql = new StringBuilder();
-            sql.AppendLine("INSERT INTO CFS.Customers (firstName, lastName, phoneNumber, email, street, city, state, country, zipCode)");
+            sql.AppendLine("INSERT INTO Customers (firstName, lastName, phoneNumber, email, street, city, state, country, zipCode)");
             sql.AppendLine(string.Format("VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}')", 
                 customer.FirstName,
                 customer.LastName, 
@@ -34,14 +34,14 @@ namespace CFS.Infrastructure.Repositories
 
         public async Task<Customer> GetCustomer(int customerId)
         {
-            var sql = $"SELECT * FROM CFS.Customers WHERE customerId = {customerId}";
+            var sql = $"SELECT * FROM Customers WHERE customerId = {customerId}";
             return await _context.QueryAsync<Customer>(sql);
         }
 
         public async Task Update(Customer customer)
         {
             StringBuilder sql = new StringBuilder();
-            sql.AppendLine("UPDATE CFS.Customers SET");
+            sql.AppendLine("UPDATE Customers SET");
             sql.AppendLine($"firstName = '{customer.FirstName}'");
             sql.AppendLine($"lastName = '{customer.LastName}'");
             sql.AppendLine($"phoneNumber = '{customer.PhoneNumber}'");
@@ -59,7 +59,7 @@ namespace CFS.Infrastructure.Repositories
 
         public async Task Delete(int customerId)
         {
-            string sql = $"DELETE FROM CFS.Customers WHERE customerId = {customerId}";
+            string sql = $"DELETE FROM Customers WHERE customerId = {customerId}";
             await _context.ExecuteNonQueryAsync(sql);
         }
     }

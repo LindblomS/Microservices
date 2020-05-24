@@ -1,34 +1,85 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using EventBusRabbitMQ;
+using Microsoft.Extensions.Logging;
+using EventBus.Abstractions;
+using Autofac;
+using EventBus;
+using Autofac.Extensions.DependencyInjection;
+using CFS.Application.Infrastructure.AutofacModules;
 
 namespace CFS.Application
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
+        public Startup(IConfiguration configuration)
         {
+            Configuration = configuration;
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public IConfiguration Configuration { get; }
+
+        public virtual IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            if (env.IsDevelopment())
+            services
+                .AddEventBus(Configuration)
+                .AddControllers();
+
+            var container = new ContainerBuilder();
+            container.Populate(services);
+            container.RegisterModule(new MediatorModule());
+            container.RegisterModule(new ApplicationModule(Configuration["ConnectionString"]));
+
+            return new AutofacServiceProvider(container.Build());
+        }
+
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        {
+            var pathBase = Configuration["PATH_BASE"];
+            if (!string.IsNullOrEmpty(pathBase))
             {
-                app.UseDeveloperExceptionPage();
+                loggerFactory.CreateLogger<Startup>().LogDebug("Using PATH BASE '{pathBase}'", pathBase);
+                app.UsePathBase(pathBase);
             }
 
-            app.Run(async (context) =>
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
             {
-                await context.Response.WriteAsync("Hello World!");
+                endpoints.MapDefaultControllerRoute();
+                endpoints.MapControllers();
             });
+        }
+    }
+
+    static class CustomExtensionsMethods
+    {
+        public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
+        {
+            var subscriptionClientName = configuration["SubscriptionClientName"];
+
+            services.AddSingleton<IEventBus, EventBusRabbitMQ.EventBusRabbitMQ>(sp =>
+            {
+                var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
+                var lifetimeScope = sp.GetRequiredService<ILifetimeScope>();
+                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ.EventBusRabbitMQ>>();
+                var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+
+                return new EventBusRabbitMQ.EventBusRabbitMQ(
+                    rabbitMQPersistentConnection,
+                    logger,
+                    lifetimeScope,
+                    eventBusSubscriptionsManager,
+                    subscriptionClientName,
+                    0);
+            });
+
+            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+
+            return services;
         }
     }
 }

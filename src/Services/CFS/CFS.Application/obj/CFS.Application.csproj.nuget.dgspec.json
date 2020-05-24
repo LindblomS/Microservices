@@ -302,6 +302,10 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "Autofac.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[5.0.1, )"
+            },
             "FluentValidation": {
               "target": "Package",
               "version": "[8.6.1, )"

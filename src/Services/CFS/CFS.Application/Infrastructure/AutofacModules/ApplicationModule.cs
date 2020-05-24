@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using Application.Infrastructure;
+using Autofac;
 using CFS.Application.Application.Queries;
 using CFS.Domain.Aggregates.CustomerAggregate;
 using CFS.Domain.Aggregates.FacilityAggregate;

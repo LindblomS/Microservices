@@ -7,8 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{E7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Order", "Order", "{91086327-48F5-48AB-8A9A-420381C3B713}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{2D8A0FA6-81E2-460D-AA6E-DD26EDFDE138}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{DCACBDEE-69DA-4153-A460-A546F0ECD151}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering.Domain", "Services\Orders\Ordering.Domain\Ordering.Domain.csproj", "{222503DB-C7D6-4B4B-BD60-26E8FB9AE020}"
@@ -41,7 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CFS.Domain", "Services\CFS\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CFS.Infrastructure", "Services\CFS\CFS.Infrastructure\CFS.Infrastructure.csproj", "{CCFDEF6F-2396-4289-83CB-6AFF3F5DE59F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFS.Application", "Services\CFS\CFS.Application\CFS.Application.csproj", "{A5FAB1DE-4439-435A-A0A8-A744DA7ED05F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CFS.Application", "Services\CFS\CFS.Application\CFS.Application.csproj", "{A5FAB1DE-4439-435A-A0A8-A744DA7ED05F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
