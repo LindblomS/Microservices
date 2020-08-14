@@ -1,6 +1,0 @@
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.Domain\bin\Debug\netcoreapp2.1\Order.Domain.deps.json
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.Domain\bin\Debug\netcoreapp2.1\Order.Domain.dll
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.Domain\obj\Debug\netcoreapp2.1\Order.Domain.csprojAssemblyReference.cache
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.Domain\obj\Debug\netcoreapp2.1\Order.Domain.csproj.CoreCompileInputs.cache
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.Domain\obj\Debug\netcoreapp2.1\Order.Domain.AssemblyInfoInputs.cache
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.Domain\obj\Debug\netcoreapp2.1\Order.Domain.AssemblyInfo.cs
