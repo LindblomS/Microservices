@@ -8,19 +8,24 @@ namespace CFS.Application.Application.Commands.Commands
     public class CreateCustomerCommand : IRequest<bool>
     {
         [DataMember]
-        public string FirstName { get; private set; }
+        public string FirstName { get; set; }
 
         [DataMember]
-        public string LastName { get; private set; }
+        public string LastName { get; set; }
 
         [DataMember]
-        public string PhoneNumber { get; private set; }
+        public string PhoneNumber { get; set; }
 
         [DataMember]
-        public string Email { get; private set; }
+        public string Email { get; set; }
 
         [DataMember]
-        public Address Address { get; private set; }
+        public Address Address { get; set; }
+
+        public CreateCustomerCommand()
+        {
+            
+        }
 
         public CreateCustomerCommand(string firstName, string lastName, string phoneNumber, string email, Address address)
         {

@@ -29,15 +29,15 @@ namespace CFS.Application.Infrastructure.AutofacModules
             builder.RegisterAssemblyTypes(typeof(UpdateFacilityCommand).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));
             builder.RegisterAssemblyTypes(typeof(UpdateServiceCommand).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));
 
-            builder.RegisterAssemblyTypes(typeof(CreateCustomerCommandValidator).GetTypeInfo().Assembly).Where(t => t.IsClosedTypeOf(typeof(IValidator<>))).AsImplementedInterfaces();
-            builder.RegisterAssemblyTypes(typeof(CreateFacilityCommandValidator).GetTypeInfo().Assembly).Where(t => t.IsClosedTypeOf(typeof(IValidator<>))).AsImplementedInterfaces();
-            builder.RegisterAssemblyTypes(typeof(CreateServiceCommandValidator).GetTypeInfo().Assembly).Where(t => t.IsClosedTypeOf(typeof(IValidator<>))).AsImplementedInterfaces();
-            builder.RegisterAssemblyTypes(typeof(DeleteCustomerCommandValidator).GetTypeInfo().Assembly).Where(t => t.IsClosedTypeOf(typeof(IValidator<>))).AsImplementedInterfaces();
-            builder.RegisterAssemblyTypes(typeof(DeleteFacilityCommandValidator).GetTypeInfo().Assembly).Where(t => t.IsClosedTypeOf(typeof(IValidator<>))).AsImplementedInterfaces();
-            builder.RegisterAssemblyTypes(typeof(DeleteServiceCommandValidator).GetTypeInfo().Assembly).Where(t => t.IsClosedTypeOf(typeof(IValidator<>))).AsImplementedInterfaces(); 
-            builder.RegisterAssemblyTypes(typeof(UpdateCustomerCommandValidator).GetTypeInfo().Assembly).Where(t => t.IsClosedTypeOf(typeof(IValidator<>))).AsImplementedInterfaces();
-            builder.RegisterAssemblyTypes(typeof(UpdateFacilityCommandValidator).GetTypeInfo().Assembly).Where(t => t.IsClosedTypeOf(typeof(IValidator<>))).AsImplementedInterfaces();
-            builder.RegisterAssemblyTypes(typeof(UpdateServiceCommandValidator).GetTypeInfo().Assembly).Where(t => t.IsClosedTypeOf(typeof(IValidator<>))).AsImplementedInterfaces();
+            //builder.RegisterAssemblyTypes(typeof(CreateCustomerCommandValidator).GetTypeInfo().Assembly).Where(t => t.IsClosedTypeOf(typeof(IValidator<>))).AsImplementedInterfaces();
+            //builder.RegisterAssemblyTypes(typeof(CreateFacilityCommandValidator).GetTypeInfo().Assembly).Where(t => t.IsClosedTypeOf(typeof(IValidator<>))).AsImplementedInterfaces();
+            //builder.RegisterAssemblyTypes(typeof(CreateServiceCommandValidator).GetTypeInfo().Assembly).Where(t => t.IsClosedTypeOf(typeof(IValidator<>))).AsImplementedInterfaces();
+            //builder.RegisterAssemblyTypes(typeof(DeleteCustomerCommandValidator).GetTypeInfo().Assembly).Where(t => t.IsClosedTypeOf(typeof(IValidator<>))).AsImplementedInterfaces();
+            //builder.RegisterAssemblyTypes(typeof(DeleteFacilityCommandValidator).GetTypeInfo().Assembly).Where(t => t.IsClosedTypeOf(typeof(IValidator<>))).AsImplementedInterfaces();
+            //builder.RegisterAssemblyTypes(typeof(DeleteServiceCommandValidator).GetTypeInfo().Assembly).Where(t => t.IsClosedTypeOf(typeof(IValidator<>))).AsImplementedInterfaces(); 
+            //builder.RegisterAssemblyTypes(typeof(UpdateCustomerCommandValidator).GetTypeInfo().Assembly).Where(t => t.IsClosedTypeOf(typeof(IValidator<>))).AsImplementedInterfaces();
+            //builder.RegisterAssemblyTypes(typeof(UpdateFacilityCommandValidator).GetTypeInfo().Assembly).Where(t => t.IsClosedTypeOf(typeof(IValidator<>))).AsImplementedInterfaces();
+            //builder.RegisterAssemblyTypes(typeof(UpdateServiceCommandValidator).GetTypeInfo().Assembly).Where(t => t.IsClosedTypeOf(typeof(IValidator<>))).AsImplementedInterfaces();
 
             builder.Register<ServiceFactory>(context =>
             {
@@ -46,7 +46,7 @@ namespace CFS.Application.Infrastructure.AutofacModules
             });
 
             builder.RegisterGeneric(typeof(LoggingBehavior<,>)).As(typeof(IPipelineBehavior<,>));
-            builder.RegisterGeneric(typeof(ValidatorBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
+            //builder.RegisterGeneric(typeof(ValidatorBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
         }
     }
 }

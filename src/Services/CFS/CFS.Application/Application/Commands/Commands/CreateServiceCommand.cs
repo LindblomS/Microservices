@@ -8,13 +8,18 @@ namespace CFS.Application.Application.Commands.Commands
     public class CreateServiceCommand : IRequest<bool>
     {
         [DataMember]
-        public int FacilityId { get; private set; }
+        public int FacilityId { get; set; }
 
         [DataMember]
-        public DateTime StartDate { get; private set; }
+        public DateTime StartDate { get; set; }
 
         [DataMember]
-        public DateTime? StopDate { get; private set; }
+        public DateTime? StopDate { get; set; }
+
+        public CreateServiceCommand()
+        {
+
+        }
 
         public CreateServiceCommand(int facilityId, DateTime startDate, DateTime stopDate)
         {

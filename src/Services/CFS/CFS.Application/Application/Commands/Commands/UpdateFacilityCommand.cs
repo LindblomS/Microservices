@@ -8,13 +8,18 @@ namespace CFS.Application.Application.Commands.Commands
     public class UpdateFacilityCommand : IRequest<bool>
     {
         [DataMember]
-        public int FacilityId { get; private set; }
+        public int FacilityId { get; set; }
 
         [DataMember]
-        public int CustomerId { get; private set; }
+        public int CustomerId { get; set; }
 
         [DataMember]
-        public Address Address { get; private set; }
+        public Address Address { get; set; }
+
+        public UpdateFacilityCommand()
+        {
+
+        }
 
         public UpdateFacilityCommand(int facilityId, int customerId, Address address)
         {

@@ -52,18 +52,16 @@ namespace CFS.Application.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.Created)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult> CreateServiceAsync([FromBody] CreateServiceCommand command)
         {
-            var commandResult = false;
-
             _logger.LogInformation(
                 "----- Sending command: {CommandName} - ({@Command})",
                 command.GetGenericTypeName(),
                 command);
 
-            commandResult = await _mediator.Send(command);
+            var commandResult = await _mediator.Send(command);
 
             if (commandResult)
                 return Ok();
@@ -76,14 +74,12 @@ namespace CFS.Application.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult> UpdateServiceAsync([FromBody] UpdateServiceCommand command)
         {
-            var commandResult = false;
-
             _logger.LogInformation(
                 "----- Sending command: {CommandName} - ({@Command})",
                 command.GetGenericTypeName(),
                 command);
 
-            commandResult = await _mediator.Send(command);
+            var commandResult = await _mediator.Send(command);
 
             if (commandResult)
                 return Ok();

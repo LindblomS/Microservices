@@ -7,7 +7,12 @@ namespace CFS.Application.Application.Commands.Commands
     public class DeleteCustomerCommand : IRequest<bool>
     {
         [DataMember]
-        public int CustomerId { get; private set; }
+        public int CustomerId { get; set; }
+
+        public DeleteCustomerCommand()
+        {
+
+        }
 
         public DeleteCustomerCommand(int customerId)
         {

@@ -7,16 +7,21 @@ namespace CFS.Application.Application.Commands.Commands
     [DataContract]
     public class UpdateServiceCommand : IRequest<bool>
     {
-        public int ServiceId { get; private set; }
+        public int ServiceId { get; set; }
 
         [DataMember]
-        public int FacilityId { get; private set; }
+        public int FacilityId { get; set; }
 
         [DataMember]
-        public DateTime StartDate { get; private set; }
+        public DateTime StartDate { get; set; }
 
         [DataMember]
-        public DateTime? StopDate { get; private set; }
+        public DateTime? StopDate { get; set; }
+
+        public UpdateServiceCommand()
+        {
+
+        }
 
         public UpdateServiceCommand(int serviceId, int facilityId, DateTime startDate, DateTime stopDate)
         {

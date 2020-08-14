@@ -8,10 +8,15 @@ namespace CFS.Application.Application.Commands.Commands
     public class CreateFacilityCommand : IRequest<bool>
     {
         [DataMember]
-        public int CustomerId { get; private set; }
+        public int CustomerId { get; set; }
 
         [DataMember]
-        public Address Address { get; private set; }
+        public Address Address { get; set; }
+
+        public CreateFacilityCommand()
+        {
+
+        }
 
         public CreateFacilityCommand(int customerId, Address address)
         {
