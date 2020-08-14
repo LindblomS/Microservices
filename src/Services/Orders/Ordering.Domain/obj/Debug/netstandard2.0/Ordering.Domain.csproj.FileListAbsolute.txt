@@ -1,8 +1,0 @@
-D:\Code\GitCode\myeshop\src\Services\Orders\Ordering.Domain\bin\Debug\netstandard2.0\Ordering.Domain.deps.json
-D:\Code\GitCode\myeshop\src\Services\Orders\Ordering.Domain\bin\Debug\netstandard2.0\Ordering.Domain.dll
-D:\Code\GitCode\myeshop\src\Services\Orders\Ordering.Domain\bin\Debug\netstandard2.0\Ordering.Domain.pdb
-D:\Code\GitCode\myeshop\src\Services\Orders\Ordering.Domain\obj\Debug\netstandard2.0\Ordering.Domain.AssemblyInfoInputs.cache
-D:\Code\GitCode\myeshop\src\Services\Orders\Ordering.Domain\obj\Debug\netstandard2.0\Ordering.Domain.AssemblyInfo.cs
-D:\Code\GitCode\myeshop\src\Services\Orders\Ordering.Domain\obj\Debug\netstandard2.0\Ordering.Domain.dll
-D:\Code\GitCode\myeshop\src\Services\Orders\Ordering.Domain\obj\Debug\netstandard2.0\Ordering.Domain.pdb
-D:\Code\GitCode\myeshop\src\Services\Orders\Ordering.Domain\obj\Debug\netstandard2.0\Ordering.Domain.csprojAssemblyReference.cache

@@ -1,8 +1,0 @@
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.FunctionalTests\bin\Debug\netcoreapp2.1\Order.FunctionalTests.deps.json
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.FunctionalTests\bin\Debug\netcoreapp2.1\Order.FunctionalTests.dll
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.FunctionalTests\bin\Debug\netcoreapp2.1\Order.FunctionalTests.pdb
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.FunctionalTests\obj\Debug\netcoreapp2.1\Order.FunctionalTests.csproj.CoreCompileInputs.cache
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.FunctionalTests\obj\Debug\netcoreapp2.1\Order.FunctionalTests.AssemblyInfoInputs.cache
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.FunctionalTests\obj\Debug\netcoreapp2.1\Order.FunctionalTests.AssemblyInfo.cs
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.FunctionalTests\obj\Debug\netcoreapp2.1\Order.FunctionalTests.dll
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.FunctionalTests\obj\Debug\netcoreapp2.1\Order.FunctionalTests.pdb

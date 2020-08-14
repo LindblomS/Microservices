@@ -1,8 +1,0 @@
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.Infrastructure\bin\Debug\netcoreapp2.1\Order.Infrastructure.deps.json
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.Infrastructure\bin\Debug\netcoreapp2.1\Order.Infrastructure.dll
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.Infrastructure\bin\Debug\netcoreapp2.1\Order.Infrastructure.pdb
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.Infrastructure\obj\Debug\netcoreapp2.1\Order.Infrastructure.csproj.CoreCompileInputs.cache
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.Infrastructure\obj\Debug\netcoreapp2.1\Order.Infrastructure.AssemblyInfoInputs.cache
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.Infrastructure\obj\Debug\netcoreapp2.1\Order.Infrastructure.AssemblyInfo.cs
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.Infrastructure\obj\Debug\netcoreapp2.1\Order.Infrastructure.dll
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.Infrastructure\obj\Debug\netcoreapp2.1\Order.Infrastructure.pdb

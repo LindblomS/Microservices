@@ -1,9 +1,0 @@
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.UnitTests\bin\Debug\netcoreapp2.1\Ordering.UnitTests.deps.json
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.UnitTests\bin\Debug\netcoreapp2.1\Ordering.UnitTests.dll
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.UnitTests\bin\Debug\netcoreapp2.1\Ordering.UnitTests.pdb
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.UnitTests\obj\Debug\netcoreapp2.1\Ordering.UnitTests.csprojAssemblyReference.cache
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.UnitTests\obj\Debug\netcoreapp2.1\Ordering.UnitTests.csproj.CoreCompileInputs.cache
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.UnitTests\obj\Debug\netcoreapp2.1\Ordering.UnitTests.AssemblyInfoInputs.cache
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.UnitTests\obj\Debug\netcoreapp2.1\Ordering.UnitTests.AssemblyInfo.cs
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.UnitTests\obj\Debug\netcoreapp2.1\Ordering.UnitTests.dll
-D:\Code\GitCode\myeshop\src\Services\Orders\Order.UnitTests\obj\Debug\netcoreapp2.1\Ordering.UnitTests.pdb

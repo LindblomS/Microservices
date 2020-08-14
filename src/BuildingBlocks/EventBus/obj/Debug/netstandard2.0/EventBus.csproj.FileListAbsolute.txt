@@ -1,8 +1,0 @@
-D:\Code\GitCode\myeshop\src\BuildingBlocks\EventBus\bin\Debug\netstandard2.0\EventBus.deps.json
-D:\Code\GitCode\myeshop\src\BuildingBlocks\EventBus\bin\Debug\netstandard2.0\EventBus.dll
-D:\Code\GitCode\myeshop\src\BuildingBlocks\EventBus\obj\Debug\netstandard2.0\EventBus.AssemblyInfoInputs.cache
-D:\Code\GitCode\myeshop\src\BuildingBlocks\EventBus\obj\Debug\netstandard2.0\EventBus.AssemblyInfo.cs
-D:\Code\GitCode\myeshop\src\BuildingBlocks\EventBus\bin\Debug\netstandard2.0\EventBus.pdb
-D:\Code\GitCode\myeshop\src\BuildingBlocks\EventBus\obj\Debug\netstandard2.0\EventBus.dll
-D:\Code\GitCode\myeshop\src\BuildingBlocks\EventBus\obj\Debug\netstandard2.0\EventBus.pdb
-D:\Code\GitCode\myeshop\src\BuildingBlocks\EventBus\obj\Debug\netstandard2.0\EventBus.csprojAssemblyReference.cache
