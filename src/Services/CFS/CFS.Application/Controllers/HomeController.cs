@@ -10,7 +10,7 @@ namespace CFS.Application.Controllers
     {
         public IActionResult Index()
         {
-            return new ContentResult { Content = "Hej" };
+            return new RedirectResult("~/swagger");
         }
     }
 }

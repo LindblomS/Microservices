@@ -1,5 +1,4 @@
 D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\obj\Debug\netcoreapp3.1\CFS.Application.csprojAssemblyReference.cache
-D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\obj\Debug\netcoreapp3.1\CFS.Application.MvcApplicationPartsAssemblyInfo.cache
 D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\obj\Debug\netcoreapp3.1\CFS.Application.AssemblyInfoInputs.cache
 D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\obj\Debug\netcoreapp3.1\CFS.Application.AssemblyInfo.cs
 D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
@@ -54,3 +53,11 @@ D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\obj\Debug\netcoreapp3.1
 D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\obj\Debug\netcoreapp3.1\CFS.Application.pdb
 D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\bin\Debug\netcoreapp3.1\Autofac.Extensions.DependencyInjection.dll
 D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\bin\Debug\netcoreapp3.1\appsettings.json
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\obj\Debug\netcoreapp3.1\staticwebassets\CFS.Application.StaticWebAssets.Manifest.cache
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\obj\Debug\netcoreapp3.1\staticwebassets\CFS.Application.StaticWebAssets.xml
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\bin\Debug\netcoreapp3.1\Microsoft.OpenApi.dll
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Swagger.dll
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\obj\Debug\netcoreapp3.1\CFS.Application.MvcApplicationPartsAssemblyInfo.cs
+D:\Code\GitCode\myeshop\src\Services\CFS\CFS.Application\obj\Debug\netcoreapp3.1\CFS.Application.MvcApplicationPartsAssemblyInfo.cache

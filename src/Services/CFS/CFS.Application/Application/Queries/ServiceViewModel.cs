@@ -7,5 +7,7 @@ namespace CFS.Application.Application.Queries
 {
     public class ServiceViewModel
     {
+        public int ServiceId { get; set; }
+        public string ServiceName { get; set; }
     }
 }

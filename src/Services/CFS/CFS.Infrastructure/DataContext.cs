@@ -7,6 +7,7 @@ using CFS.Domain.Aggregates.CustomerAggregate;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Linq;
 
 namespace CFS.Infrastructure
 {
@@ -31,11 +32,11 @@ namespace CFS.Infrastructure
             {
                 using (var connection = _connectionFactory.GetConnection())
                 {
-                    List<T> result = (List<T>)await connection.QueryAsync<List<T>>(sql);
+                    var result = (await connection.QueryAsync<T>(sql)).ToList();
                     return result;
                 }
             }
-            catch (Exception)
+            catch
             {
                 // Log exception
                 return new List<T>();
@@ -48,11 +49,11 @@ namespace CFS.Infrastructure
             {
                 using (var connection = _connectionFactory.GetConnection())
                 {
-                    T result = (T)await connection.QueryAsync<T>(sql);
+                    T result = (await connection.QueryAsync<T>(sql)).FirstOrDefault();
                     return result;
                 }
             }
-            catch (Exception)
+            catch
             {
                 // Log exception
                 return default(T);
