@@ -7,5 +7,7 @@ namespace CFS.Application.Application.Queries
 {
     public class FacilityViewModel
     {
+        public int FacilityId { get; set; }
+        public string FacilityName { get; set; }
     }
 }

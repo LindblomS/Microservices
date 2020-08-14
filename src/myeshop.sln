@@ -41,6 +41,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CFS.Infrastructure", "Servi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CFS.Application", "Services\CFS\CFS.Application\CFS.Application.csproj", "{A5FAB1DE-4439-435A-A0A8-A744DA7ED05F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{692FBC8E-71B7-4030-81D3-C5BAC59B5A94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFS.Client", "Clients\CFS.Client\CFS.Client.csproj", "{76E412F8-525C-4B73-97D9-6282AFF47947}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +95,10 @@ Global
 		{A5FAB1DE-4439-435A-A0A8-A744DA7ED05F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5FAB1DE-4439-435A-A0A8-A744DA7ED05F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5FAB1DE-4439-435A-A0A8-A744DA7ED05F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76E412F8-525C-4B73-97D9-6282AFF47947}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76E412F8-525C-4B73-97D9-6282AFF47947}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76E412F8-525C-4B73-97D9-6282AFF47947}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76E412F8-525C-4B73-97D9-6282AFF47947}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,6 +121,7 @@ Global
 		{058899BE-5D75-4177-8B21-6CB795E6F9A1} = {B1886BA9-B85A-48D9-A7FC-ECA73C0E70AB}
 		{CCFDEF6F-2396-4289-83CB-6AFF3F5DE59F} = {B1886BA9-B85A-48D9-A7FC-ECA73C0E70AB}
 		{A5FAB1DE-4439-435A-A0A8-A744DA7ED05F} = {B1886BA9-B85A-48D9-A7FC-ECA73C0E70AB}
+		{76E412F8-525C-4B73-97D9-6282AFF47947} = {692FBC8E-71B7-4030-81D3-C5BAC59B5A94}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1D4A3E-BC3E-4F19-BCB1-8FF69F3FCCDD}

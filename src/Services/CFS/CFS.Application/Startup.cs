@@ -10,6 +10,11 @@ using Autofac;
 using EventBus;
 using Autofac.Extensions.DependencyInjection;
 using CFS.Application.Infrastructure.AutofacModules;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace CFS.Application
 {
@@ -28,6 +33,16 @@ namespace CFS.Application
                 .AddEventBus(Configuration)
                 .AddControllers();
 
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "CFS api",
+                    Version = "v1",
+                    Description = "The CFS service http api"
+                });
+            });
+
             var container = new ContainerBuilder();
             container.Populate(services);
             container.RegisterModule(new MediatorModule());
@@ -36,14 +51,10 @@ namespace CFS.Application
             return new AutofacServiceProvider(container.Build());
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            var pathBase = Configuration["PATH_BASE"];
-            if (!string.IsNullOrEmpty(pathBase))
-            {
-                loggerFactory.CreateLogger<Startup>().LogDebug("Using PATH BASE '{pathBase}'", pathBase);
-                app.UsePathBase(pathBase);
-            }
+            if (env.IsDevelopment())
+                app.UseDeveloperExceptionPage();
 
             app.UseRouting();
 
@@ -52,6 +63,12 @@ namespace CFS.Application
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllers();
             });
+
+            app.UseSwagger()
+                 .UseSwaggerUI(c =>
+                 {
+                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "CFS.API V1");
+                 });
         }
     }
 
