@@ -21,7 +21,7 @@ namespace CFS.Application.Application.Commands.Commands
 
         }
 
-        public CreateServiceCommand(int facilityId, DateTime startDate, DateTime stopDate)
+        public CreateServiceCommand(int facilityId, DateTime startDate, DateTime? stopDate)
         {
             FacilityId = facilityId;
             StartDate = startDate;

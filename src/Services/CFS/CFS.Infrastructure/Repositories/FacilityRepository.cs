@@ -17,9 +17,10 @@ namespace CFS.Infrastructure.Repositories
         public async Task Add(Facility facility)
         {
             StringBuilder sql = new StringBuilder();
-            sql.AppendLine("INSERT INTO Facilities (customerId, street, city, state, country, zipCode)");
-            sql.AppendLine(string.Format("VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')", 
+            sql.AppendLine("INSERT INTO Facilities (customerId, facilityName, street, city, state, country, zipCode)");
+            sql.AppendLine(string.Format("VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}')", 
                 facility.CustomerId,
+                facility.FacilityName,
                 facility.Address.Street,
                 facility.Address.City,
                 facility.Address.State,
@@ -33,11 +34,12 @@ namespace CFS.Infrastructure.Repositories
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendLine("UPDATE Facilities SET");
-            sql.AppendLine($"customerId = '{facility.CustomerId}'");
-            sql.AppendLine($"street = '{facility.Address.Street}'");
-            sql.AppendLine($"city = '{facility.Address.City}'");
-            sql.AppendLine($"state = '{facility.Address.State}'");
-            sql.AppendLine($"country = '{facility.Address.Country}'");
+            sql.AppendLine($"customerId = '{facility.CustomerId}',");
+            sql.AppendLine($"facilityName = '{facility.FacilityName}',");
+            sql.AppendLine($"street = '{facility.Address.Street}',");
+            sql.AppendLine($"city = '{facility.Address.City}',");
+            sql.AppendLine($"state = '{facility.Address.State}',");
+            sql.AppendLine($"country = '{facility.Address.Country}',");
             sql.AppendLine($"zipCode = '{facility.Address.ZipCode}'");
 
             sql.AppendLine($"WHERE facilityId = {facility.Id}");

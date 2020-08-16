@@ -42,14 +42,14 @@ namespace CFS.Infrastructure.Repositories
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendLine("UPDATE Customers SET");
-            sql.AppendLine($"firstName = '{customer.FirstName}'");
-            sql.AppendLine($"lastName = '{customer.LastName}'");
-            sql.AppendLine($"phoneNumber = '{customer.PhoneNumber}'");
-            sql.AppendLine($"email = '{customer.Email}'");
-            sql.AppendLine($"street = '{customer.Address.Street}'");
-            sql.AppendLine($"city = '{customer.Address.City}'");
-            sql.AppendLine($"state = '{customer.Address.State}'");
-            sql.AppendLine($"country = '{customer.Address.Country}'");
+            sql.AppendLine($"firstName = '{customer.FirstName}',");
+            sql.AppendLine($"lastName = '{customer.LastName}',");
+            sql.AppendLine($"phoneNumber = '{customer.PhoneNumber},'");
+            sql.AppendLine($"email = '{customer.Email}',");
+            sql.AppendLine($"street = '{customer.Address.Street}',");
+            sql.AppendLine($"city = '{customer.Address.City}',");
+            sql.AppendLine($"state = '{customer.Address.State}',");
+            sql.AppendLine($"country = '{customer.Address.Country}',");
             sql.AppendLine($"zipCode = '{customer.Address.ZipCode}'");
 
             sql.AppendLine($"WHERE customerId = {customer.Id}");

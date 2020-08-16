@@ -23,7 +23,7 @@ namespace CFS.Application.Application.Commands.Commands
 
         }
 
-        public UpdateServiceCommand(int serviceId, int facilityId, DateTime startDate, DateTime stopDate)
+        public UpdateServiceCommand(int serviceId, int facilityId, DateTime startDate, DateTime? stopDate)
         {
             ServiceId = serviceId;
             FacilityId = facilityId;

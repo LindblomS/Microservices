@@ -13,9 +13,9 @@ namespace CFS.Domain.Aggregates.ServiceAggregate
         public DateTime StartDate => _startDate;
         public DateTime? StopDate => _stopDate;
 
-        public Service(int id, int facilityId, DateTime startDate, DateTime? stopDate)
+        public Service(int serviceId, int facilityId, DateTime startDate, DateTime? stopDate)
         {
-            Id = id;
+            Id = serviceId;
             _facilityId = facilityId;
             _startDate = startDate != default ? startDate : throw new ArgumentNullException(nameof(startDate));
             _stopDate = stopDate != default ? stopDate : null;

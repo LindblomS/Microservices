@@ -1,5 +1,6 @@
 ﻿using CFS.Application.Application.Commands.Commands;
 using CFS.Domain.Aggregates.ServiceAggregate;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CFS.Application.Application.Commands.CommandHandlers
 {
-    public class CreateServiceCommandHandler
+    public class CreateServiceCommandHandler : IRequestHandler<CreateServiceCommand, bool>
     {
         private readonly IServiceRepository _repository;
         private readonly ILogger<CreateServiceCommandHandler> _logger;

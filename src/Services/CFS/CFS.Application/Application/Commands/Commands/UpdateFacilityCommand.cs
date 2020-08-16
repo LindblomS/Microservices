@@ -14,6 +14,9 @@ namespace CFS.Application.Application.Commands.Commands
         public int CustomerId { get; set; }
 
         [DataMember]
+        public string FacilityName { get; set; }
+
+        [DataMember]
         public Address Address { get; set; }
 
         public UpdateFacilityCommand()
@@ -21,10 +24,11 @@ namespace CFS.Application.Application.Commands.Commands
 
         }
 
-        public UpdateFacilityCommand(int facilityId, int customerId, Address address)
+        public UpdateFacilityCommand(int facilityId, int customerId, string facilityName, Address address)
         {
             FacilityId = facilityId;
             CustomerId = customerId;
+            FacilityName = facilityName;
             Address = address;
         }
     }

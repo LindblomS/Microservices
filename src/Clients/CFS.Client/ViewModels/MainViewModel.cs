@@ -1,35 +1,59 @@
 ﻿using CFS.Application.Application.Queries;
 using CFS.Client.Models;
-using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Linq;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Collections.Generic;
+using CFS.Client.Services;
+using System.Threading.Tasks;
 
 namespace CFS.Client.ViewModels
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : BaseViewModel
     {
-        private List<(CustomerViewModel customer, List<FacilityViewModel> facilities, List<ServiceViewModel> services)> _data;
+        private readonly CustomerService _customerService;
+        private readonly FacilityService _facilityService;
+        private readonly ServiceService _serviceService;
         private CustomerViewModel _currentCustomer;
+        private List<CFSViewModel> _customers;
 
-        public MainViewModel()
+        public MainViewModel(CustomerService customerService, FacilityService facilityService, ServiceService serviceService)
         {
-            _data = new List<(CustomerViewModel customer, List<FacilityViewModel> facilities, List<ServiceViewModel> services)>();
-            _data = GetCustomers();
-
-            CurrentCustomer = _data[0].customer;
-            NotifyPropertyChanged(nameof(CurrentCustomer));
+            _customerService = customerService;
+            _facilityService = facilityService;
+            _serviceService = serviceService;
+            _customers = new List<CFSViewModel>();
 
             FindCommand = new RelayCommand(p => Find());
             PreviousCommand = new RelayCommand(p => this.Previous());
             NextCommand = new RelayCommand(p => Next());
+            ReloadDataCommand = new RelayCommand(execute => ReloadData());
+
+            CreateCustomerCommand = new RelayCommand(
+                execute => new CreateOrUpdateCustomerViewModel(_customerService));
+            UpdateCustomerCommand = new RelayCommand(
+                execute => UpdateCustomer(), canExecute => _currentCustomer != null);
+            CreateFacilityCommand = new RelayCommand(
+                execute => new CreateOrUpdateFacilityViewModel(_facilityService));
+            UpdateFacilityCommand = new RelayCommand(
+                execute => UpdateFacility(), canExecute => SelectedFacility != null);
+            CreateServiceCommand = new RelayCommand(
+                execute => new CreateOrUpdateServiceViewModel(_serviceService));
+            UpdateServiceCommand = new RelayCommand(
+                execute => UpdateService(), canExecute => SelectedService != null);
+
+            GetCustomers();
         }
 
         public ICommand FindCommand { get; }
         public ICommand PreviousCommand { get; }
         public ICommand NextCommand { get; }
+        public ICommand ReloadDataCommand { get; set; }
+        public ICommand CreateCustomerCommand { get; }
+        public ICommand UpdateCustomerCommand { get; }
+        public ICommand CreateFacilityCommand { get; }
+        public ICommand UpdateFacilityCommand { get; }
+        public ICommand CreateServiceCommand { get; }
+        public ICommand UpdateServiceCommand { get; }
 
         public CustomerViewModel CurrentCustomer
         { 
@@ -43,60 +67,85 @@ namespace CFS.Client.ViewModels
             }
         }
 
+        public FacilityViewModel SelectedFacility { get; set; }
+        public ServiceViewModel SelectedService { get; set; }
+
         public List<FacilityViewModel> Facilites
         {
-            get { return _data.Where(c => c.customer.CustomerId == CurrentCustomer.CustomerId).FirstOrDefault().facilities; }
+            get { return _customers.SingleOrDefault(c => c.Customer.CustomerId == _currentCustomer?.CustomerId)?.Facilites; }
         }
 
         public List<ServiceViewModel> Services
         {
-            get { return _data.Where(c => c.customer.CustomerId == CurrentCustomer.CustomerId).FirstOrDefault().services; }
+            get { return _customers.SingleOrDefault(c => c.Customer.CustomerId == _currentCustomer?.CustomerId)?.Services; }
         }
 
-        public void Find()
+        private void Find()
         {
 
         }
 
-        public void Previous()
+        private void Previous()
         {
-            var current = _data.Where(c => c.customer == CurrentCustomer).FirstOrDefault();
-            var oldIndex = _data.IndexOf(current);
-            CurrentCustomer = _data.ElementAtOrDefault(oldIndex - 1).customer ?? CurrentCustomer;
+            var current = _customers.Where(c => c.Customer.CustomerId == _currentCustomer?.CustomerId).FirstOrDefault();
+            var indexOfCurrent = _customers.IndexOf(current);
+            CurrentCustomer = _customers.ElementAtOrDefault(indexOfCurrent - 1)?.Customer ?? _customers.LastOrDefault()?.Customer;
         }
 
-        public void Next()
+        private void Next()
         {
-            var current = _data.Where(c => c.customer == CurrentCustomer).FirstOrDefault();
-            var oldIndex = _data.IndexOf(current);
-            CurrentCustomer = _data.ElementAtOrDefault(oldIndex + 1).customer ?? CurrentCustomer;
+            var current = _customers.Where(c => c.Customer.CustomerId == _currentCustomer?.CustomerId).FirstOrDefault();
+            var indexOfCurrent = _customers.IndexOf(current);
+            CurrentCustomer = _customers.ElementAtOrDefault(indexOfCurrent + 1)?.Customer ?? _customers.FirstOrDefault()?.Customer;
         }
 
-        public List<(CustomerViewModel customer, List<FacilityViewModel> facilities, List<ServiceViewModel> services)> GetCustomers()
+        private void UpdateCustomer()
         {
-            return new List<(CustomerViewModel customer, List<FacilityViewModel> facilities, List<ServiceViewModel> services)>
+            var vm = new CreateOrUpdateCustomerViewModel(_customerService);
+            vm.Customer = _currentCustomer;
+        }
+
+        private void UpdateFacility()
+        {
+            var vm = new CreateOrUpdateFacilityViewModel(_facilityService);
+            vm.Facility = SelectedFacility;
+        }
+
+        private void UpdateService()
+        {
+            var vm = new CreateOrUpdateServiceViewModel(_serviceService);
+            vm.Service = SelectedService;
+        }
+
+        private async void GetCustomers()
+        {
+            var GetCustomersTask = _customerService.GetCustomersAsync();
+            var GetFacilitiesTask = _facilityService.GetFacilitesAsync();
+            var GetServicesTask = _serviceService.GetServicesAsync();
+
+            var customers = await GetCustomersTask;
+            var facilites = await GetFacilitiesTask;
+            var services = await GetServicesTask;
+
+            if (customers != null)
             {
-                (new CustomerViewModel{ CustomerId = 1, FirstName = "Stan", LastName = "Bengtsson" }, 
-                new List<FacilityViewModel> 
-                { new FacilityViewModel { FacilityId = 1, FacilityName = "asd" } }, 
-                new List<ServiceViewModel> { new ServiceViewModel { ServiceId = 1, ServiceName = "asd" } }),
+                Parallel.ForEach(customers, (customer) =>
+                {
+                    _customers.Add(new CFSViewModel
+                    {
+                        Customer = customer,
+                        Facilites = facilites.Where(f => f.CustomerId == customer.CustomerId).ToList(),
+                        Services = services.Where(s => facilites.Any(f => f.CustomerId == customer.CustomerId && f.FacilityId == s.FacilityId)).ToList()
+                    });
+                });
 
-                (new CustomerViewModel{ CustomerId = 2, FirstName = "Lisa", LastName = "HejOchHå" },
-                new List<FacilityViewModel>
-                { new FacilityViewModel { FacilityId = 2, FacilityName = "asdf" } },
-                new List<ServiceViewModel> { new ServiceViewModel { ServiceId = 2, ServiceName = "asd" } }),
-
-                (new CustomerViewModel{ CustomerId = 3, FirstName = "Olof", LastName = "Bryggebygd" },
-                new List<FacilityViewModel>
-                { new FacilityViewModel { FacilityId = 3, FacilityName = "asdf" } },
-                new List<ServiceViewModel> { new ServiceViewModel { ServiceId = 3, ServiceName = "asd" } })
-            };
+                _currentCustomer = _customers.First().Customer;
+            }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        private void ReloadData()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            _customers.Clear();
+            GetCustomers();
         }
     }
 }

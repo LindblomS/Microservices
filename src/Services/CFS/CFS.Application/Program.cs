@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Net;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -39,14 +37,14 @@ namespace CFS.Application
         private static IWebHost BuildWebHost(IConfiguration configuration, string[] args)
         {
             return Microsoft.AspNetCore.WebHost.CreateDefaultBuilder(args)
-                .CaptureStartupErrors(false)
-                .ConfigureKestrel(options =>
-                {
-                    options.Listen(IPAddress.Any, 80, listenOptions =>
-                    {
-                        listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
-                    });
-                })
+                .CaptureStartupErrors(true)
+                //.ConfigureKestrel(options =>
+                //{
+                //    options.Listen(IPAddress.Any, 80, listenOptions =>
+                //    {
+                //        listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+                //    });
+                //})
                 .UseStartup<Startup>()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseConfiguration(configuration)

@@ -22,9 +22,9 @@ namespace CFS.Domain.Aggregates.CustomerAggregate
         public string Email => _email;
         public Address Address => _address;
 
-        public Customer(int id, string firstName, string lastName, string phoneNumber, string email, Address address)
+        public Customer(int customerId, string firstName, string lastName, string phoneNumber, string email, Address address)
         {
-            Id = id;
+            Id = customerId;
 
             _firstName = !string.IsNullOrWhiteSpace(firstName)
                 ? firstName

@@ -31,7 +31,7 @@ namespace CFS.Application.Application.Commands.CommandHandlers
                 request.Address.Country,
                 request.Address.ZipCode);
 
-            var facility = new Facility(request.FacilityId, request.CustomerId, address);
+            var facility = new Facility(request.FacilityId, request.CustomerId, request.FacilityName, address);
 
             _logger.LogInformation("----- Updating facility - FacilityId: {facilityId}", facility.Id);
 

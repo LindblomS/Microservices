@@ -30,8 +30,8 @@ namespace CFS.Infrastructure.Repositories
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendLine("UPDATE Services SET");
-            sql.AppendLine($"facilityId = {service.FacilityId}");
-            sql.AppendLine($"startDate = '{service.StartDate}'");
+            sql.AppendLine($"facilityId = {service.FacilityId},");
+            sql.AppendLine($"startDate = '{service.StartDate}',");
             sql.AppendLine($"stopDate = '{service.StopDate}'");
 
             sql.AppendLine($"WHERE serviceId = {service.Id}");

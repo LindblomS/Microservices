@@ -1,6 +1,7 @@
 ﻿using CFS.Application.Application.Commands.Commands;
 using CFS.Domain.Aggregates.FacilityAggregate;
 using CFS.Domain.Aggregates.SharedValueObjects;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CFS.Application.Application.Commands.CommandHandlers
 {
-    public class CreateFacilityCommandHandler
+    public class CreateFacilityCommandHandler : IRequestHandler<CreateFacilityCommand, bool>
     {
         private readonly IFacilityRepository _repository;
         private readonly ILogger<CreateFacilityCommandHandler> _logger;
@@ -28,7 +29,7 @@ namespace CFS.Application.Application.Commands.CommandHandlers
                 request.Address.Country,
                 request.Address.ZipCode);
 
-            var facility = new Facility(-1, request.CustomerId, address);
+            var facility = new Facility(-1, request.CustomerId, request.FacilityName, address);
 
             _logger.LogInformation("----- Creating facility - Facility: {facility}", facility);
 

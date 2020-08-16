@@ -1,29 +1,36 @@
-﻿using CFS.Domain.SeedWork;
-using MediatR;
-using System;
-using System.Data;
+﻿using System;
 using Dapper;
-using CFS.Domain.Aggregates.CustomerAggregate;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace CFS.Infrastructure
 {
     public class DataContext
     {
         private readonly IConnectionFactory _connectionFactory;
+        private readonly ILogger<DataContext> _logger;
 
-        public DataContext(IConnectionFactory connectionFactory)
+        public DataContext(IConnectionFactory connectionFactory, ILogger<DataContext> logger)
         {
             _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<int> ExecuteNonQueryAsync(string sql)
         {
-            var affectedRows = await _connectionFactory.GetConnection().ExecuteAsync(sql);
-            return affectedRows;
+            try
+            {
+                var affectedRows = await _connectionFactory.GetConnection().ExecuteAsync(sql);
+                return affectedRows;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ERROR");
+                return 0;
+            }
+            
         }
 
         public async Task<List<T>> ListQueryAsync<T>(string sql)

@@ -4,40 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid Margin="5">
+        Title="MainWindow" Height="500" Width="800">
 
+    <Grid Margin="5">
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition Height="425"/>
         </Grid.RowDefinitions>
-
-        <Grid.Resources>
-            
-            <Style x:Key="HeaderLabel" TargetType="{x:Type Label}">
-                <Setter Property="Padding" Value="0" />
-                <Setter Property="FontSize" Value="12" />
-                <Setter Property="FontWeight" Value="DemiBold" />
-            </Style>
-
-            <Style x:Key="FieldLabel" TargetType="{x:Type Label}">
-                <Setter Property="Padding" Value="0" />
-                <Setter Property="FontSize" Value="10" />
-                <Setter Property="VerticalAlignment" Value="Center" />
-            </Style>
-
-            <Style x:Key="FieldText" TargetType="{x:Type TextBox}">
-                <Setter Property="Padding" Value="0" />
-                <Setter Property="FontSize" Value="10" />
-                <Setter Property="VerticalAlignment" Value="Center" />
-            </Style>
-
-            <Style x:Key="MenuButton" TargetType="{x:Type Button}">
-                <Setter Property="Margin" Value="0 2 2 2" />
-                <Setter Property="Width" Value="100" />
-            </Style>
-
-        </Grid.Resources>
 
         <DockPanel Grid.Row="0" HorizontalAlignment="Left">
             
@@ -55,6 +29,11 @@
                 Style="{StaticResource MenuButton}"
                 Content="Next"
                 Command="{Binding NextCommand}"/>
+
+            <Button 
+                Style="{StaticResource MenuButton}"
+                Content="Reload data"
+                Command="{Binding ReloadDataCommand}"/>
 
         </DockPanel>
 
@@ -88,6 +67,7 @@
                     <RowDefinition Height="18" />
                     <RowDefinition Height="18" />
                     <RowDefinition Height="18" />
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
@@ -157,11 +137,27 @@
                     Grid.Row="6"
                     Text="{Binding CurrentCustomer.Email}"/>
 
+                <Button 
+                    Grid.Row="9"
+                    Style="{StaticResource RegularButton}"
+                    HorizontalAlignment="Left"
+                    Content="Create"
+                    Command="{Binding CreateCustomerCommand}"/>
+
+                <Button 
+                    Grid.Row="10"
+                    Style="{StaticResource RegularButton}"
+                    HorizontalAlignment="Left"
+                    Content="Update"
+                    Command="{Binding UpdateCustomerCommand}"/>
+
             </Grid>
 
             <Grid Grid.Row="0" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="25"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
@@ -170,7 +166,11 @@
                     Grid.Row="0"
                     Content="Facilites" />
 
-                <ListView Grid.Row="1" ItemsSource="{Binding Facilites}">
+                <ListView 
+                    Grid.Row="1" 
+                    ItemsSource="{Binding Facilites}"
+                    SelectedItem="{Binding SelectedFacility}">
+                    
                     <ListView.View>
                         <GridView>
                             
@@ -188,11 +188,27 @@
                     </ListView.View>
                 </ListView>
 
+                <Button 
+                    Grid.Row="2"
+                    Style="{StaticResource RegularButton}"
+                    HorizontalAlignment="Left"
+                    Content="Create"
+                    Command="{Binding CreateFacilityCommand}"/>
+
+                <Button 
+                    Grid.Row="3"
+                    Style="{StaticResource RegularButton}"
+                    HorizontalAlignment="Left"
+                    Content="Update"
+                    Command="{Binding UpdateFacilityCommand}"/>
+
             </Grid>
 
             <Grid Grid.Row="1" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="25"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
@@ -201,7 +217,11 @@
                     Grid.Row="0"
                     Content="Services" />
 
-                <ListView Grid.Row="1" ItemsSource="{Binding Services}">
+                <ListView 
+                    Grid.Row="1" 
+                    ItemsSource="{Binding Services}"
+                    SelectedItem="{Binding SelectedService}">
+                    
                     <ListView.View>
                         <GridView>
 
@@ -218,6 +238,21 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
+
+                <Button 
+                    Grid.Row="2"
+                    Style="{StaticResource RegularButton}"
+                    HorizontalAlignment="Left"
+                    Content="Create"
+                    Command="{Binding CreateServiceCommand}"/>
+
+                <Button 
+                    Grid.Row="3"
+                    Style="{StaticResource RegularButton}"
+                    HorizontalAlignment="Left"
+                    Content="Update"
+                    Command="{Binding UpdateServiceCommand}"/>
+                
             </Grid>
 
         </Grid>
