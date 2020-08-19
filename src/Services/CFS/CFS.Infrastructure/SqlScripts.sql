@@ -15,7 +15,7 @@ GO
 CREATE TABLE [dbo].[Facilities](
 	[facilityId] [int] IDENTITY(1,1) NOT NULL,
 	[customerId] [int] NULL,
-	[facilityName] [varchar(50)],
+	[facilityName] [varchar](50),
 	[street] [varchar](max) NULL,
 	[city] [varchar](max) NULL,
 	[state] [varchar](max) NULL,
