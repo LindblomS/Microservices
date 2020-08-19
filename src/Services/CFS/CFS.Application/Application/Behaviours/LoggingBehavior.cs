@@ -7,7 +7,7 @@ using EventBus.Extensions;
 
 namespace CFS.Application.Application.Behaviours
 {
-    public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TRequest>
+    public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
         private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
 
@@ -16,7 +16,7 @@ namespace CFS.Application.Application.Behaviours
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<TRequest> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TRequest> next)
+        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
         {
             _logger.LogInformation("----- Handling command {CommandName} ({@Command})", request.GetGenericTypeName(), request);
             var response = await next();

@@ -16,10 +16,10 @@ namespace CFS.Application.Infrastructure.AutofacModules
                 .AsImplementedInterfaces();
 
             // Resgiter all command handlers
-            builder.RegisterAssemblyTypes(typeof(CreateCustomerCommand).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));
+            builder.RegisterAssemblyTypes(typeof(Startup).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));
 
             // Register all command validators
-            builder.RegisterAssemblyTypes(typeof(CreateCustomerCommand).GetTypeInfo().Assembly).Where(t => t.IsClosedTypeOf(typeof(IValidator<>))).AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(typeof(Startup).GetTypeInfo().Assembly).Where(t => t.IsClosedTypeOf(typeof(IValidator<>))).AsImplementedInterfaces();
 
             builder.Register<ServiceFactory>(context =>
             {
