@@ -1,4 +1,4 @@
-﻿using CFS.Domain.Aggregates.CustomerAggregate;
+﻿using CFS.Domain.Aggregates;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,11 +7,11 @@ namespace CFS.Infrastructure.Repositories
 {
     public class CustomerRepository : ICustomerRepository
     {
-        private readonly DataContext _context;
+        private readonly IDbWithTransaction _db;
 
-        public CustomerRepository(DataContext dataContext)
+        public CustomerRepository(IDbWithTransaction db)
         {
-            _context = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
+            _db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
         public async Task Add(Customer customer)
@@ -29,13 +29,13 @@ namespace CFS.Infrastructure.Repositories
                 customer.Address.Country, 
                 customer.Address.ZipCode));
 
-            await _context.ExecuteNonQueryAsync(sql.ToString());
+            await _db.ExecuteAsync(sql.ToString(), null);
         }
 
-        public async Task<Customer> GetCustomer(int customerId)
+        public async Task<Customer> GetCustomer(int id)
         {
-            var sql = $"SELECT * FROM Customers WHERE customerId = {customerId}";
-            return await _context.QueryAsync<Customer>(sql);
+            var sql = $"SELECT * FROM Customers WHERE customerId = @id";
+            return await _db.GetAsync<Customer>(sql, new { id });
         }
 
         public async Task Update(Customer customer)
@@ -54,13 +54,13 @@ namespace CFS.Infrastructure.Repositories
 
             sql.AppendLine($"WHERE customerId = {customer.Id}");
 
-            await _context.ExecuteNonQueryAsync(sql.ToString());
+            await _db.ExecuteAsync(sql.ToString(), null);
         }
 
-        public async Task Delete(int customerId)
+        public async Task Delete(int id)
         {
-            string sql = $"DELETE FROM Customers WHERE customerId = {customerId}";
-            await _context.ExecuteNonQueryAsync(sql);
+            string sql = $"DELETE FROM Customers WHERE customerId = @id";
+            await _db.ExecuteAsync(sql, new { id });
         }
     }
 }

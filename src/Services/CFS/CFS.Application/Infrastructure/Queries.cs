@@ -9,63 +9,63 @@ namespace Application.Infrastructure
 {
     public class Queries : IQueries
     {
-        private readonly DataContext _context;
+        private readonly IDbQueries _db;
 
-        public Queries(DataContext context)
+        public Queries(IDbQueries db)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public async Task<CustomerViewModel> GetCustomer(int customerId)
+        public async Task<CustomerViewModel> GetCustomer(int id)
         {
-            var sql = $"SELECT * FROM Customers WHERE customerId = {customerId}";
-            return await _context.QueryAsync<CustomerViewModel>(sql);
+            var sql = "SELECT * FROM Customers WHERE customerId = @id";
+            return await _db.GetAsync<CustomerViewModel>(sql, id);
         }
 
-        public async Task<List<CustomerViewModel>> GetCustomers()
+        public async Task<IList<CustomerViewModel>> GetCustomers()
         {
-            var sql = $"SELECT * FROM Customers";
-            return await _context.ListQueryAsync<CustomerViewModel>(sql);
+            var sql = "SELECT * FROM Customers";
+            return await _db.SelectAsync<CustomerViewModel>(sql, null);
         }
 
-        public async Task<List<FacilityViewModel>> GetFacilities()
+        public async Task<IList<FacilityViewModel>> GetFacilities()
         {
-            var sql = $"SELECT * FROM Facilities";
-            return await _context.ListQueryAsync<FacilityViewModel>(sql);
+            var sql = "SELECT * FROM Facilities";
+            return await _db.SelectAsync<FacilityViewModel>(sql, null);
         }
 
-        public async Task<List<FacilityViewModel>> GetFacilitiesOnCustomer(int customerId)
+        public async Task<IList<FacilityViewModel>> GetFacilitiesOnCustomer(int id)
         {
-            var sql = $"SELECT * FROM Facilities WHERE customerId = {customerId}";
-            return await _context.ListQueryAsync<FacilityViewModel>(sql);
+            var sql = "SELECT * FROM Facilities WHERE customerId = @id";
+            return await _db.SelectAsync<FacilityViewModel>(sql, id);
         }
 
-        public async Task<FacilityViewModel> GetFacility(int facilityId)
+        public async Task<FacilityViewModel> GetFacility(int id)
         {
-            var sql = $"SELECT * FROM Facilities WHERE facilityId = {facilityId}";
-            return await _context.QueryAsync<FacilityViewModel>(sql);
+            var sql = "SELECT * FROM Facilities WHERE facilityId = @id";
+            return await _db.GetAsync<FacilityViewModel>(sql, id);
         }
 
-        public async Task<ServiceViewModel> GetService(int serviceId)
+        public async Task<ServiceViewModel> GetService(int id)
         {
-            var sql = $"SELECT * FROM Services WHERE serviceId = {serviceId}";
-            return await _context.QueryAsync<ServiceViewModel>(sql);
+            var sql = "SELECT * FROM Services WHERE serviceId = @id";
+            return await _db.GetAsync<ServiceViewModel>(sql, id);
         }
 
-        public async Task<List<ServiceViewModel>> GetServices()
+        public async Task<IList<ServiceViewModel>> GetServices()
         {
             var sql = $"SELECT * FROM Services";
-            return await _context.ListQueryAsync<ServiceViewModel>(sql);
+            return await _db.SelectAsync<ServiceViewModel>(sql, null);
         }
 
-        public async Task<List<ServiceViewModel>> GetServicesOnCustomer(int customerId)
+        public async Task<IList<ServiceViewModel>> GetServicesOnCustomer(int id)
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendLine("SELECT * FROM Services s");
             sql.AppendLine("JOIN Facilities f ON f.facilityId = s.facilityId");
-            sql.AppendLine($"WHERE f.customerId =  {customerId}");
+            sql.AppendLine("WHERE f.customerId = @id");
 
-            return await _context.ListQueryAsync<ServiceViewModel>(sql.ToString());
+            return await _db.SelectAsync<ServiceViewModel>(sql.ToString(), id);
         }
     }
 }

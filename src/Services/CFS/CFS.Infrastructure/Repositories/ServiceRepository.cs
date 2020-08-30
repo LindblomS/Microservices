@@ -1,4 +1,4 @@
-﻿using CFS.Domain.Aggregates.ServiceAggregate;
+﻿using CFS.Domain.Aggregates;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,11 +7,11 @@ namespace CFS.Infrastructure.Repositories
 {
     public class ServiceRepository : IServiceRepository
     {
-        private readonly DataContext _context;
+        private readonly IDbWithTransaction _db;
 
-        public ServiceRepository(DataContext context)
+        public ServiceRepository(IDbWithTransaction db)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
         public async Task Add(Service service)
@@ -23,7 +23,7 @@ namespace CFS.Infrastructure.Repositories
                 service.StartDate,
                 service.StopDate));
 
-            await _context.ExecuteNonQueryAsync(sql.ToString());
+            await _db.ExecuteAsync(sql.ToString(), null);
         }
 
         public async Task Update(Service service)
@@ -36,19 +36,19 @@ namespace CFS.Infrastructure.Repositories
 
             sql.AppendLine($"WHERE serviceId = {service.Id}");
 
-            await _context.ExecuteNonQueryAsync(sql.ToString());
+            await _db.ExecuteAsync(sql.ToString(), null);
         }
 
-        public async Task<Service> GetService(int serviceId)
+        public async Task<Service> GetService(int id)
         {
-            var sql = $"SELECT * FROM CFS_Services WHERE serviceId = {serviceId}";
-            return await _context.QueryAsync<Service>(sql);
+            var sql = $"SELECT * FROM CFS_Services WHERE serviceId = @id";
+            return await _db.GetAsync<Service>(sql, new { id }); ;
         }
 
-        public async Task Delete(int serviceId)
+        public async Task Delete(int id)
         {
-            string sql = $"DELETE FROM Services WHERE serviceId = {serviceId}";
-            await _context.ExecuteNonQueryAsync(sql);
+            string sql = $"DELETE FROM Services WHERE serviceId = @id";
+            await _db.ExecuteAsync(sql, new { id });
         }
     }
 }

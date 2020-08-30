@@ -1,7 +1,7 @@
 ﻿using CFS.Domain.SeedWork;
 using System.Threading.Tasks;
 
-namespace CFS.Domain.Aggregates.ServiceAggregate
+namespace CFS.Domain.Aggregates
 {
     public interface IServiceRepository
     {

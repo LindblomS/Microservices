@@ -1,7 +1,7 @@
 ﻿using CFS.Domain.SeedWork;
 using System.Threading.Tasks;
 
-namespace CFS.Domain.Aggregates.FacilityAggregate
+namespace CFS.Domain.Aggregates
 {
     public interface IFacilityRepository
     {

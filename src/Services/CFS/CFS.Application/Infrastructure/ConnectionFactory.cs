@@ -16,7 +16,7 @@ namespace CFS.Application.Infrastructure
                 : throw new ArgumentNullException(nameof(connectionString));
         }
 
-        public IDbConnection GetConnection()
+        public SqlConnection GetConnection()
         {
             return new SqlConnection(_connectionstring);
         }

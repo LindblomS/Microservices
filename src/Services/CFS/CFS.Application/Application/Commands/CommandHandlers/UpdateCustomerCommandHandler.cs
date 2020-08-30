@@ -1,6 +1,5 @@
 ﻿using CFS.Application.Application.Commands.Commands;
-using CFS.Domain.Aggregates.CustomerAggregate;
-using CFS.Domain.Aggregates.SharedValueObjects;
+using CFS.Domain.Aggregates;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;

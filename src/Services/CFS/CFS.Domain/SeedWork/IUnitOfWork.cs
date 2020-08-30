@@ -1,12 +1,14 @@
-﻿using System;
-using System.Data;
-using System.Data.Common;
-using System.Threading.Tasks;
+﻿using CFS.Domain.Aggregates;
+using System;
 
 namespace CFS.Domain.SeedWork
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
-
+        ICustomerRepository CustomerRepository { get; }
+        IFacilityRepository FacilityRepository { get; }
+        IServiceRepository ServiceRepository { get; }
+        void Commit();
+        void BeginTransaction();
     }
 }

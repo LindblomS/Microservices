@@ -1,14 +1,8 @@
-﻿using CFS.Domain.Aggregates.CustomerAggregate;
-using CFS.Domain.Aggregates.ServiceAggregate;
-using CFS.Domain.Aggregates.SharedValueObjects;
-using CFS.Domain.Events;
+﻿using CFS.Domain.Events;
 using CFS.Domain.SeedWork;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace CFS.Domain.Aggregates.FacilityAggregate
+namespace CFS.Domain.Aggregates
 {
     public class Facility : Entity, IAggregateRoot
     {
@@ -30,6 +24,12 @@ namespace CFS.Domain.Aggregates.FacilityAggregate
                 : throw new ArgumentNullException(nameof(facilityName));
 
             _address = address ?? throw new ArgumentNullException(nameof(address));
+        }
+
+        public void Delete()
+        {
+            var facilityDeletedDomainEvent = new FacilityDeletedDomainEvent(Id);
+            AddDomainEvent(facilityDeletedDomainEvent);
         }
     }
 }

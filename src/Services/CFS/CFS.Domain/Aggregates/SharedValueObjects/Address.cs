@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace CFS.Domain.Aggregates.SharedValueObjects
+namespace CFS.Domain.Aggregates
 {
     public class Address : ValueObject
     {

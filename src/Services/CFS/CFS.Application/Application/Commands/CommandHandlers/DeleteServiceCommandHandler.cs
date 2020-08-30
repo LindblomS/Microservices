@@ -1,5 +1,5 @@
 ﻿using CFS.Application.Application.Commands.Commands;
-using CFS.Domain.Aggregates.ServiceAggregate;
+using CFS.Domain.Aggregates;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;

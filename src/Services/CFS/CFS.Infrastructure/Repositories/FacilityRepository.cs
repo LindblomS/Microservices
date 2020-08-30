@@ -1,4 +1,4 @@
-﻿using CFS.Domain.Aggregates.FacilityAggregate;
+﻿using CFS.Domain.Aggregates;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,11 +7,11 @@ namespace CFS.Infrastructure.Repositories
 {
     public class FacilityRepository : IFacilityRepository
     {
-        private readonly DataContext _context;
+        private readonly IDbWithTransaction _db;
 
-        public FacilityRepository(DataContext context)
+        public FacilityRepository(IDbWithTransaction db)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
         public async Task Add(Facility facility)
@@ -27,7 +27,7 @@ namespace CFS.Infrastructure.Repositories
                 facility.Address.Country,
                 facility.Address.ZipCode));
 
-            await _context.ExecuteNonQueryAsync(sql.ToString());
+            await _db.ExecuteAsync(sql.ToString(), null);
         }
 
         public async Task Update(Facility facility)
@@ -44,19 +44,19 @@ namespace CFS.Infrastructure.Repositories
 
             sql.AppendLine($"WHERE facilityId = {facility.Id}");
 
-            await _context.ExecuteNonQueryAsync(sql.ToString());
+            await _db.ExecuteAsync(sql.ToString(), null);
         }
 
-        public async Task<Facility> GetFacility(int facilityId)
+        public async Task<Facility> GetFacility(int id)
         {
-            var sql = $"SELECT * FROM Facilities WHERE facilityId = {facilityId}";
-            return await _context.QueryAsync<Facility>(sql);
+            var sql = $"SELECT * FROM Facilities WHERE facilityId = @id";
+            return await _db.GetAsync<Facility>(sql, new { id }); ;
         }
 
-        public async Task Delete(int facilityId)
+        public async Task Delete(int id)
         {
-            string sql = $"DELETE FROM Facilities WHERE facilityId = {facilityId}";
-            await _context.ExecuteNonQueryAsync(sql);
+            string sql = $"DELETE FROM Facilities WHERE facilityId = @id";
+            await _db.ExecuteAsync(sql, new { id });
         }
     }
 }

@@ -7,13 +7,13 @@ namespace CFS.Application.Application.Queries
 {
     public interface IQueries
     {
-        Task<CustomerViewModel> GetCustomer(int customerId);
-        Task<List<CustomerViewModel>> GetCustomers();
-        Task<FacilityViewModel> GetFacility(int faciltyId);
-        Task<List<FacilityViewModel>> GetFacilitiesOnCustomer(int customerId);
-        Task<List<FacilityViewModel>> GetFacilities();
-        Task<ServiceViewModel> GetService(int serviceId);
-        Task<List<ServiceViewModel>> GetServicesOnCustomer(int customerId);
-        Task<List<ServiceViewModel>> GetServices();
+        Task<CustomerViewModel> GetCustomer(int id);
+        Task<IList<CustomerViewModel>> GetCustomers();
+        Task<FacilityViewModel> GetFacility(int id);
+        Task<IList<FacilityViewModel>> GetFacilitiesOnCustomer(int id);
+        Task<IList<FacilityViewModel>> GetFacilities();
+        Task<ServiceViewModel> GetService(int id);
+        Task<IList<ServiceViewModel>> GetServicesOnCustomer(int id);
+        Task<IList<ServiceViewModel>> GetServices();
     }
 }
