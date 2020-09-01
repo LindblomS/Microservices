@@ -5,9 +5,9 @@ namespace CFS.Domain.Aggregates
 {
     public interface ICustomerRepository
     {
-        Task Add(Customer customer);
-        Task Update(Customer customer);
-        Task Delete(int customerId);
+        Task<int> Add(Customer customer);
+        Task<int> Update(Customer customer);
+        Task<int> Delete(Customer customer);
         Task<Customer> GetCustomer(int customerId);
     }
 }

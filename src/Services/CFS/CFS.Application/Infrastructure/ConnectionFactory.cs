@@ -2,6 +2,7 @@
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace CFS.Application.Infrastructure
 {
@@ -16,7 +17,7 @@ namespace CFS.Application.Infrastructure
                 : throw new ArgumentNullException(nameof(connectionString));
         }
 
-        public SqlConnection GetConnection()
+        public IDbConnection GetConnection()
         {
             return new SqlConnection(_connectionstring);
         }

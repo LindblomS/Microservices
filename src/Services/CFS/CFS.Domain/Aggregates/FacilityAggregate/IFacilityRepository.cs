@@ -5,9 +5,9 @@ namespace CFS.Domain.Aggregates
 {
     public interface IFacilityRepository
     {
-        Task Add(Facility facility);
-        Task Update(Facility facility);
-        Task Delete(int facilityId);
+        Task<int> Add(Facility facility);
+        Task<int> Update(Facility facility);
+        Task<int> Delete(Facility facility);
         Task<Facility> GetFacility(int facilityId);
     }
 }

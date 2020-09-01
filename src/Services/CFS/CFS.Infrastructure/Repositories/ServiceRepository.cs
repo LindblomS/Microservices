@@ -7,14 +7,14 @@ namespace CFS.Infrastructure.Repositories
 {
     public class ServiceRepository : IServiceRepository
     {
-        private readonly IDbWithTransaction _db;
+        private readonly IDb _db;
 
-        public ServiceRepository(IDbWithTransaction db)
+        public ServiceRepository(IDb db)
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public async Task Add(Service service)
+        public async Task<int> Add(Service service)
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendLine("INSERT INTO Services (facilityId, startDate, stopDate)");
@@ -23,10 +23,10 @@ namespace CFS.Infrastructure.Repositories
                 service.StartDate,
                 service.StopDate));
 
-            await _db.ExecuteAsync(sql.ToString(), null);
+            return await _db.ExecuteAsync(sql.ToString(), null, service);
         }
 
-        public async Task Update(Service service)
+        public async Task<int> Update(Service service)
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendLine("UPDATE Services SET");
@@ -36,7 +36,7 @@ namespace CFS.Infrastructure.Repositories
 
             sql.AppendLine($"WHERE serviceId = {service.Id}");
 
-            await _db.ExecuteAsync(sql.ToString(), null);
+            return await _db.ExecuteAsync(sql.ToString(), null, service);
         }
 
         public async Task<Service> GetService(int id)
@@ -45,10 +45,10 @@ namespace CFS.Infrastructure.Repositories
             return await _db.GetAsync<Service>(sql, new { id }); ;
         }
 
-        public async Task Delete(int id)
+        public async Task<int> Delete(Service service)
         {
             string sql = $"DELETE FROM Services WHERE serviceId = @id";
-            await _db.ExecuteAsync(sql, new { id });
+            return await _db.ExecuteAsync(sql, new { service.Id }, service);
         }
     }
 }

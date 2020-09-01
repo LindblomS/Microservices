@@ -5,9 +5,9 @@ namespace CFS.Domain.Aggregates
 {
     public interface IServiceRepository
     {
-        Task Add(Service service);
-        Task Update(Service service);
-        Task Delete(int serviceId);
+        Task<int> Add(Service service);
+        Task<int> Update(Service service);
+        Task<int> Delete(Service service);
         Task<Service> GetService(int serviceId);
     }
 }

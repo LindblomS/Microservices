@@ -7,14 +7,14 @@ namespace CFS.Infrastructure.Repositories
 {
     public class FacilityRepository : IFacilityRepository
     {
-        private readonly IDbWithTransaction _db;
+        private readonly IDb _db;
 
-        public FacilityRepository(IDbWithTransaction db)
+        public FacilityRepository(IDb db)
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public async Task Add(Facility facility)
+        public async Task<int> Add(Facility facility)
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendLine("INSERT INTO Facilities (customerId, facilityName, street, city, state, country, zipCode)");
@@ -27,10 +27,10 @@ namespace CFS.Infrastructure.Repositories
                 facility.Address.Country,
                 facility.Address.ZipCode));
 
-            await _db.ExecuteAsync(sql.ToString(), null);
+            return await _db.ExecuteAsync(sql.ToString(), null, facility);
         }
 
-        public async Task Update(Facility facility)
+        public async Task<int> Update(Facility facility)
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendLine("UPDATE Facilities SET");
@@ -44,7 +44,7 @@ namespace CFS.Infrastructure.Repositories
 
             sql.AppendLine($"WHERE facilityId = {facility.Id}");
 
-            await _db.ExecuteAsync(sql.ToString(), null);
+            return await _db.ExecuteAsync(sql.ToString(), null, facility);
         }
 
         public async Task<Facility> GetFacility(int id)
@@ -53,10 +53,10 @@ namespace CFS.Infrastructure.Repositories
             return await _db.GetAsync<Facility>(sql, new { id }); ;
         }
 
-        public async Task Delete(int id)
+        public async Task<int> Delete(Facility facility)
         {
             string sql = $"DELETE FROM Facilities WHERE facilityId = @id";
-            await _db.ExecuteAsync(sql, new { id });
+            return await _db.ExecuteAsync(sql, new { facility.Id }, facility);
         }
     }
 }
