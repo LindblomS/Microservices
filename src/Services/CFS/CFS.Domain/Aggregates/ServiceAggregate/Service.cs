@@ -1,7 +1,7 @@
 ﻿using CFS.Domain.SeedWork;
 using System;
 
-namespace CFS.Domain.Aggregates.ServiceAggregate
+namespace CFS.Domain.Aggregates
 {
     public class Service : Entity, IAggregateRoot
     {

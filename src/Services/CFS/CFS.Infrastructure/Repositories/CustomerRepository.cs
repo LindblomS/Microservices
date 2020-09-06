@@ -1,4 +1,5 @@
-﻿using CFS.Domain.Aggregates.CustomerAggregate;
+﻿using CFS.Domain.Aggregates;
+using CFS.Domain.SeedWork;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,14 +8,16 @@ namespace CFS.Infrastructure.Repositories
 {
     public class CustomerRepository : ICustomerRepository
     {
-        private readonly DataContext _context;
+        private readonly IDb _db;
 
-        public CustomerRepository(DataContext dataContext)
+        public CustomerRepository(IDb db)
         {
-            _context = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
+            _db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public async Task Add(Customer customer)
+        public IUnitOfWork UnitOfWork => _db;
+
+        public async Task<int> Add(Customer customer)
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendLine("INSERT INTO Customers (firstName, lastName, phoneNumber, email, street, city, state, country, zipCode)");
@@ -29,16 +32,16 @@ namespace CFS.Infrastructure.Repositories
                 customer.Address.Country, 
                 customer.Address.ZipCode));
 
-            await _context.ExecuteNonQueryAsync(sql.ToString());
+            return await _db.ExecuteAsync(sql.ToString(), null, customer);
         }
 
-        public async Task<Customer> GetCustomer(int customerId)
+        public async Task<Customer> GetCustomer(int id)
         {
-            var sql = $"SELECT * FROM Customers WHERE customerId = {customerId}";
-            return await _context.QueryAsync<Customer>(sql);
+            var sql = $"SELECT * FROM Customers WHERE customerId = @id";
+            return await _db.GetAsync<Customer>(sql, new { id });
         }
 
-        public async Task Update(Customer customer)
+        public async Task<int> Update(Customer customer)
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendLine("UPDATE Customers SET");
@@ -54,13 +57,13 @@ namespace CFS.Infrastructure.Repositories
 
             sql.AppendLine($"WHERE customerId = {customer.Id}");
 
-            await _context.ExecuteNonQueryAsync(sql.ToString());
+            return await _db.ExecuteAsync(sql.ToString(), null, customer);
         }
 
-        public async Task Delete(int customerId)
+        public async Task<int> Delete(Customer customer)
         {
-            string sql = $"DELETE FROM Customers WHERE customerId = {customerId}";
-            await _context.ExecuteNonQueryAsync(sql);
+            string sql = $"DELETE FROM Customers WHERE customerId = @id";
+            return await _db.ExecuteAsync(sql, new { customer.Id }, customer);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using CFS.Application.Application.Commands.Commands;
-using CFS.Domain.Aggregates.ServiceAggregate;
+using CFS.Domain.Aggregates;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -30,8 +30,6 @@ namespace CFS.Application.Application.Commands.CommandHandlers
             try
             {
                 await _repository.Update(service);
-                // For implementation of integrationevents
-                // _mediator.Publish(integrationevent) 
                 return true;
             }
             catch (Exception ex)

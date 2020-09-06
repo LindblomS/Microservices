@@ -1,6 +1,7 @@
 ﻿using CFS.Application.Application.Commands.Commands;
-using CFS.Domain.Aggregates.CustomerAggregate;
-using CFS.Domain.Aggregates.SharedValueObjects;
+using CFS.Domain.Aggregates;
+using CFS.Domain.SeedWork;
+using CFS.Infrastructure.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,12 +12,12 @@ namespace CFS.Application.Application.Commands.CommandHandlers
 {
     public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, bool>
     {
-        private readonly ICustomerRepository _repository;
+        private readonly ICustomerRepository _customerRepository;
         private readonly ILogger<CreateCustomerCommandHandler> _logger;
 
-        public CreateCustomerCommandHandler(ICustomerRepository repository, ILogger<CreateCustomerCommandHandler> logger)
+        public CreateCustomerCommandHandler(ICustomerRepository customerRepository, ILogger<CreateCustomerCommandHandler> logger)
         {
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _customerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -35,7 +36,7 @@ namespace CFS.Application.Application.Commands.CommandHandlers
 
             try
             {
-                await _repository.Add(customer);
+                await _customerRepository.Add(customer);
                 return true;
             }
             catch (Exception ex)

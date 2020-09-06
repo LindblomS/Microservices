@@ -42,8 +42,8 @@ namespace CFS.Client
 
         private void ConfigureServices(IServiceCollection services)
         {
-            var remoteServiceBaseUrl = Configuration.GetValue<string>("RemoteServiceBaseUrl");
-
+            //var remoteServiceBaseUrl = Configuration.GetValue<string>("RemoteServiceBaseUrl");
+            var remoteServiceBaseUrl = "https://localhost:44342/api/v1";
             services
                 .AddLogging()
                 .AddTransient<MainWindow>()

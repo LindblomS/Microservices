@@ -1,4 +1,4 @@
-﻿using CFS.Domain.Aggregates.FacilityAggregate;
+﻿using CFS.Domain.Aggregates;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,14 +7,14 @@ namespace CFS.Infrastructure.Repositories
 {
     public class FacilityRepository : IFacilityRepository
     {
-        private readonly DataContext _context;
+        private readonly IDb _db;
 
-        public FacilityRepository(DataContext context)
+        public FacilityRepository(IDb db)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public async Task Add(Facility facility)
+        public async Task<int> Add(Facility facility)
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendLine("INSERT INTO Facilities (customerId, facilityName, street, city, state, country, zipCode)");
@@ -27,10 +27,10 @@ namespace CFS.Infrastructure.Repositories
                 facility.Address.Country,
                 facility.Address.ZipCode));
 
-            await _context.ExecuteNonQueryAsync(sql.ToString());
+            return await _db.ExecuteAsync(sql.ToString(), null, facility);
         }
 
-        public async Task Update(Facility facility)
+        public async Task<int> Update(Facility facility)
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendLine("UPDATE Facilities SET");
@@ -44,19 +44,19 @@ namespace CFS.Infrastructure.Repositories
 
             sql.AppendLine($"WHERE facilityId = {facility.Id}");
 
-            await _context.ExecuteNonQueryAsync(sql.ToString());
+            return await _db.ExecuteAsync(sql.ToString(), null, facility);
         }
 
-        public async Task<Facility> GetFacility(int facilityId)
+        public async Task<Facility> GetFacility(int id)
         {
-            var sql = $"SELECT * FROM Facilities WHERE facilityId = {facilityId}";
-            return await _context.QueryAsync<Facility>(sql);
+            var sql = $"SELECT * FROM Facilities WHERE facilityId = @id";
+            return await _db.GetAsync<Facility>(sql, new { id }); ;
         }
 
-        public async Task Delete(int facilityId)
+        public async Task<int> Delete(Facility facility)
         {
-            string sql = $"DELETE FROM Facilities WHERE facilityId = {facilityId}";
-            await _context.ExecuteNonQueryAsync(sql);
+            string sql = $"DELETE FROM Facilities WHERE facilityId = @id";
+            return await _db.ExecuteAsync(sql, new { facility.Id }, facility);
         }
     }
 }

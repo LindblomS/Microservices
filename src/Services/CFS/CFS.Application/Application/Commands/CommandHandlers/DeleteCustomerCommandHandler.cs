@@ -1,5 +1,5 @@
 ﻿using CFS.Application.Application.Commands.Commands;
-using CFS.Domain.Aggregates.CustomerAggregate;
+using CFS.Domain.Aggregates;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -25,7 +25,8 @@ namespace CFS.Application.Application.Commands.CommandHandlers
 
             try
             {
-                await _repository.Delete(request.CustomerId);
+                var customer = await _repository.GetCustomer(request.CustomerId);
+                await _repository.Delete(customer);
                 return true;
             }
             catch (Exception ex)
