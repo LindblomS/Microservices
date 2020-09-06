@@ -1,11 +1,11 @@
-﻿using CFS.Domain.Aggregates;
-using System;
+﻿using System;
+using System.Data.Common;
 using System.Threading.Tasks;
 
 namespace CFS.Domain.SeedWork
 {
     public interface IUnitOfWork : IDisposable
     {
-        void SaveChanges();
+        Task<bool> CommitTransactionAsync(DbTransaction transaction);
     }
 }

@@ -25,7 +25,8 @@ namespace CFS.Application.Application.Commands.CommandHandlers
 
             try
             {
-                await _repository.Delete(request.ServiceId);
+                var service = await _repository.GetService(request.ServiceId);
+                await _repository.Delete(service);
                 return true;
             }
             catch (Exception ex)

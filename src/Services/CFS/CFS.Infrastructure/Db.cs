@@ -1,18 +1,18 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using MediatR;
 using CFS.Domain.SeedWork;
+using System.Data.Common;
 
 namespace CFS.Infrastructure
 {
     public class Db : IDb
     {
-        private IDbTransaction _currentTransaction;
+        private DbTransaction _currentTransaction;
         private readonly IConnectionFactory _connectionFactory;
         private readonly IMediator _mediator;
         private List<INotification> _domainEvents;
@@ -24,24 +24,29 @@ namespace CFS.Infrastructure
             _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _domainEvents = new List<INotification>();
         }
 
-        public IDbTransaction GetCurrentTransaction => _currentTransaction;
+        public DbTransaction GetCurrentTransaction => _currentTransaction;
         public bool HasActiveTransaction => _currentTransaction != null;
 
-        public void SaveChanges()
+        public async Task<bool> CommitTransactionAsync(DbTransaction transaction)
         {
-            if (_currentTransaction == null)
-                throw new InvalidOperationException(nameof(_currentTransaction));
+            if (transaction == null) throw new ArgumentNullException(nameof(transaction));
+            if (transaction != _currentTransaction) throw new InvalidOperationException($"Transaction is not current");
+        
+            var success = false;
             try
             {
                 _domainEvents.ForEach(e => _mediator.Publish(e));
-                _currentTransaction.Commit();
+                await _currentTransaction.CommitAsync();
+                _domainEvents.Clear();
+                success = true;
             }
-            catch
+            catch (Exception ex)
             {
-                RollbackTransaction();
-                throw;
+                await RollbackTransactionAsync();
+                _logger.LogError(ex, "");
             }
             finally
             {
@@ -51,34 +56,37 @@ namespace CFS.Infrastructure
                     _currentTransaction = null;
                 }
             }
-        }
 
-        public IDbTransaction BeginTransaction()
+            return success;
+        }
+ 
+        public async Task<DbTransaction> BeginTransactionAsync()
         {
             if (_currentTransaction != null) return null;
-
-            _currentTransaction = _connectionFactory.GetConnection().BeginTransaction();
-
+            var connection = (DbConnection)_connectionFactory.GetConnection();
+            await connection.OpenAsync();
+            _currentTransaction = await connection.BeginTransactionAsync();
             return _currentTransaction;
         }
 
-        public void RollbackTransaction()
+        public async Task RollbackTransactionAsync()
         {
             try
             {
-                _currentTransaction?.Rollback();
+                _domainEvents.Clear();
+                await _currentTransaction?.RollbackAsync();
             }
             finally
             {
                 if (_currentTransaction != null)
                 {
-                    _currentTransaction.Dispose();
+                    await _currentTransaction.DisposeAsync();
                     _currentTransaction = null;
                 }
             }
         }
 
-        public async Task<T> CommandAsync<T>(Func<IDbConnection, IDbTransaction, Task<T>> command)
+        public async Task<T> CommandAsync<T>(Func<DbConnection, DbTransaction, Task<T>> command)
         {
             try
             {
@@ -88,6 +96,7 @@ namespace CFS.Infrastructure
             catch (Exception ex)
             {
                 _logger.LogError(ex, "ERROR");
+                await RollbackTransactionAsync();
                 throw;
             }
         }
@@ -97,7 +106,8 @@ namespace CFS.Infrastructure
             return await CommandAsync(async (connection, transaction) =>
             {
                 var result = await connection.ExecuteAsync(sql, parameters, transaction);
-                _domainEvents.AddRange(entity.DomainEvents);
+                if (entity.DomainEvents?.Any() == true)
+                    _domainEvents.AddRange(entity.DomainEvents);
                 return result;
             });
         }

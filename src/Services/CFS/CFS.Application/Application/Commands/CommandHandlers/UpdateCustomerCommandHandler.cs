@@ -37,8 +37,6 @@ namespace CFS.Application.Application.Commands.CommandHandlers
             try
             {
                 await _repository.Update(customer);
-                // For implementation of integrationevents
-                // _mediator.Publish(integrationevent) 
                 return true;
             }
             catch (Exception ex)

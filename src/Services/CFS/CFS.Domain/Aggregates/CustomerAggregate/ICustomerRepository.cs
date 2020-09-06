@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace CFS.Domain.Aggregates
 {
-    public interface ICustomerRepository
+    public interface ICustomerRepository : IRepository<Customer>
     {
         Task<int> Add(Customer customer);
         Task<int> Update(Customer customer);

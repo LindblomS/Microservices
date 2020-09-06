@@ -1,4 +1,5 @@
 ﻿using CFS.Domain.Aggregates;
+using CFS.Domain.SeedWork;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,8 @@ namespace CFS.Infrastructure.Repositories
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
         }
+
+        public IUnitOfWork UnitOfWork => _db;
 
         public async Task<int> Add(Customer customer)
         {
