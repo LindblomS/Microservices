@@ -23,6 +23,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventBusServiceBus", "Event
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationEventLogEF", "EventBus\IntegrationEventLogEF\IntegrationEventLogEF.csproj", "{DA037194-41A5-4680-A9F9-8CC94F396ECC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebHost", "WebHost", "{AE7AD4BE-AACC-40F5-858A-E8F3B5E29E56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebHost.Customization", "WebHost\WebHost.Customization\WebHost.Customization.csproj", "{90AA84DB-906D-4FCB-9D9D-C932111A7017}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +61,10 @@ Global
 		{DA037194-41A5-4680-A9F9-8CC94F396ECC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA037194-41A5-4680-A9F9-8CC94F396ECC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA037194-41A5-4680-A9F9-8CC94F396ECC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90AA84DB-906D-4FCB-9D9D-C932111A7017}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90AA84DB-906D-4FCB-9D9D-C932111A7017}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90AA84DB-906D-4FCB-9D9D-C932111A7017}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90AA84DB-906D-4FCB-9D9D-C932111A7017}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +78,7 @@ Global
 		{676C2601-69FF-40F5-8B6D-4200268707B0} = {493731B5-3D3E-482D-B0FF-DBDB33E524F3}
 		{04023E83-AF52-44BF-9A03-E29E8E7652A4} = {493731B5-3D3E-482D-B0FF-DBDB33E524F3}
 		{DA037194-41A5-4680-A9F9-8CC94F396ECC} = {493731B5-3D3E-482D-B0FF-DBDB33E524F3}
+		{90AA84DB-906D-4FCB-9D9D-C932111A7017} = {AE7AD4BE-AACC-40F5-858A-E8F3B5E29E56}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {64151344-227D-48F0-BD0D-BCA86CFD69C1}

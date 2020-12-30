@@ -42,7 +42,7 @@
 
         public bool IsTransient()
         {
-            return this.Id == default(Int32);
+            return this.Id == default(Guid);
         }
 
         public override bool Equals(object obj)

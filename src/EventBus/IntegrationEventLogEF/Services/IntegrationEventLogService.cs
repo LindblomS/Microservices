@@ -5,7 +5,6 @@
     using global::EventBus.EventBus.Events;
     using System;
     using System.Collections.Generic;
-    using System.Data.Common;
     using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
@@ -13,17 +12,13 @@
     public class IntegrationEventLogService : IIntegrationEventLogService,IDisposable
     {
         private readonly IntegrationEventLogContext _integrationEventLogContext;
-        private readonly DbConnection _dbConnection;
         private readonly List<Type> _eventTypes;
         private volatile bool disposedValue;
 
-        public IntegrationEventLogService(DbConnection dbConnection)
+        public IntegrationEventLogService()
         {
-            _dbConnection = dbConnection ?? throw new ArgumentNullException(nameof(dbConnection));
             _integrationEventLogContext = new IntegrationEventLogContext(
-                new DbContextOptionsBuilder<IntegrationEventLogContext>()
-                    .UseSqlServer(_dbConnection)
-                    .Options);
+                new DbContextOptionsBuilder<IntegrationEventLogContext>().Options);
 
             _eventTypes = Assembly.Load(Assembly.GetEntryAssembly().FullName)
                 .GetTypes()

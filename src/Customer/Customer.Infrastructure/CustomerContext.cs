@@ -15,7 +15,7 @@
         private readonly IMediator _mediator;
         private IDbContextTransaction _currentTransaction;
 
-        public CustomerContext(DbContextOptions<CustomerContext> options, IMediator mediator)
+        public CustomerContext(DbContextOptions<CustomerContext> options, IMediator mediator) : base(options)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
@@ -28,6 +28,7 @@
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CustomerEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new ClientRequestEntityTypeConfiguration());
         }
 
         public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))

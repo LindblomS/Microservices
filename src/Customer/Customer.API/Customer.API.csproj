@@ -4,9 +4,13 @@
 		<TargetFramework>net5.0</TargetFramework>
 		<AssemblyName>Services.Customer.API</AssemblyName>
 		<RootNamespace>Services.Customer.API</RootNamespace>
+		<UserSecretsId>083619a5-edbc-4a55-89d2-4fde2ff4f8ce</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.1" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.0.0-dev-00834" />
 		<PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
 		<PackageReference Include="MediatR" Version="9.0.0" />
@@ -16,8 +20,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\EventBus\EventBusRabbitMQ\EventBusRabbitMQ.csproj" />
 	  <ProjectReference Include="..\..\EventBus\EventBus\EventBus.csproj" />
 	  <ProjectReference Include="..\..\EventBus\IntegrationEventLogEF\IntegrationEventLogEF.csproj" />
+	  <ProjectReference Include="..\..\WebHost\WebHost.Customization\WebHost.Customization.csproj" />
 	  <ProjectReference Include="..\Customer.Domain\Customer.Domain.csproj" />
 	  <ProjectReference Include="..\Customer.Infrastructure\Customer.Infrastructure.csproj" />
 	</ItemGroup>

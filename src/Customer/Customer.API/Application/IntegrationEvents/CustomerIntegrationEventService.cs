@@ -3,16 +3,14 @@
     using EventBus.EventBus.Abstractions;
     using EventBus.EventBus.Events;
     using EventBus.IntegrationEventLogEF;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using Services.Customer.Infrastructure;
     using System;
-    using System.Data.Common;
     using System.Threading.Tasks;
 
     public class CustomerIntegrationEventService : ICustomerIntegrationEventService
     {
-        private readonly Func<DbConnection, IIntegrationEventLogService> _integrationEventLogServiceFactory;
+        private readonly Func<IIntegrationEventLogService> _integrationEventLogServiceFactory;
         private readonly IEventBus _eventBus;
         private readonly CustomerContext _context;
         private readonly IIntegrationEventLogService _eventLogService;
@@ -20,13 +18,24 @@
 
         public CustomerIntegrationEventService(IEventBus eventBus,
             CustomerContext context,
-            Func<DbConnection, IIntegrationEventLogService> integrationEventLogServiceFactory,
+            Func<IIntegrationEventLogService> integrationEventLogServiceFactory,
             ILogger<CustomerIntegrationEventService> logger)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _integrationEventLogServiceFactory = integrationEventLogServiceFactory ?? throw new ArgumentNullException(nameof(integrationEventLogServiceFactory));
             _eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
-            _eventLogService = _integrationEventLogServiceFactory(_context.Database.GetDbConnection());
+            _eventLogService = _integrationEventLogServiceFactory();
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
+        public CustomerIntegrationEventService(
+            CustomerContext context, 
+            Func<IIntegrationEventLogService> integrationEventLogServiceFactory,
+            ILogger<CustomerIntegrationEventService> logger)
+        {
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _integrationEventLogServiceFactory = integrationEventLogServiceFactory ?? throw new ArgumentNullException(nameof(integrationEventLogServiceFactory));
+            _eventLogService = _integrationEventLogServiceFactory();
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 

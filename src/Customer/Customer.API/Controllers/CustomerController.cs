@@ -28,10 +28,8 @@
         [HttpPost]
         [ProducesResponseType(typeof(CustomerViewModel), (int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(CustomerViewModel), (int)HttpStatusCode.BadRequest)]
-        public async Task<ActionResult<CustomerViewModel>> Create([FromBody] string name)
+        public async Task<ActionResult<CustomerViewModel>> Create([FromBody] CreateCustomerCommand command)
         {
-            var command = new CreateCustomerCommand(name);
-
             _logger.LogInformation(
                 "----- Sending command: {CommandName}: {CommandId} ({@Command})",
                 typeof(CreateCustomerCommand).Name,
@@ -49,10 +47,8 @@
         [HttpPut]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Update([FromBody] Guid customerId, [FromBody] string name)
+        public async Task<IActionResult> Update([FromBody] UpdateCustomerCommand command)
         {
-            var command = new UpdateCustomerCommand(name, customerId);
-
             _logger.LogInformation(
                 "----- Sending command: {CommandName}: {CommandId} ({@Command})",
                 typeof(UpdateCustomerCommand).Name,
@@ -72,10 +68,8 @@
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Delete([FromBody] Guid customerId)
+        public async Task<IActionResult> Delete([FromBody] DeleteCustomerCommand command)
         {
-            var command = new DeleteCustomerCommand(customerId);
-
             _logger.LogInformation(
                 "----- Sending command: {CommandName}: {CommandId} ({@Command})",
                 typeof(DeleteCustomerCommand).Name,
