@@ -8,6 +8,7 @@
     using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
+    using System.Data.Common;
 
     public class IntegrationEventLogService : IIntegrationEventLogService,IDisposable
     {
@@ -15,10 +16,10 @@
         private readonly List<Type> _eventTypes;
         private volatile bool disposedValue;
 
-        public IntegrationEventLogService()
+        public IntegrationEventLogService(DbConnection connection)
         {
             _integrationEventLogContext = new IntegrationEventLogContext(
-                new DbContextOptionsBuilder<IntegrationEventLogContext>().Options);
+                new DbContextOptionsBuilder<IntegrationEventLogContext>().UseSqlServer(connection).Options);
 
             _eventTypes = Assembly.Load(Assembly.GetEntryAssembly().FullName)
                 .GetTypes()

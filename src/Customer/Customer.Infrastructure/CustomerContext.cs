@@ -15,6 +15,11 @@
         private readonly IMediator _mediator;
         private IDbContextTransaction _currentTransaction;
 
+        public CustomerContext(DbContextOptions<CustomerContext> options) : base(options)
+        {
+
+        }
+
         public CustomerContext(DbContextOptions<CustomerContext> options, IMediator mediator) : base(options)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));

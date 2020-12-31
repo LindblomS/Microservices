@@ -20,6 +20,7 @@ namespace Services.Customer.API
     using Services.Customer.API.Application.Factories;
     using Services.Customer.API.Infrastructure.AutoFacModules;
     using System.Reflection;
+    using System.Data.Common;
 
     public class Startup
     {
@@ -45,16 +46,13 @@ namespace Services.Customer.API
                     .AllowCredentials());
             });
 
-            services.AddTransient<Func<IIntegrationEventLogService>>(sp => () => new IntegrationEventLogService());
+            services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(sp => (DbConnection connection) => new IntegrationEventLogService(connection));
             services.AddTransient<ICustomerIntegrationEventService, CustomerIntegrationEventService>();
             services.AddSingleton<IValidatorFactory, ValidatorFactory>();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            // Register your own things directly with Autofac here. Don't
-            // call builder.Populate(), that happens in AutofacServiceProviderFactory
-            // for you.
             builder.RegisterModule(new MediatorModule());
             builder.RegisterModule(new ApplicationModule());
         }
@@ -99,7 +97,7 @@ namespace Services.Customer.API
                                          sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
                                          sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                                      });
-            });
+            }, ServiceLifetime.Scoped);
 
             return services;
         }

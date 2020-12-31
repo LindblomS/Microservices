@@ -10,6 +10,7 @@
             builder.ToTable("customer", CustomerContext.DEFAULT_SCHEMA);
             builder.HasKey(e => e.Id);
             builder.Ignore(e => e.DomainEvents);
+            builder.Ignore(e => e.Name);
             builder
                 .Property<string>("_name")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)

@@ -10,6 +10,10 @@
 	<ItemGroup>
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.1">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.1" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.0.0-dev-00834" />
 		<PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
@@ -26,6 +30,11 @@
 	  <ProjectReference Include="..\..\WebHost\WebHost.Customization\WebHost.Customization.csproj" />
 	  <ProjectReference Include="..\Customer.Domain\Customer.Domain.csproj" />
 	  <ProjectReference Include="..\Customer.Infrastructure\Customer.Infrastructure.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Infrastructure\IntegrationEventMigrations\" />
+	  <Folder Include="Infrastructure\Migrations\" />
 	</ItemGroup>
 
 </Project>
