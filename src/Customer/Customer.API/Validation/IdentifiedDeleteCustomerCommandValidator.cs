@@ -3,14 +3,12 @@
     using FluentValidation;
     using Microsoft.Extensions.Logging;
     using Services.Customer.API.Application.Commands;
-    using System;
 
-    public class IdentifiedCommandValidator : AbstractValidator<IdentifiedCommand<CreateCustomerCommand, Guid>>
+    public class IdentifiedDeleteCustomerCommandValidator : AbstractValidator<IdentifiedCommand<DeleteCustomerCommand, bool>>
     {
-        public IdentifiedCommandValidator(ILogger<IdentifiedCommandValidator> logger)
+        public IdentifiedDeleteCustomerCommandValidator(ILogger<IdentifiedDeleteCustomerCommandValidator> logger)
         {
             RuleFor(command => command.Id).NotEmpty();
-
             logger.LogTrace("----- INSTANCE CREATED - {ClassName}", GetType().Name);
         }
     }

@@ -8,7 +8,7 @@
     {
         Task<Customer> GetAsync(Guid customerId);
         Task<Customer> CreateAsync(Customer customer);
-        Task DeleteAsync(Guid customerId);
+        Task DeleteAsync(Customer customer);
         Task UpdateAsync(Customer customer);
     }
 }

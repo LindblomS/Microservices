@@ -14,6 +14,7 @@
 
         [DataMember]
         public string Name { get; private set; }
+        [DataMember]
         public Guid Id { get; private set; }
     }
 }

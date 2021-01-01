@@ -8,8 +8,7 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class IdentifiedCommandHandler<T, R> : IRequestHandler<IdentifiedCommand<T, R>, R>
-        where T : IRequest<R>
+    public abstract class IdentifiedCommandHandler<T, R> : IRequestHandler<IdentifiedCommand<T, R>, R> where T : IRequest<R>
     {
         private readonly IMediator _mediator;
         private readonly IRequestManager _requestManager;
@@ -43,15 +42,20 @@
                 try
                 {
                     var command = message.Command;
-                    var commandName = typeof(CreateCustomerCommand).Name;
+                    var commandName = command.GetType().Name;
                     var idProperty = string.Empty;
                     var commandId = string.Empty;
 
                     switch (command)
                     {
-                        case CreateCustomerCommand createCustomerCommand:
-                            idProperty = nameof(createCustomerCommand.Name);
-                            commandId = createCustomerCommand.Name;
+                        case UpdateCustomerCommand updateCommand:
+                            idProperty = nameof(updateCommand.Id);
+                            commandId = updateCommand.Id.ToString();
+                            break;
+
+                        case DeleteCustomerCommand deleteCustomerCommand:
+                            idProperty = nameof(deleteCustomerCommand.Id);
+                            commandId = deleteCustomerCommand.Id.ToString();
                             break;
 
                         default:

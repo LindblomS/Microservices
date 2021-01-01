@@ -23,7 +23,17 @@
         {
             _logger.LogInformation("----- Updating Customer - CustomerId: {@CustomerId}", request.Id);
             var customer = await _repository.GetAsync(request.Id);
-            await _repository.UpdateAsync(customer);
+
+            if (customer != null)
+            {
+                customer.Name = request.Name;
+                await _repository.UpdateAsync(customer);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Customer was not found. CustomerId: {request.Id}");
+            }
+  
             return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
     }

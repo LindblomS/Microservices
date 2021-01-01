@@ -47,18 +47,25 @@
         [HttpPut]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Update([FromBody] UpdateCustomerCommand command)
+        public async Task<IActionResult> Update([FromBody] UpdateCustomerCommand command, [FromHeader(Name = "x-requestId")] string requestId)
         {
-            _logger.LogInformation(
-                "----- Sending command: {CommandName}: {CommandId} ({@Command})",
-                typeof(UpdateCustomerCommand).Name,
-                nameof(command.Id),
-                command.Id,
-                command);
+            var commandResult = false;
 
-            var result = await _mediator.Send(command);
+            if (Guid.TryParse(requestId, out var guid) && guid != Guid.Empty)
+            {
+                var updateCustomerCommand = new IdentifiedCommand<UpdateCustomerCommand, bool>(command, guid);
 
-            if (result)
+                _logger.LogInformation(
+                    "----- Sending command: {CommandName}: {CommandId} ({@Command})",
+                    typeof(UpdateCustomerCommand).Name,
+                    nameof(command.Id),
+                    command.Id,
+                    command);
+
+                commandResult = await _mediator.Send(updateCustomerCommand);
+            }
+
+            if (commandResult)
                 return Ok();
             else
                 return BadRequest();
@@ -68,18 +75,25 @@
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Delete([FromBody] DeleteCustomerCommand command)
+        public async Task<IActionResult> Delete([FromBody] DeleteCustomerCommand command, [FromHeader(Name = "x-requestId")] string requestId)
         {
-            _logger.LogInformation(
-                "----- Sending command: {CommandName}: {CommandId} ({@Command})",
-                typeof(DeleteCustomerCommand).Name,
-                nameof(command.Id),
-                command.Id,
-                command);
+            var commandResult = false;
 
-            var result = await _mediator.Send(command);
+            if (Guid.TryParse(requestId, out var guid) && guid != Guid.Empty)
+            {
+                var deleteCustomerCommand = new IdentifiedCommand<DeleteCustomerCommand, bool>(command, guid);
 
-            if (result)
+                _logger.LogInformation(
+                    "----- Sending command: {CommandName}: {CommandId} ({@Command})",
+                    typeof(DeleteCustomerCommand).Name,
+                    nameof(command.Id),
+                    command.Id,
+                    command);
+
+                commandResult = await _mediator.Send(deleteCustomerCommand);
+            }
+
+            if (commandResult)
                 return Ok();
             else
                 return BadRequest();

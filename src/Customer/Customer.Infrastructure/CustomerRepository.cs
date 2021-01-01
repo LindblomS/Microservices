@@ -21,10 +21,9 @@
             return (await _context.AddAsync(customer)).Entity;
         }
 
-        public async Task DeleteAsync(Guid customerId)
+        public async Task DeleteAsync(Customer customer)
         {
-            var customer = await _context.Customers.FindAsync(customerId);
-            _context.Customers.Remove(customer);
+            await Task.Run(() => _context.Customers.Remove(customer));
         }
 
         public async Task<Customer> GetAsync(Guid customerId)

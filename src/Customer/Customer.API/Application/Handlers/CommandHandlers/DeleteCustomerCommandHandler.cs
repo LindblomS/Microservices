@@ -22,7 +22,18 @@
         public async Task<bool> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("----- Deleting Customer - CustomerId: {@CustomerId}", request.Id);
-            await _repository.DeleteAsync(request.Id);
+            var customer = await _repository.GetAsync(request.Id);
+
+            if (customer != null)
+            {
+                customer.Delete();
+                await _repository.DeleteAsync(customer);
+            }
+            else
+            {
+                _logger.LogWarning("----- Customer - CustomerId: {@CustomerID} was not found");
+                return false;
+            }
             return await _repository.UnitOfWork.SaveEntitiesAsync();
         }
     }
