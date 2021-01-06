@@ -27,7 +27,7 @@
 
         public async Task Handle(CustomerDeletedDomainEvent notification, CancellationToken cancellationToken)
         {
-            var customer = _repository.GetAsync(notification.CustomerId);
+            var customer = await _repository.GetAsync(notification.CustomerId);
             var @event = new CustomerDeletedIntegrationEvent(customer.Id);
             await _integrationEventService.AddAndSaveEventAsync(@event);
         }

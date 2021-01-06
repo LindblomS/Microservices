@@ -28,13 +28,13 @@
             {
                 customer.Delete();
                 await _repository.DeleteAsync(customer);
+                return await _repository.UnitOfWork.SaveEntitiesAsync();
             }
             else
             {
-                _logger.LogWarning("----- Customer - CustomerId: {@CustomerID} was not found");
+                _logger.LogWarning("----- Customer - CustomerId: {@CustomerId} was not found");
                 return false;
             }
-            return await _repository.UnitOfWork.SaveEntitiesAsync();
         }
     }
 }

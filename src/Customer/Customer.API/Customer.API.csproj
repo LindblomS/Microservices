@@ -4,7 +4,6 @@
 		<TargetFramework>net5.0</TargetFramework>
 		<AssemblyName>Services.Customer.API</AssemblyName>
 		<RootNamespace>Services.Customer.API</RootNamespace>
-		<UserSecretsId>083619a5-edbc-4a55-89d2-4fde2ff4f8ce</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -14,13 +13,11 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.1" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.0.0-dev-00834" />
 		<PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
 		<PackageReference Include="MediatR" Version="9.0.0" />
 		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
 		<PackageReference Include="FluentValidation.AspNetCore" Version="9.3.0" />
-		<PackageReference Include="Dapper" Version="2.0.78" />
 	</ItemGroup>
 
 	<ItemGroup>

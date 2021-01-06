@@ -1,4 +1,4 @@
-﻿namespace Services.Customer.API.Application.IntegrationEvents.Events
+﻿namespace Services.Order.API.Application.IntegrationEvents.Events
 {
     using EventBus.EventBus.Events;
     using System;
