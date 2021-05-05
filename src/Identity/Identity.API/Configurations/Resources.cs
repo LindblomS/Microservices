@@ -21,14 +21,14 @@
                 new ApiResource
                 {
                     Name = "customer",
-                    Scopes = new[] {"customer.read", "customer.write"},
-                    ApiSecrets = new[] { new Secret("secret".Sha256()) }
+                    Scopes = {"customer.read", "customer.write"},
+                    ApiSecrets = { new Secret("secret".Sha256()) }
                 },
                 new ApiResource
                 {
                     Name = "order",
-                    Scopes = new[] {"order.read", "order.write"},
-                    ApiSecrets = new[] { new Secret("secret".Sha256()) }
+                    Scopes = {"order.read", "order.write"},
+                    ApiSecrets = { new Secret("secret".Sha256()) }
                 }
             };
         }

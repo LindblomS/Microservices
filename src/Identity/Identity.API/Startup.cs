@@ -9,6 +9,7 @@ namespace Identity.API
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllersWithViews();
 
             services.AddIdentityServer()
                 .AddInMemoryClients(Clients.Get())
@@ -21,8 +22,15 @@ namespace Identity.API
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseStaticFiles();
+
             app.UseRouting();
             app.UseIdentityServer();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+            });
         }
     }
 }
