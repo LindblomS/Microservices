@@ -21,6 +21,7 @@ namespace Services.Customer.API
     using Services.Customer.API.Infrastructure.AutoFacModules;
     using System.Reflection;
     using System.Data.Common;
+    using Microsoft.IdentityModel.Logging;
 
     public class Startup
     {
@@ -33,22 +34,26 @@ namespace Services.Customer.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication("Bearer")
+                .AddIdentityServerAuthentication("Bearer", options =>
+                {
+                    options.ApiName = "customer";
+                    options.Authority = "https://localhost:5003";
+                });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("readPolicy", policy => policy.RequireClaim("scope", "customer.read"));
+            });
+
             services.AddCustomDbContext(Configuration);
             services.AddControllers();
             services.AddEventBus(Configuration);
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder
-                    .SetIsOriginAllowed((host) => true)
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials());
-            });
 
             services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(sp => (DbConnection connection) => new IntegrationEventLogService(connection));
             services.AddTransient<ICustomerIntegrationEventService, CustomerIntegrationEventService>();
             services.AddSingleton<IValidatorFactory, ValidatorFactory>();
+
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -62,15 +67,14 @@ namespace Services.Customer.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                IdentityModelEventSource.ShowPII = true;
             }
 
             app.UseRouting();
-            app.UseCors("CorsPolicy");
+            app.UseAuthentication();
+            app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapDefaultControllerRoute();
-            });
+            app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
         }
     }
 

@@ -1,6 +1,7 @@
 ﻿namespace Services.Order.API.Controllers
 {
     using MediatR;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Services.Order.API.Application.Commands.Commands;
@@ -63,6 +64,7 @@
 
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<OrderViewModel>), (int)HttpStatusCode.OK)]
+        [Authorize(Policy = "readPolicy")]
         public async Task<ActionResult<IEnumerable<OrderViewModel>>> Get()
         {
             return Ok(await _queries.GetOrdersAsync());
