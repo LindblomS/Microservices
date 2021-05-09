@@ -1,5 +1,6 @@
 ﻿namespace Identity.API.Configurations
 {
+    using IdentityServer4;
     using IdentityServer4.Models;
     using System.Collections.Generic;
 
@@ -18,17 +19,22 @@
                 },
                 new Client
                 {
-                    ClientId = "interactive",
-                    ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
+                    ClientId = "mvcclient",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.Code,
 
-                    RedirectUris = { "https://localhost:5003/signin-oidc" },
-                    FrontChannelLogoutUri = "https://localhost:5003/signout-oidc",
-                    PostLogoutRedirectUris = { "https://localhost:5003/signout-callback-oidc" },
+                    RedirectUris = { "https://localhost:5004/signin-oidc" },
+                    PostLogoutRedirectUris = { "https://localhost:5004" },
 
-                    AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "customer.read", "order.read" }
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile
+                    },
+
+                    RequirePkce = true,
+                    AllowPlainTextPkce = false
                 },
             };
         }
