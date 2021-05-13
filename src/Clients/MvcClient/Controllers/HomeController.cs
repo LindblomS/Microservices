@@ -31,5 +31,10 @@
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public IActionResult Logout()
+        {
+            return SignOut("cookie", "oidc");
+        }
     }
 }

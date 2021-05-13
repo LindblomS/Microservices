@@ -30,8 +30,12 @@ namespace MvcClient
                     options.ClientId = "mvcclient";
                     options.ClientSecret = "secret";
                     options.ResponseType = "code";
-                    options.UsePkce = true;
-                    options.ResponseMode = "query";
+                    options.SignedOutCallbackPath = "/Home/Index";
+                    options.SaveTokens = true;
+
+                    //options.Scope.Add("openid");
+                    //options.UsePkce = true;
+                    //options.ResponseMode = "query";
                 });
         }
 
@@ -45,7 +49,7 @@ namespace MvcClient
             app.UseStaticFiles();
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthentication();
             app.UseAuthorization();
             
             app.UseEndpoints(e => e.MapDefaultControllerRoute());

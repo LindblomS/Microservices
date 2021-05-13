@@ -1,10 +1,13 @@
-namespace Identity.Api.ViewModels
+namespace Identity.API.ViewModels
 {
-    using Identity.Api.Models;
+    using System.ComponentModel.DataAnnotations;
 
-    public class LoginViewModel : LoginInputModel
+    public class LoginViewModel
     {
-        public bool AllowRememberLogin { get; set; } = true;
-        public bool EnableLocalLogin { get; set; } = true;
+        [Required]
+        public string Username { get; set; }
+        [Required]
+        public string Password { get; set; }
+        public string ReturnUrl { get; set; }
     }
 }

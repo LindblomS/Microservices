@@ -25,16 +25,13 @@
                     AllowedGrantTypes = GrantTypes.Code,
 
                     RedirectUris = { "https://localhost:5004/signin-oidc" },
-                    PostLogoutRedirectUris = { "https://localhost:5004" },
+                    PostLogoutRedirectUris = { "https://localhost:5004/Home/Index" },
 
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile
-                    },
-
-                    RequirePkce = true,
-                    AllowPlainTextPkce = false
+                    }
                 },
             };
         }
