@@ -76,9 +76,14 @@ namespace Identity.API.Controllers
             await _signInManager.SignOutAsync();
             var logOutRequest = await _interactionService.GetLogoutContextAsync(logoutId);
             if (string.IsNullOrEmpty(logOutRequest.PostLogoutRedirectUri))
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Account");
 
             return Redirect(logOutRequest.PostLogoutRedirectUri);
+        }
+
+        public string Index()
+        {
+            return "Hola";
         }
 
     }
