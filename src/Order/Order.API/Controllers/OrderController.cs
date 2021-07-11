@@ -62,12 +62,12 @@
                 return BadRequest();
         }
 
-        [HttpGet]
+        [HttpGet("{customerId}")]
         [ProducesResponseType(typeof(IEnumerable<OrderViewModel>), (int)HttpStatusCode.OK)]
         [Authorize(Policy = "readPolicy")]
-        public async Task<ActionResult<IEnumerable<OrderViewModel>>> Get()
+        public async Task<ActionResult<IEnumerable<OrderViewModel>>> Get(string customerId)
         {
-            return Ok(await _queries.GetOrdersAsync());
+            return Ok(await _queries.GetOrdersAsync(Guid.Parse(customerId)));
         }
     }
 }

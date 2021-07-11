@@ -21,12 +21,11 @@
         }
 
         [Authorize]
-        public IActionResult Privacy()
+        public IActionResult Orders()
         {
-            return View();
+            return RedirectToAction("Orders", "Orders");
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
@@ -35,6 +34,12 @@
         public IActionResult Logout()
         {
             return SignOut("cookie", "oidc");
+        }
+
+        [Authorize]
+        public IActionResult Login()
+        {
+            return RedirectToAction("Index");
         }
     }
 }

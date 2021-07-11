@@ -6,6 +6,7 @@ namespace Services.Order.API
     using EventBus.EventBusRabbitMQ;
     using EventBus.IntegrationEventLogEF;
     using FluentValidation;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
@@ -40,6 +41,8 @@ namespace Services.Order.API
                     options.ApiName = "order";
                     options.Authority = "https://localhost:5003";
                 });
+
+            //services.AddSingleton<IAuthorizationHandler, authhandler>();
 
             services.AddAuthorization(options =>
             {

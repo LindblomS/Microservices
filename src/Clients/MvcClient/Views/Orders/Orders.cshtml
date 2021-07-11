@@ -1,0 +1,20 @@
+﻿@model OrdersViewModel
+<h1>Tja</h1>
+<div>
+	<h2>Your orders</h2>
+	<div>
+		<h3>orders</h3>
+		@foreach (var order in Model?.Orders)
+		{
+			<ul>
+				<li>orderid @order.OrderId</li>
+				@foreach (var item in order.OrderItems)
+				{
+					<li>Item @item.Name</li>
+					<li>Quantity @item.Quantity</li>
+				}
+			</ul>
+		}
+	</div>
+	<h3>pending</h3>
+</div>

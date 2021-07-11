@@ -17,6 +17,7 @@ namespace MvcClient
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient();
             services.AddControllersWithViews();
             services.AddAuthentication(options => 
             {
@@ -32,10 +33,9 @@ namespace MvcClient
                     options.ResponseType = "code";
                     options.SignedOutCallbackPath = "/Home/Index";
                     options.SaveTokens = true;
+                    options.SignInScheme = "cookie";
 
-                    //options.Scope.Add("openid");
-                    //options.UsePkce = true;
-                    //options.ResponseMode = "query";
+                    options.Scope.Add("order.read");
                 });
         }
 

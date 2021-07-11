@@ -14,7 +14,7 @@ namespace Identity.API
             using (var scope = host.Services.CreateScope())
             {
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-                userManager.CreateAsync(new IdentityUser("balle"), "password");
+                userManager.CreateAsync(new IdentityUser("balle") { Id = "38c85c53-9be7-4da6-8449-e8355da237f9" }, "password");
             }
 
             host.Run();

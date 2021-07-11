@@ -57,7 +57,9 @@ namespace Identity.API.Controllers
             if (ModelState.IsValid)
             {
                 var user = new IdentityUser(vm.Username);
+                user.Id = Guid.NewGuid().ToString();
                 var result = await _userManager.CreateAsync(user, vm.Password);
+
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, false);

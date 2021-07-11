@@ -27,7 +27,7 @@
                 new ApiResource
                 {
                     Name = "order",
-                    Scopes = {"order.read", "order.write"},
+                    Scopes = {"order.read", "order.write", "id"},
                     ApiSecrets = { new Secret("secret".Sha256()) }
                 }
             };
@@ -40,7 +40,8 @@
                 new ApiScope("customer.read"),
                 new ApiScope("customer.write"),
                 new ApiScope("order.read"),
-                new ApiScope("order.write")
+                new ApiScope("order.write"),
+                new ApiScope("id")
             };
         }
     }
