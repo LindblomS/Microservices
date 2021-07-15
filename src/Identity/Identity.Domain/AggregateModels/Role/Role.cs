@@ -2,28 +2,72 @@
 {
     using Services.Identity.Domain.Domain.SeedWork;
     using Services.Identity.Domain.Events;
+    using Services.Identity.Domain.Exceptions;
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class Role : Entity, IAggregateRoot
     {
+        private readonly List<Claim> _claims;
+
         public Role(string id, string displayName)
         {
-            if (string.IsNullOrWhiteSpace(id))
-                throw new ArgumentNullException(nameof(id));
-
-            if (string.IsNullOrWhiteSpace(displayName))
-                throw new ArgumentNullException(nameof(displayName));
+            ValidateId(id);
+            ValidateDisplayName(displayName);
 
             Id = id;
             DisplayName = displayName;
+            _claims ??= new List<Claim>();
+        }
+
+        public Role(string id, string displayName, IEnumerable<Claim> claims) 
+            : this(id, displayName)
+        {
+            _claims = claims?.ToList() ?? throw new ArgumentNullException(nameof(claims));
         }
 
         public string Id { get; }
         public string DisplayName { get; }
+        public IReadOnlyList<Claim> Claims => _claims;
+
+        public void AddClaim(Claim claim)
+        {
+            if (_claims.Any(x => x.Type == claim.Type))
+                throw new IdentityDomainException("Cannot add claim. Role already has claim");
+
+            _claims.Add(claim);
+        }
+
+        public void RemoveClaim(Claim claim)
+        {
+            if (!_claims.Any(x => x.Type == claim.Type))
+                throw new IdentityDomainException("Cannot remove claim. Role does not have claim");
+
+            _claims.Remove(claim);
+        }
 
         public void Delete()
         {
             AddDomainEvent(new RoleDeletedDomainEvent(this));
+        }
+
+        private void ValidateId(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+                throw new ArgumentNullException(nameof(id));
+
+            if (id.Length > 25)
+                throw new ArgumentException("id cannot exceed 25 characters");
+        }
+
+        private void ValidateDisplayName(string displayName)
+        {
+            if (string.IsNullOrWhiteSpace(displayName))
+                throw new ArgumentNullException(nameof(displayName));
+
+            if (displayName.Length > 50)
+                throw new ArgumentException("display name cannot exceed 50 characters");
         }
     }
 }

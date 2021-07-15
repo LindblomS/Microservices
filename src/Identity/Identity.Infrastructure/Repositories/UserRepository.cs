@@ -10,11 +10,18 @@
 
     public class UserRepository : IUserRepository
     {
-        public IUnitOfWork UnitOfWork => throw new NotImplementedException();
+        private readonly DbContext _context;
+
+        public UserRepository(DbContext context)
+        {
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+        }
+
+        public IUnitOfWork UnitOfWork => _context;
 
         public async Task CreateAsync(User user)
         {
-            throw new NotImplementedException();
+            
         }
 
         public async Task DeleteAsync(User user)
