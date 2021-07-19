@@ -6,9 +6,9 @@
 
     public interface IUserRepository : IRepository<User>
     {
-        Task CreateAsync(User user);
+        void Create(User user);
         Task UpdateAsync(User user);
         Task DeleteAsync(User user);
-        Task GetAsync(Guid id);
+        Task<User> GetAsync(Guid id);
     }
 }

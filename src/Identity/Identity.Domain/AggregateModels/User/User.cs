@@ -12,6 +12,7 @@
     {
         private readonly Guid _id;
         private readonly string _username;
+        private readonly string _passwordHash;
         private List<Claim> _claims;
         private List<Role> _roles;
 
@@ -26,7 +27,7 @@
             _roles = new List<Role>();
         }
 
-        public User(Guid id, string username, IEnumerable<Claim> claims, IEnumerable<Role> roles)
+        public User(Guid id, string username, string passwordHash,  IEnumerable<Claim> claims, IEnumerable<Role> roles)
         {
             if (id == default(Guid))
                 throw new ArgumentNullException(nameof(id));
@@ -36,12 +37,18 @@
             ValidateUsername(username);
             _username = username;
 
+            if (string.IsNullOrWhiteSpace(passwordHash))
+                throw new ArgumentNullException(nameof(passwordHash));
+
+            _passwordHash = passwordHash;
+
             _claims = claims?.ToList() ?? throw new ArgumentNullException(nameof(claims));
             _roles = roles?.ToList() ?? throw new ArgumentNullException(nameof(roles));
         }
 
         public Guid Id => _id;
         public string Username => _username;
+        public string PasswordHash => _passwordHash;
         public IReadOnlyList<Claim> Claims => _claims;
         public IReadOnlyList<Role> Roles => _roles;
 

@@ -9,6 +9,7 @@
 
     public class Role : Entity, IAggregateRoot
     {
+        private string _displayName;
         private readonly List<Claim> _claims;
 
         public Role(string id, string displayName)
@@ -17,7 +18,7 @@
             ValidateDisplayName(displayName);
 
             Id = id;
-            DisplayName = displayName;
+            _displayName = displayName;
             _claims ??= new List<Claim>();
         }
 
@@ -28,8 +29,14 @@
         }
 
         public string Id { get; }
-        public string DisplayName { get; }
+        public string DisplayName => _displayName;
         public IReadOnlyList<Claim> Claims => _claims;
+
+        public void ChangeDisplayName(string displayName)
+        {
+            ValidateDisplayName(displayName);
+            _displayName = displayName;
+        }
 
         public void AddClaim(Claim claim)
         {

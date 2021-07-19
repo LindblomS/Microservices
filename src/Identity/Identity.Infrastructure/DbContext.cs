@@ -15,6 +15,10 @@
         Task<SqlTransaction> BeginTransactionAsync();
         Task CommitTransactionAsync(SqlTransaction transaction);
         bool HasActiveTransaction();
+
+        Task<IEnumerable<T>> QueryAsync<T>(string sql, object parameters);
+        Task<T> QuerySingleOrDefaultAsync<T>(string sql, object parameters);
+        void Execute(string sql, object parameters, IEnumerable<INotification> notifications);
     }
 
     public class DbContext : IUnitOfWork, IDbContext
@@ -32,14 +36,14 @@
             _commands = new List<Command>();
         }
 
-        public void Execute<T>(string sql, object parameters, IEnumerable<INotification> notifications)
+        public void Execute(string sql, object parameters, IEnumerable<INotification> notifications)
         {
             _commands.Add(new (sql, parameters, notifications));
         }
 
         public async Task<T> QuerySingleOrDefaultAsync<T>(string sql, object parameters)
         {
-            if (_transaction == null)
+            if (_transaction is null)
             {
                 using (var connection = _connectionProvider.GetConnection())
                 {
@@ -47,8 +51,22 @@
                     return await connection.QuerySingleOrDefaultAsync<T>(sql, parameters);
                 }
             }
-            else
-                return await _transaction.Connection.QuerySingleOrDefaultAsync<T>(sql, parameters, _transaction);
+
+            return await _transaction.Connection.QuerySingleOrDefaultAsync<T>(sql, parameters, _transaction);
+        }
+
+        public async Task<IEnumerable<T>> QueryAsync<T>(string sql, object parameters)
+        {
+            if (_transaction is null)
+            {
+                using (var connection = _connectionProvider.GetConnection())
+                {
+                    await connection.OpenAsync();
+                    return await connection.QueryAsync<T>(sql, parameters);
+                }
+            }
+
+            return await _transaction.Connection.QueryAsync<T>(sql, parameters, _transaction);
         }
 
 
@@ -151,7 +169,7 @@
             _connection?.Close();
         }
 
-        private class Command
+        public class Command
         {
             public Command(string sql, object parameters, IEnumerable<INotification> notifications)
             {
