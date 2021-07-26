@@ -35,7 +35,7 @@ namespace Services.Identity.Infrastructure.Repositories
 
         public async Task<Role> GetAsync(string id)
         {
-            var sql = $"select id as {nameof(RoleDto.Id)}, display_name as {nameof(RoleDto.DisplayName)} from role where id = @id";
+            var sql = $"select id as {nameof(RoleDto.id)}, display_name as {nameof(RoleDto.displayName)} from role where id = @id";
             var role = RoleMapper.Map(await _context.QuerySingleOrDefaultAsync<RoleDto>(sql, new { id = id }));
 
             var claims = await GetRoleClaims(id);
@@ -69,7 +69,7 @@ namespace Services.Identity.Infrastructure.Repositories
 
         private async Task<IEnumerable<Claim>> GetRoleClaims(string roleId)
         {
-            var sql = $"select claim_type as {nameof(ClaimDto.Type)}, claim_value as {nameof(ClaimDto.Value)} where role_id = @role_id";
+            var sql = $"select claim_type as {nameof(ClaimDto.type)}, claim_value as {nameof(ClaimDto.value)} where role_id = @role_id";
             var dtos = await _context.QueryAsync<ClaimDto>(sql, new { role_id = roleId });
             var claims = new List<Claim>();
 

@@ -10,7 +10,7 @@ namespace Services.Identity.Infrastructure.Mappers
     {
         public static User Map(UserDto user)
         {
-            return new User(user.Id, user.Username, user.PasswordHash, new List<Claim>(), new List<Role>());
+            return new User(user.id, user.username, user.passwordHash, new List<Claim>(), new List<Role>());
         }
     }
 }

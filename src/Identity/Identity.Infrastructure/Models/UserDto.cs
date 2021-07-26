@@ -2,10 +2,5 @@
 
 namespace Services.Identity.Infrastructure.Models
 {
-    public record UserDto
-    {
-        public Guid Id { get; init; }
-        public string Username { get; init; }
-        public string PasswordHash { get; init; }
-    }
+    public record UserDto (Guid id, string username, string passwordHash);
 }

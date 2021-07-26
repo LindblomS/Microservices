@@ -7,7 +7,7 @@ namespace Services.Identity.Infrastructure.Mappers
     {
         public static Claim Map(ClaimDto claim)
         {
-            return new Claim(claim.Type, claim.Value);
+            return new Claim(claim.type, claim.value);
         }
     }
 }

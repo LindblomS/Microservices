@@ -46,7 +46,7 @@
 
         public async Task<User> GetAsync(Guid id)
         {
-            var sql = $"select id as {nameof(UserDto.Id)}, username as {nameof(UserDto.Username)}, password_hash as {nameof(UserDto.PasswordHash)} from user where id = @id";
+            var sql = $"select id as {nameof(UserDto.id)}, username as {nameof(UserDto.username)}, password_hash as {nameof(UserDto.passwordHash)} from user where id = @id";
             var user = UserMapper.Map(await _context.QuerySingleOrDefaultAsync<UserDto>(sql, new { id = id }));
 
             var claims = await GetUserClaims(id);
@@ -147,7 +147,7 @@
 
         private async Task<IEnumerable<Claim>> GetUserClaims(Guid userId)
         {
-            var sql = $"select claim_type as {nameof(ClaimDto.Type)}, claim_value as {nameof(ClaimDto.Value)} from user_claim where user_id = @user_id";
+            var sql = $"select claim_type as {nameof(ClaimDto.type)}, claim_value as {nameof(ClaimDto.value)} from user_claim where user_id = @user_id";
             var dtos = await _context.QueryAsync<ClaimDto>(sql, new { user_id = userId });
             var claims = new List<Claim>();
 
@@ -159,7 +159,7 @@
 
         private async Task<IEnumerable<Role>> GetUserRoles(Guid userId)
         {
-            var sql = $"select role_id as {nameof(RoleDto.Id)}, display_name as {nameof(RoleDto.DisplayName)} from user_role where user_id = @user_id";
+            var sql = $"select role_id as {nameof(RoleDto.id)}, display_name as {nameof(RoleDto.displayName)} from user_role where user_id = @user_id";
             var dtos = await _context.QueryAsync<RoleDto>(sql, new { user_id = userId });
             var roles = new List<Role>();
 

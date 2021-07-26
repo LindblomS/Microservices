@@ -7,7 +7,7 @@ namespace Services.Identity.Infrastructure.Mappers
     {
         public static Role Map(RoleDto role)
         {
-            return new Role(role.Id, role.DisplayName);
+            return new Role(role.id, role.displayName);
         }
     }
 }
