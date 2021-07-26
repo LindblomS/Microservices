@@ -7,6 +7,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Services.Identity.Domain.ValueObjects;
 
     public class User : Entity, IAggregateRoot
     {
@@ -16,12 +17,17 @@
         private List<Claim> _claims;
         private List<Role> _roles;
 
-        public User(string username)
+        public User(string username, string passwordHash)
         {
             _id = Guid.NewGuid();
 
             ValidateUsername(username);
             _username = username;
+
+            if (string.IsNullOrWhiteSpace(passwordHash))
+                throw new ArgumentNullException(nameof(passwordHash));
+
+            _passwordHash = passwordHash;
 
             _claims = new List<Claim>();
             _roles = new List<Role>();

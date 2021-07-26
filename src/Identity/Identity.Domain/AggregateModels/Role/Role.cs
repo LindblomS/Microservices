@@ -3,6 +3,7 @@
     using Services.Identity.Domain.Domain.SeedWork;
     using Services.Identity.Domain.Events;
     using Services.Identity.Domain.Exceptions;
+    using Services.Identity.Domain.ValueObjects;
     using System;
     using System.Collections.Generic;
     using System.Linq;

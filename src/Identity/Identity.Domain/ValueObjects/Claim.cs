@@ -1,8 +1,8 @@
-﻿namespace Services.Identity.Domain.AggregateModels
+﻿namespace Services.Identity.Domain.ValueObjects
 {
     using System;
 
-    public class Claim
+    public record Claim
     {
         public Claim(string type, string value)
         {

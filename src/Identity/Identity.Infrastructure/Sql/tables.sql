@@ -35,3 +35,10 @@ create table [dbo].[user_role](
 		[role_id] asc
 	)
 )
+
+create table [dbo].[client_request](
+	[id] UNIQUEIDENTIFIER not null,
+	[name] varchar(100) not null,
+	[time] datetime2 not null,
+	constraint [pk_client_request] primary key clustered ([id] asc)
+)

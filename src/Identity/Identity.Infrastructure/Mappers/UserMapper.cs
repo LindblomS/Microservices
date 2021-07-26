@@ -1,11 +1,11 @@
-﻿using Services.Identity.Domain.AggregateModels;
-using Services.Identity.Domain.AggregateModels.Role;
-using Services.Identity.Domain.AggregateModels.User;
-using Services.Identity.Infrastructure.Models;
-using System.Collections.Generic;
-
-namespace Services.Identity.Infrastructure.Mappers
+﻿namespace Services.Identity.Infrastructure.Mappers
 {
+    using Services.Identity.Domain.AggregateModels.Role;
+    using Services.Identity.Domain.AggregateModels.User;
+    using Services.Identity.Domain.ValueObjects;
+    using Services.Identity.Infrastructure.Models;
+    using System.Collections.Generic;
+
     public static class UserMapper
     {
         public static User Map(UserDto user)

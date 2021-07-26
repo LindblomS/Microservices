@@ -2,6 +2,7 @@
 using Services.Identity.Domain.AggregateModels;
 using Services.Identity.Domain.AggregateModels.Role;
 using Services.Identity.Domain.Domain.SeedWork;
+using Services.Identity.Domain.ValueObjects;
 using Services.Identity.Infrastructure.Mappers;
 using Services.Identity.Infrastructure.Models;
 using System;
@@ -67,6 +68,18 @@ namespace Services.Identity.Infrastructure.Repositories
             _context.Execute(sql, new { id = role.Id, display_name = role.DisplayName }, new List<INotification>());
         }
 
+        public async Task<IEnumerable<Role>> GetAsync(IEnumerable<string> roles)
+        {
+            var sql = $"select id as {nameof(RoleDto.id)}, display_name as {nameof(RoleDto.displayName)} from role where id in @roles";
+            var dtos = await _context.QueryAsync<RoleDto>(sql, new { roles = roles });
+            var rolesToReturn = new List<Role>();
+
+            foreach (var role in dtos)
+                rolesToReturn.Add(RoleMapper.Map(role));
+
+            return rolesToReturn;
+        }
+
         private async Task<IEnumerable<Claim>> GetRoleClaims(string roleId)
         {
             var sql = $"select claim_type as {nameof(ClaimDto.type)}, claim_value as {nameof(ClaimDto.value)} where role_id = @role_id";
@@ -108,5 +121,7 @@ namespace Services.Identity.Infrastructure.Repositories
 
             return commands;
         }
+
+
     }
 }
