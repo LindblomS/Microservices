@@ -1,5 +1,6 @@
 ﻿namespace Identity.API.Application.Behaviours
 {
+    using Identity.API.Application.Factories;
     using MediatR;
     using Services.Identity.Contracts.Results;
     using System;
@@ -16,7 +17,7 @@
             }
             catch (Exception exception)
             {
-                return 
+                return ResultFactory.CreateExceptionResult<R>(exception);
             }
         }
     }

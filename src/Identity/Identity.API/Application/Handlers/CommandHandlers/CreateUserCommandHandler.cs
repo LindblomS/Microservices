@@ -1,5 +1,6 @@
 ﻿namespace Identity.API.Application.Handlers.CommandHandlers
 {
+    using Identity.API.Application.Factories;
     using Identity.Contracts.Commands;
     using MediatR;
     using Services.Identity.Contracts.Results;
@@ -35,7 +36,7 @@
 
             _userRepository.Create(user);
 
-            return new CommandResult();
+            return ResultFactory.CreateSuccessResult();
         }
     }
 
@@ -47,7 +48,7 @@
 
         protected override CommandResult CreateResultForDuplicateRequest()
         {
-            return new CommandResult("Duplicate command");
+            return ResultFactory.CreateFailureResult<CommandResult>("Duplicate command");
         }
     }
 }

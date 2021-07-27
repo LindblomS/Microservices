@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="10.3.0" />
     <PackageReference Include="IdentityServer4" Version="4.1.2" />
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.2" />
     <PackageReference Include="MediatR" Version="9.0.0" />
@@ -12,10 +13,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Application\Handlers\QueryHandlers\" />
   </ItemGroup>
 
   <ItemGroup>
