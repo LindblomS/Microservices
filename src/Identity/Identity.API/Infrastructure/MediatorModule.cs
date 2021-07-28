@@ -8,7 +8,11 @@
     using Identity.API.Application.Handlers.CommandHandlers;
     using Identity.API.Application.Validators;
     using MediatR;
+    using Services.Identity.Domain.AggregateModels.Role;
+    using Services.Identity.Domain.AggregateModels.User;
+    using Services.Identity.Infrastructure;
     using Services.Identity.Infrastructure.Idempotency;
+    using Services.Identity.Infrastructure.Repositories;
 
     public class MediatorModule : Autofac.Module
     {
@@ -17,6 +21,13 @@
             builder.RegisterType<RequestManager>()
                 .As<IRequestManager>()
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<CustomContext>()
+                .As<IDbContext>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<UserRepository>().As<IUserRepository>();
+            builder.RegisterType<RoleRepository>().As<IRoleRepository>();
 
             builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly)
                 .AsImplementedInterfaces();
