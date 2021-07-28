@@ -1,5 +1,6 @@
 namespace Identity.API
 {
+    using Autofac.Extensions.DependencyInjection;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +26,6 @@ namespace Identity.API
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                }).UseServiceProviderFactory(new AutofacServiceProviderFactory());
     }
 }

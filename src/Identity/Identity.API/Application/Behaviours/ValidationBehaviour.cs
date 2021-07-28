@@ -20,7 +20,7 @@
 
         public async Task<R> Handle(T request, CancellationToken cancellationToken, RequestHandlerDelegate<R> next)
         {
-            var result = _validators.Select(x => x.Validate(request)).Select(x => x.Errors);
+            var result = _validators.Select(x => x.Validate(request)).Where(x => !x.IsValid);
 
             if (result.Any())
                 return ResultFactory.CreateFailureResult<R>(string.Join(Environment.NewLine, result));

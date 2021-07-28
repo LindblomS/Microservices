@@ -25,5 +25,15 @@
         public string FailureMessage { get; private set; }
         public Exception Exception { get; private set; }
 
+        public bool IsFailure()
+        {
+            return !string.IsNullOrEmpty(FailureMessage);
+        }
+
+        public bool IsException()
+        {
+            return Exception != null;
+        }
+
     }
 }

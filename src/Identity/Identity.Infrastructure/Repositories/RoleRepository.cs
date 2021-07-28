@@ -14,9 +14,9 @@ namespace Services.Identity.Infrastructure.Repositories
 {
     public class RoleRepository : IRoleRepository
     {
-        private readonly DbContext _context;
+        private readonly CustomContext _context;
 
-        public RoleRepository(DbContext context)
+        public RoleRepository(CustomContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }

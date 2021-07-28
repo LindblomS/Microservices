@@ -21,7 +21,7 @@
         void Execute(string sql, object parameters, IEnumerable<INotification> notifications);
     }
 
-    public class DbContext : IUnitOfWork, IDbContext
+    public class CustomContext : IUnitOfWork, IDbContext
     {
         private SqlTransaction _transaction;
         private SqlConnection _connection;
@@ -29,7 +29,7 @@
         private readonly IMediator _mediator;
         private readonly List<Command> _commands;
 
-        public DbContext(IConnectionProvider connectionProvider, IMediator mediator)
+        public CustomContext(IConnectionProvider connectionProvider, IMediator mediator)
         {
             _connectionProvider = connectionProvider ?? throw new ArgumentNullException(nameof(connectionProvider));
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));

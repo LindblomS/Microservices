@@ -25,7 +25,7 @@
                 return CreateResultForDuplicateRequest();
 
             await _requestManager.CreateRequestForCommandAsync<T>(request.Id);
-            return await _mediator.Send(request, cancellationToken);
+            return await _mediator.Send(request.Command, cancellationToken);
         }
 
         protected virtual R CreateResultForDuplicateRequest()

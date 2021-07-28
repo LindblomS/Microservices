@@ -5,6 +5,7 @@
     using Services.Identity.Domain.AggregateModels.Role;
     using Services.Identity.Domain.AggregateModels.User;
     using Services.Identity.Domain.Domain.SeedWork;
+    using Services.Identity.Domain.ValueObjects;
     using Services.Identity.Infrastructure.Mappers;
     using Services.Identity.Infrastructure.Models;
     using System;
@@ -14,9 +15,9 @@
 
     public class UserRepository : IUserRepository
     {
-        private readonly DbContext _context;
+        private readonly CustomContext _context;
 
-        public UserRepository(DbContext context)
+        public UserRepository(CustomContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }

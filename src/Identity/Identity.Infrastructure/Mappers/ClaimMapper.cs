@@ -1,4 +1,5 @@
 ﻿using Services.Identity.Domain.AggregateModels;
+using Services.Identity.Domain.ValueObjects;
 using Services.Identity.Infrastructure.Models;
 
 namespace Services.Identity.Infrastructure.Mappers
