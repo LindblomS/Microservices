@@ -1,17 +1,16 @@
-﻿using MediatR;
-using Services.Identity.Domain.AggregateModels;
-using Services.Identity.Domain.AggregateModels.Role;
-using Services.Identity.Domain.Domain.SeedWork;
-using Services.Identity.Domain.ValueObjects;
-using Services.Identity.Infrastructure.Mappers;
-using Services.Identity.Infrastructure.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Services.Identity.Infrastructure.Repositories
+﻿namespace Services.Identity.Infrastructure.Repositories
 {
+    using MediatR;
+    using Services.Identity.Domain.AggregateModels.Role;
+    using Services.Identity.Domain.Domain.SeedWork;
+    using Services.Identity.Domain.ValueObjects;
+    using Services.Identity.Infrastructure.Mappers;
+    using Services.Identity.Infrastructure.Models;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
     public class RoleRepository : IRoleRepository
     {
         private readonly CustomContext _context;

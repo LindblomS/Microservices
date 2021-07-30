@@ -27,7 +27,7 @@
         public void Create(User user)
         {
             var commands = new Dictionary<string, object>();
-            var sql = $@"insert into user (id, username, password_hash) values (@id, @username, @password)";
+            var sql = $@"insert into [user] (id, username, password_hash) values (@id, @username, @password)";
             commands.Add(sql, new { id = user.Id, username = user.Username, password = user.PasswordHash });
 
             foreach (var c in GetAddClaimCommands(user.Claims, user.Id))
@@ -47,7 +47,7 @@
 
         public async Task<User> GetAsync(Guid id)
         {
-            var sql = $"select id as {nameof(UserDto.id)}, username as {nameof(UserDto.username)}, password_hash as {nameof(UserDto.passwordHash)} from user where id = @id";
+            var sql = $"select id as {nameof(UserDto.id)}, username as {nameof(UserDto.username)}, password_hash as {nameof(UserDto.passwordHash)} from [user] where id = @id";
             var user = UserMapper.Map(await _context.QuerySingleOrDefaultAsync<UserDto>(sql, new { id = id }));
 
             var claims = await GetUserClaims(id);

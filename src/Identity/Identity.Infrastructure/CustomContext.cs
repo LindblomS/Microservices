@@ -94,8 +94,8 @@
             foreach (var command in commands)
                 rowsAffected += await connection.ExecuteAsync(command.Sql, command.Parameters, transaction);
 
-            foreach (var notification in commands.Select(x => x.Notifications))
-                await _mediator.Publish(notification);
+            //foreach (var notification in commands.Select(x => x.Notifications))
+            //    await _mediator.Publish(notification);
 
             return rowsAffected;
         }

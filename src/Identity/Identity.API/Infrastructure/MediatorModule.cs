@@ -23,7 +23,6 @@
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<CustomContext>()
-                .As<IDbContext>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<UserRepository>().As<IUserRepository>();
@@ -48,6 +47,7 @@
                 return t => { object o; return componentContext.TryResolve(t, out o) ? o : null; };
             });
 
+            builder.RegisterGeneric(typeof(ResultBehaviours<,>)).As(typeof(IPipelineBehavior<,>));
             builder.RegisterGeneric(typeof(LoggingBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
             builder.RegisterGeneric(typeof(ValidationBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
         }

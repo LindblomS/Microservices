@@ -36,7 +36,10 @@
                 var user = users.SingleOrDefault(x => x.Id == userClaim.UserId);
 
                 if (user is null)
+                {
                     user = new(userClaim.UserId, userClaim.Username, new List<Claim>(), new List<Role>());
+                    users.Add(user);
+                }
 
                 user.Claims.Add(new(userClaim.ClaimType, userClaim.ClaimValue));
             }
@@ -54,12 +57,12 @@
         {
             var sql = $@"
                 select 
-                    user.id as {nameof(UserClaim.UserId)}, 
-                    user.username as {nameof(UserClaim.Username)}, 
+                    [user].id as {nameof(UserClaim.UserId)}, 
+                    [user].username as {nameof(UserClaim.Username)}, 
                     user_claim.claim_type as {nameof(UserClaim.ClaimType)}, 
                     user_claim.claim_value as {nameof(UserClaim.ClaimValue)} 
-                from user
-                left join user_claim on user_claim.user_id = user.id";
+                from [user]
+                left join user_claim on user_claim.user_id = [user].id";
 
             return await connection.QueryAsync<UserClaim>(sql);
         }
