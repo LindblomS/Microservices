@@ -5,7 +5,6 @@
     using Services.Identity.Contracts.Commands;
     using Services.Identity.Contracts.Results;
     using Services.Identity.Domain.AggregateModels.Role;
-    using Services.Identity.Domain.AggregateModels.User;
     using Services.Identity.Domain.ValueObjects;
     using Services.Identity.Infrastructure;
     using Services.Identity.Infrastructure.Idempotency;
@@ -16,41 +15,35 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, CommandResult>
+    public class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, CommandResult>
     {
-        private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly CustomContext _context;
 
-        public UpdateUserCommandHandler(IUserRepository userRepository, IRoleRepository roleRepository, CustomContext context)
+        public UpdateRoleCommandHandler(IRoleRepository roleRepository, CustomContext context)
         {
-            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             _roleRepository = roleRepository ?? throw new ArgumentNullException(nameof(roleRepository));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public async Task<CommandResult> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+        public async Task<CommandResult> Handle(UpdateRoleCommand request, CancellationToken cancellationToken)
         {
             SqlTransaction transaction = null;
             if (!_context.HasActiveTransaction())
                 transaction = await _context.BeginTransactionAsync();
 
-            var user = await _userRepository.GetAsync(request.Id);
+            var role = await _roleRepository.GetAsync(request.Id);
             var claims = GetClaims(request);
-            var roles = await _roleRepository.GetAsync(request.Roles);
 
-            foreach (var claim in user.Claims.Where(userClaim => claims.Any(c => c.Type != userClaim.Type && c.Value != userClaim.Value)))
-                user.RemoveClaim(claim);
+            foreach (var claim in role.Claims.Where(roleClaim => claims.Any(c => c.Type != roleClaim.Type && c.Value != roleClaim.Value)))
+                role.RemoveClaim(claim);
 
-            foreach (var claim in claims.Where(c => user.Claims.Any(userClaim => userClaim.Type != c.Type && userClaim.Value != c.Value)))
-                user.AddClaim(claim);
+            foreach (var claim in claims.Where(c => role.Claims.Any(roleClaim => roleClaim.Type != c.Type && roleClaim.Value != c.Value)))
+                role.AddClaim(claim);
 
-            foreach (var role in user.Roles.Where(userRole => roles.Any(r => r.Id != userRole.Id)))
-                user.RemoveRole(role);
+            if (role.DisplayName != request.DisplayName)
+                role.ChangeDisplayName(request.DisplayName);
 
-            foreach (var role in roles.Where(r => user.Roles.Any(userRole => userRole.Id != r.Id)))
-                user.AddRole(role);
-
-            await _userRepository.UpdateAsync(user);
+            await _roleRepository.UpdateAsync(role);
 
             if (!(transaction is null))
                 await _context.CommitTransactionAsync(transaction);
@@ -58,10 +51,9 @@
             return ResultFactory.CreateSuccessResult();
         }
 
-        private IEnumerable<Claim> GetClaims(UpdateUserCommand request)
+        private IEnumerable<Claim> GetClaims(UpdateRoleCommand request)
         {
             var claims = new List<Claim>();
-
             foreach (var claim in request.Claims)
                 claims.Add(new(claim.Type, claim.Value));
 
@@ -69,9 +61,9 @@
         }
     }
 
-    public class IdentifiedUpdateUserCommandHandler : IdentifiedCommandHandler<UpdateUserCommand, CommandResult>
+    public class IdentifiedUpdateRoleCommandHandler : IdentifiedCommandHandler<UpdateRoleCommand, CommandResult>
     {
-        public IdentifiedUpdateUserCommandHandler(IRequestManager requestManager, IMediator mediator) : base(requestManager, mediator)
+        public IdentifiedUpdateRoleCommandHandler(IRequestManager requestManager, IMediator mediator) : base(requestManager, mediator)
         {
         }
 

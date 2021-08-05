@@ -1,8 +1,8 @@
 ﻿namespace Identity.API.Application.Handlers.CommandHandlers
 {
     using Identity.API.Application.Factories;
-    using Identity.Contracts.Commands;
     using MediatR;
+    using Services.Identity.Contracts.Commands;
     using Services.Identity.Contracts.Results;
     using Services.Identity.Domain.AggregateModels.Role;
     using Services.Identity.Domain.AggregateModels.User;

@@ -1,13 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Services.Identity.Contracts.Commands
+﻿namespace Services.Identity.Contracts.Commands
 {
-    public class UpdateUserCommand
+    using MediatR;
+    using Services.Identity.Contracts.Models;
+    using Services.Identity.Contracts.Results;
+    using System;
+    using System.Collections.Generic;
+
+    public class UpdateUserCommand : IRequest<CommandResult>
     {
-        
+        public Guid Id { get; private set; }
+        public IEnumerable<Claim> Claims { get; private set; }
+        public IEnumerable<string> Roles { get; private set; }
+
     }
 }

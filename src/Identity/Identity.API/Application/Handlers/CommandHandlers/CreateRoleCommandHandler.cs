@@ -1,19 +1,17 @@
-﻿using Identity.API.Application.Factories;
-using MediatR;
-using Services.Identity.Contracts.Commands;
-using Services.Identity.Contracts.Results;
-using Services.Identity.Domain.AggregateModels.Role;
-using Services.Identity.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace Identity.API.Application.Handlers.CommandHandlers
+﻿namespace Identity.API.Application.Handlers.CommandHandlers
 {
+    using Identity.API.Application.Factories;
+    using MediatR;
+    using Services.Identity.Contracts.Commands;
+    using Services.Identity.Contracts.Results;
+    using Services.Identity.Domain.AggregateModels.Role;
+    using Services.Identity.Infrastructure;
+    using Services.Identity.Infrastructure.Idempotency;
+    using System;
+    using System.Data.SqlClient;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public class CreateRoleCommandHandler : IPipelineBehavior<CreateRoleCommand, CommandResult>
     {
         private readonly IRoleRepository _roleRepository;
@@ -42,6 +40,18 @@ namespace Identity.API.Application.Handlers.CommandHandlers
                 await _context.CommitTransactionAsync(transaction);
 
             return ResultFactory.CreateSuccessResult();
+        }
+    }
+
+    public class IdentifiedCreateRoleCommandHandler : IdentifiedCommandHandler<CreateRoleCommand, CommandResult>
+    {
+        public IdentifiedCreateRoleCommandHandler(IRequestManager requestManager, IMediator mediator) : base(requestManager, mediator)
+        {
+        }
+
+        protected override CommandResult CreateResultForDuplicateRequest()
+        {
+            return ResultFactory.CreateFailureResult<CommandResult>("Duplicate command");
         }
     }
 }

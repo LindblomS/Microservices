@@ -1,4 +1,4 @@
-﻿namespace Identity.Contracts.Commands
+﻿namespace Services.Identity.Contracts.Commands
 {
     using MediatR;
     using Services.Identity.Contracts.Models;

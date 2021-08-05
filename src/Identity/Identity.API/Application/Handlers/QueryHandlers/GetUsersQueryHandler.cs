@@ -37,7 +37,7 @@
 
                 if (user is null)
                 {
-                    user = new(userClaim.UserId, userClaim.Username, new List<Claim>(), new List<Role>());
+                    user = new(userClaim.UserId, userClaim.Username, new List<Claim>(), new List<RoleWithoutClaims>());
                     users.Add(user);
                 }
 

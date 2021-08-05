@@ -14,30 +14,30 @@
 
     [Route("api/{controller}")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class RoleController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly ILogger<UserController> _logger;
+        private readonly ILogger<RoleController> _logger;
 
-        public UserController(IMediator mediator, ILogger<UserController> logger)
+        public RoleController(IMediator mediator, ILogger<RoleController> logger)
         {
-            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _mediator = mediator ?? throw new System.ArgumentNullException(nameof(mediator));
+            _logger = logger ?? throw new System.ArgumentNullException(nameof(logger));
         }
 
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> Create([FromBody] CreateUserCommand request, [FromHeader(Name = "request_id")] string requestId)
+        public async Task<IActionResult> Create([FromBody] CreateRoleCommand request, [FromHeader(Name = "request_id")] string requestId)
         {
             if (Guid.TryParse(requestId, out Guid guid) && guid != default)
             {
-                var command = new IdentifiedCommand<CreateUserCommand, CommandResult>(request, guid);
+                var command = new IdentifiedCommand<CreateRoleCommand, CommandResult>(request, guid);
 
                 _logger.LogInformation(
                     "----- Sending command: {CommandName}: {CommandId} ({@Command})",
-                    typeof(CreateUserCommand).Name,
+                    typeof(CreateRoleCommand).Name,
                     nameof(command.Id),
                     command.Id,
                     command);
@@ -64,15 +64,15 @@
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> Update([FromBody] UpdateUserCommand request, [FromHeader(Name = "request_id")] string requestId)
+        public async Task<IActionResult> Update([FromBody] UpdateRoleCommand request, [FromHeader(Name = "request_id")] string requestId)
         {
             if (Guid.TryParse(requestId, out Guid guid) && guid != default)
             {
-                var command = new IdentifiedCommand<UpdateUserCommand, CommandResult>(request, guid);
+                var command = new IdentifiedCommand<UpdateRoleCommand, CommandResult>(request, guid);
 
                 _logger.LogInformation(
                     "----- Sending command: {CommandName}: {CommandId} ({@Command})",
-                    typeof(UpdateUserCommand).Name,
+                    typeof(UpdateRoleCommand).Name,
                     nameof(command.Id),
                     command.Id,
                     command);
@@ -96,11 +96,11 @@
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<User>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<RoleWithoutClaims>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<IActionResult> GetRoles()
         {
-            var result = await _mediator.Send(new GetUsersQuery());
+            var result = await _mediator.Send(new GetRolesQuery());
 
             if (result.IsException())
             {

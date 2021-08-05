@@ -1,7 +1,7 @@
 ﻿namespace Identity.API.Application.Validators
 {
     using FluentValidation;
-    using Identity.Contracts.Commands;
+    using Services.Identity.Contracts.Commands;
 
     public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
     {
