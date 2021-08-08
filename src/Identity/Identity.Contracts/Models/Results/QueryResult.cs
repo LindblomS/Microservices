@@ -1,4 +1,4 @@
-﻿namespace Services.Identity.Contracts.Results
+﻿namespace Services.Identity.Contracts.Models.Results
 {
     public class QueryResult<T> : Result
     {

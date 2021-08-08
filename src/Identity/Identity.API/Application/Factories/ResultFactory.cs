@@ -1,6 +1,6 @@
 ﻿namespace Identity.API.Application.Factories
 {
-    using Services.Identity.Contracts.Results;
+    using Services.Identity.Contracts.Models.Results;
     using System;
 
     public static class ResultFactory

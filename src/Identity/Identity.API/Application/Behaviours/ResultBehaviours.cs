@@ -2,7 +2,7 @@
 {
     using Identity.API.Application.Factories;
     using MediatR;
-    using Services.Identity.Contracts.Results;
+    using Services.Identity.Contracts.Models.Results;
     using System;
     using System.Threading;
     using System.Threading.Tasks;

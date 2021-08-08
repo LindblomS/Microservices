@@ -2,12 +2,12 @@
 {
     using MediatR;
     using Services.Identity.Contracts.Models;
-    using Services.Identity.Contracts.Results;
+    using Services.Identity.Contracts.Models.Results;
     using System.Collections.Generic;
 
     public class CreateUserCommand : IRequest<CommandResult>
     {
-        public CreateUserCommand(string username, string passwordHash, IEnumerable<ClaimReadModel> claims, IEnumerable<string> roles)
+        public CreateUserCommand(string username, string passwordHash, IEnumerable<Claim> claims, IEnumerable<string> roles)
         {
             Username = username;
             PasswordHash = passwordHash;
@@ -17,7 +17,7 @@
 
         public string Username { get; private set; }
         public string PasswordHash { get; private set; }
-        public IEnumerable<ClaimReadModel> Claims { get; private set; }
+        public IEnumerable<Claim> Claims { get; private set; }
         public IEnumerable<string> Roles { get; private set; }
     }
 }

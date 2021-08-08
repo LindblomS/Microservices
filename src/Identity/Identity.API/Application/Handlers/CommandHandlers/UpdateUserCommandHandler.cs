@@ -3,7 +3,7 @@
     using Identity.API.Application.Factories;
     using MediatR;
     using Services.Identity.Contracts.Commands;
-    using Services.Identity.Contracts.Results;
+    using Services.Identity.Contracts.Models.Results;
     using Services.Identity.Domain.AggregateModels.Role;
     using Services.Identity.Domain.AggregateModels.User;
     using Services.Identity.Domain.ValueObjects;

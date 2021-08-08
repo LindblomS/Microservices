@@ -42,3 +42,26 @@ create table [dbo].[client_request](
 	[time] datetime2 not null,
 	constraint [pk_client_request] primary key clustered ([id] asc)
 )
+
+create table [dbo].[user_token](
+	[user_id] UNIQUEIDENTIFIER not null references [dbo].[user](id) on delete cascade,
+	[name] varchar(max) not null,
+	[login_provider] varchar(max) not null,
+	[value] varchar(max) not null,
+	constraint [pk_user_token] primary key clustered (
+		[user_id] asc, 
+		[login_provider] asc, 
+		[name] asc
+	)
+)
+
+create table [dbo].[user_login](
+	[user_id] uniqueidentifier not null references [dbo].[user](id) on delete cascade,
+	[provider_key] varchar(128) not null,
+	[login_provider] varchar(128) not null,
+	[provider_display_name] varchar(256) null,
+	constraint [pk_user_login] primary key clustered (
+		[login_provider] asc, 
+		[provider_key] asc
+	)
+)

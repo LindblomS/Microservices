@@ -9,17 +9,14 @@ namespace Identity.API
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using Services.Identity.Domain.AggregateModels.Role;
-    using Services.Identity.Domain.AggregateModels.User;
     using Services.Identity.Infrastructure;
-    using Services.Identity.Infrastructure.Repositories;
 
     public class Startup
     {
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IConnectionProvider>(sp => new ConnectionProvider("server=(localdb)\\mssqllocaldb;database=identity;integrated security=true;"));
-            services.AddDbContext<IdentityContext>(c => c.UseInMemoryDatabase("Memory"));
+            services.AddDbContext<IdentityContext>(c => c.UseSqlServer("server=(localdb)\\mssqllocaldb;database=identity;integrated security=true;"));
 
             services.AddIdentity<IdentityUser, IdentityRole>(c =>
             {

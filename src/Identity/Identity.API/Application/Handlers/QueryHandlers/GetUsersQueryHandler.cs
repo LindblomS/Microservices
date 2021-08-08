@@ -3,7 +3,7 @@
     using MediatR;
     using Services.Identity.Contracts.Models;
     using Services.Identity.Contracts.Queries;
-    using Services.Identity.Contracts.Results;
+    using Services.Identity.Contracts.Models.Results;
     using Services.Identity.Infrastructure;
     using System;
     using System.Collections.Generic;
