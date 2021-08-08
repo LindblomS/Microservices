@@ -11,8 +11,10 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Dapper;
+    using System.Linq;
+    using Identity.API.Application.Factories;
 
-    public class GetRolesQueryHandler : IRequestHandler<GetRolesQuery, QueryResult<IEnumerable<Role>>>
+    public class GetRolesQueryHandler : IRequestHandler<GetRolesQuery, QueryResult<IEnumerable<RoleReadModel>>>
     {
         private readonly IConnectionProvider _connectionProvider;
 
@@ -21,20 +23,27 @@
             _connectionProvider = connectionProvider ?? throw new ArgumentNullException(nameof(connectionProvider));
         }
 
-        public async Task<QueryResult<IEnumerable<Services.Identity.Contracts.Models.Role>>> Handle(GetRolesQuery request, CancellationToken cancellationToken)
+        public async Task<QueryResult<IEnumerable<RoleReadModel>>> Handle(GetRolesQuery request, CancellationToken cancellationToken)
         {
             using var connection = _connectionProvider.GetConnection();
+            var roles = await GetRoles(connection);
+            var roleClaims = await GetRoleClaims(connection);
 
+            foreach (var role in roles)
+                foreach (var claim in roleClaims.Where(x => x.RoleId == role.Id))
+                    role.Claims.Add(new(claim.ClaimType, claim.ClaimValue));
+
+            return ResultFactory.CreateSuccessResult(roles);
         }
 
-        private async Task<IEnumerable<Services.Identity.Contracts.Models.Role>> GetRoles(SqlConnection connection)
+        private async Task<IEnumerable<RoleReadModel>> GetRoles(SqlConnection connection)
         {
             var sql = $@"select id as {nameof(Role.Id)}, display_name as {nameof(Role.DisplayName)} from role";
             var dtos = await connection.QueryAsync<Role>(sql);
-            var roles = new List<Services.Identity.Contracts.Models.Role>();
+            var roles = new List<RoleReadModel>();
 
             foreach (var role in dtos)
-                roles.Add(new Services.Identity.Contracts.Models.Role(role.Id, role.DisplayName, new List<Claim>()));
+                roles.Add(new RoleReadModel(role.Id, role.DisplayName, new List<ClaimReadModel>()));
 
             return roles;
         }

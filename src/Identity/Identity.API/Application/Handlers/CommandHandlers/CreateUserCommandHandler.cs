@@ -43,7 +43,7 @@
                 user.AddRole(role);
 
             _userRepository.Create(user);
-            await _userRepository.UnitOfWork.SaveChangesAsync();
+            _ = await _userRepository.UnitOfWork.SaveChangesAsync();
 
             if (!(transaction is null))
                 await _context.CommitTransactionAsync(transaction);

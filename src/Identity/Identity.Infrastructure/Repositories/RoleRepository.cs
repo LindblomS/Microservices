@@ -25,7 +25,15 @@
         public void Create(Role role)
         {
             var sql = "insert into role (id, display_name) values (@id, @display_name)";
-            _context.Execute(sql, new { id = role.Id, display_name = role.DisplayName }, new List<INotification>());
+            _context.Execute(new(sql, new { id = role.Id, display_name = role.DisplayName }, new List<INotification>()));
+
+            var commands = new List<Command>();
+
+            foreach (var command in GetAddClaimCommands(role.Claims, role.Id))
+                commands.Add(command);
+
+            foreach (var command in commands)
+                _context.Execute(command);
         }
 
         public Task DeleteAsync(Role role)
@@ -52,19 +60,19 @@
             var claimsToAdd = role.Claims.Where(a => !claims.Any(b => b.Type == a.Type && b.Value == a.Value));
             var claimsToRemove = claims.Where(a => !role.Claims.Any(b => b.Type == a.Type && b.Value == a.Value));
 
-            var commands = new Dictionary<string, object>();
+            var commands = new List<Command>();
 
             foreach (var command in GetAddClaimCommands(claimsToAdd, role.Id))
-                commands.Add(command.Key, command.Value);
+                commands.Add(command);
 
             foreach (var command in GetRemoveClaimCommands(claimsToRemove, role.Id))
-                commands.Add(command.Key, command.Value);
+                commands.Add(command);
 
             foreach (var command in commands)
-                _context.Execute(command.Key, command.Value, new List<INotification>());
+                _context.Execute(command);
 
             var sql = "update role set display_name = @display_name where id = @id";
-            _context.Execute(sql, new { id = role.Id, display_name = role.DisplayName }, new List<INotification>());
+            _context.Execute(new(sql, new { id = role.Id, display_name = role.DisplayName }, new List<INotification>()));
         }
 
         public async Task<IEnumerable<Role>> GetAsync(IEnumerable<string> roles)
@@ -81,7 +89,7 @@
 
         private async Task<IEnumerable<Claim>> GetRoleClaims(string roleId)
         {
-            var sql = $"select claim_type as {nameof(ClaimDto.type)}, claim_value as {nameof(ClaimDto.value)} where role_id = @role_id";
+            var sql = $"select claim_type as {nameof(ClaimDto.type)}, claim_value as {nameof(ClaimDto.value)} from role_claim where role_id = @role_id";
             var dtos = await _context.QueryAsync<ClaimDto>(sql, new { role_id = roleId });
             var claims = new List<Claim>();
 
@@ -91,36 +99,34 @@
             return claims;
         }
 
-        private IDictionary<string, object> GetAddClaimCommands(IEnumerable<Claim> claims, string roleId)
+        private List<Command> GetAddClaimCommands(IEnumerable<Claim> claims, string roleId)
         {
-            var commands = new Dictionary<string, object>();
+            var commands = new List<Command>();
 
             foreach (var claim in claims)
             {
-                var text = $@"
+                var sql = $@"
                     insert into role_claim (claim_type, claim_value, role_id) 
                     values (@claim_type, @claim_value, @role_id)";
-                commands.Add(text, new { claim_type = claim.Type, claim_value = claim.Value, role_id = roleId });
+                commands.Add(new (sql, new { claim_type = claim.Type, claim_value = claim.Value, role_id = roleId }, new List<INotification>()));
             }
 
             return commands;
         }
 
-        private IDictionary<string, object> GetRemoveClaimCommands(IEnumerable<Claim> claims, string roleId)
+        private List<Command> GetRemoveClaimCommands(IEnumerable<Claim> claims, string roleId)
         {
-            var commands = new Dictionary<string, object>();
+            var commands = new List<Command>();
 
             foreach (var claim in claims)
             {
-                var text = $@"
+                var sql = $@"
                     delete from role_claim 
-                    where claim_type = @claim_type and claim_value = @claim_value and user_id = @role_id";
-                commands.Add(text, new { claim_type = claim.Type, claim_value = claim.Value, role_id = roleId });
+                    where claim_type = @claim_type and claim_value = @claim_value and role_id = @role_id";
+                commands.Add(new(sql, new { claim_type = claim.Type, claim_value = claim.Value, role_id = roleId }, new List<INotification>()));
             }
 
             return commands;
         }
-
-
     }
 }

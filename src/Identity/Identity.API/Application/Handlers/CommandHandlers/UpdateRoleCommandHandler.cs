@@ -34,16 +34,17 @@
             var role = await _roleRepository.GetAsync(request.Id);
             var claims = GetClaims(request);
 
-            foreach (var claim in role.Claims.Where(roleClaim => claims.Any(c => c.Type != roleClaim.Type && c.Value != roleClaim.Value)))
+            foreach (var claim in role.Claims.Where(roleClaim => claims.Any(c => c.Type != roleClaim.Type && c.Value != roleClaim.Value)).ToList())
                 role.RemoveClaim(claim);
 
-            foreach (var claim in claims.Where(c => role.Claims.Any(roleClaim => roleClaim.Type != c.Type && roleClaim.Value != c.Value)))
+            foreach (var claim in claims.Where(c => !(role.Claims.Any(roleClaim => roleClaim.Type == c.Type && roleClaim.Value == c.Value))))
                 role.AddClaim(claim);
 
             if (role.DisplayName != request.DisplayName)
                 role.ChangeDisplayName(request.DisplayName);
 
             await _roleRepository.UpdateAsync(role);
+            _ = await _roleRepository.UnitOfWork.SaveChangesAsync();
 
             if (!(transaction is null))
                 await _context.CommitTransactionAsync(transaction);

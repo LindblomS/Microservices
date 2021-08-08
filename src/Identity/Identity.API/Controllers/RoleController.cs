@@ -55,9 +55,11 @@
                     _logger.LogError(result.Exception, "error");
                     return Problem("internal server error", null, (int)HttpStatusCode.InternalServerError);
                 }
+
+                return Ok();
             }
 
-            return Ok();
+            return BadRequest("invalid request_id");
         }
 
         [HttpPut]
@@ -90,13 +92,15 @@
                     _logger.LogError(result.Exception, "error");
                     return Problem("internal server error", null, (int)HttpStatusCode.InternalServerError);
                 }
+
+                return Ok();
             }
 
-            return Ok();
+            return BadRequest("invalid request_id");
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<RoleWithoutClaims>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<RoleWithoutClaimsReadModel>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> GetRoles()
         {

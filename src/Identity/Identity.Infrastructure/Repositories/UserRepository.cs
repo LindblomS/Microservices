@@ -1,7 +1,6 @@
 ﻿namespace Services.Identity.Infrastructure.Repositories
 {
     using MediatR;
-    using Services.Identity.Domain.AggregateModels;
     using Services.Identity.Domain.AggregateModels.Role;
     using Services.Identity.Domain.AggregateModels.User;
     using Services.Identity.Domain.Domain.SeedWork;
@@ -26,18 +25,18 @@
 
         public void Create(User user)
         {
-            var commands = new Dictionary<string, object>();
+            var commands = new List<Command>();
             var sql = $@"insert into [user] (id, username, password_hash) values (@id, @username, @password)";
-            commands.Add(sql, new { id = user.Id, username = user.Username, password = user.PasswordHash });
+            commands.Add(new(sql, new { id = user.Id, username = user.Username, password = user.PasswordHash }, new List<INotification>()));
 
-            foreach (var c in GetAddClaimCommands(user.Claims, user.Id))
-                commands.Add(c.Key, c.Value);
+            foreach (var command in GetAddClaimCommands(user.Claims, user.Id))
+                commands.Add(command);
 
-            foreach (var c in GetAddRoleCommands(user.Roles, user.Id))
-                commands.Add(c.Key, c.Value);
+            foreach (var command in GetAddRoleCommands(user.Roles, user.Id))
+                commands.Add(command);
 
-            foreach (var c in commands)
-                _context.Execute(c.Key, c.Value, new List<INotification>());
+            foreach (var command in commands)
+                _context.Execute(command);
         }
 
         public async Task DeleteAsync(User user)
@@ -72,75 +71,75 @@
             var rolesToAdd = user.Roles.Where(a => !roles.Any(b => b.Id == a.Id));
             var rolesToRemove = roles.Where(a => !user.Roles.Any(b => b.Id == a.Id));
 
-            var commands = new Dictionary<string, object>();
+            var commands = new List<Command>();
 
             foreach (var command in GetAddClaimCommands(claimsToAdd, user.Id))
-                commands.Add(command.Key, command.Value);
+                commands.Add(command);
 
             foreach (var command in GetRemoveClaimCommands(claimsToRemove, user.Id))
-                commands.Add(command.Key, command.Value);
+                commands.Add(command);
 
             foreach (var command in GetAddRoleCommands(rolesToAdd, user.Id))
-                commands.Add(command.Key, command.Value);
+                commands.Add(command);
 
             foreach (var command in GetRemoveRoleCommands(rolesToRemove, user.Id))
-                commands.Add(command.Key, command.Value);
+                commands.Add(command);
 
             foreach (var command in commands)
-                _context.Execute(command.Key, command.Value, new List<INotification>());
+                _context.Execute(command);
         }
 
-        private IDictionary<string, object> GetAddClaimCommands(IEnumerable<Claim> claims, Guid userId)
+        private List<Command> GetAddClaimCommands(IEnumerable<Claim> claims, Guid userId)
         {
-            var commands = new Dictionary<string, object>();
+            var commands = new List<Command>();
 
             foreach (var claim in claims)
             {
-                var text = $@"
+                var sql = $@"
                     insert into user_claim (claim_type, claim_value, user_id) 
                     values (@claim_type, @claim_value, @user_id)";
-                commands.Add(text, new { claim_type = claim.Type, claim_value = claim.Value, user_id = userId });
+                commands.Add(new(sql, new { claim_type = claim.Type, claim_value = claim.Value, user_id = userId }, new List<INotification>()));
             }
 
             return commands;
         }
 
-        private IDictionary<string, object> GetRemoveClaimCommands(IEnumerable<Claim> claims, Guid userId)
+        private List<Command> GetRemoveClaimCommands(IEnumerable<Claim> claims, Guid userId)
         {
-            var commands = new Dictionary<string, object>();
+            var commands = new List<Command>();
 
             foreach (var claim in claims)
             {
-                var text = $@"
+                var sql = $@"
                     delete from user_claim 
                     where claim_type = @claim_type and claim_value = @claim_value and user_id = @user_id";
-                commands.Add(text, new { claim_type = claim.Type, claim_value = claim.Value, user_id = userId });
+                commands.Add(new(sql, new { claim_type = claim.Type, claim_value = claim.Value, user_id = userId }, new List<INotification>()));
             }
 
             return commands;
         }
 
-        private IDictionary<string, object> GetAddRoleCommands(IEnumerable<Role> roles, Guid userid)
+        private List<Command> GetAddRoleCommands(IEnumerable<Role> roles, Guid userid)
         {
-            var commands = new Dictionary<string, object>();
+            var commands = new List<Command>();
 
             foreach (var role in roles)
             {
                 var text = $@"insert into user_role (user_id, role_id) values (@user_id, @role_id)";
-                commands.Add(text, new { user_id = userid, role_id = role.Id });
+                commands.Add(new(text, new { user_id = userid, role_id = role.Id }, new List<INotification>()));
             }
 
             return commands;
         }
 
-        private IDictionary<string, object> GetRemoveRoleCommands(IEnumerable<Role> roles, Guid userId)
+        private List<Command> GetRemoveRoleCommands(IEnumerable<Role> roles, Guid userId)
         {
-            var commands = new Dictionary<string, object>();
+            var commands = new List<Command>();
 
             foreach (var role in roles)
             {
                 var text = $@"delete from user_role where user_id = @user_id and role_id = @role_id";
-                commands.Add(text, new { user_id = userId, role_id = role.Id });
+                commands.Add(new(text, new { user_id = userId, role_id = role.Id }, new List<INotification>()));
             }
 
             return commands;

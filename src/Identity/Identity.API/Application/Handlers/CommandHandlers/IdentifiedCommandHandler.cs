@@ -1,7 +1,7 @@
 ﻿namespace Identity.API.Application.Handlers.CommandHandlers
 {
-    using Identity.Contracts.Commands;
     using MediatR;
+    using Services.Identity.Contracts.Commands;
     using Services.Identity.Infrastructure.Idempotency;
     using System;
     using System.Threading;

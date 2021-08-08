@@ -14,7 +14,7 @@
     using Dapper;
     using Identity.API.Application.Factories;
 
-    public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, QueryResult<IEnumerable<User>>>
+    public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, QueryResult<IEnumerable<UserReadModel>>>
     {
         private readonly IConnectionProvider _connectionProvider;
 
@@ -23,13 +23,13 @@
             _connectionProvider = connectionProvider ?? throw new ArgumentNullException(nameof(connectionProvider));
         }
 
-        public async Task<QueryResult<IEnumerable<User>>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
+        public async Task<QueryResult<IEnumerable<UserReadModel>>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
         {
             using var connection = _connectionProvider.GetConnection();
             await connection.OpenAsync();
             var userClaims = await GetUserClaims(connection);
             var userRoles = await GetUserRoles(connection);
-            var users = new List<User>();
+            var users = new List<UserReadModel>();
 
             foreach (var userClaim in userClaims)
             {
@@ -37,7 +37,7 @@
 
                 if (user is null)
                 {
-                    user = new(userClaim.UserId, userClaim.Username, new List<Claim>(), new List<RoleWithoutClaims>());
+                    user = new(userClaim.UserId, userClaim.Username, new List<ClaimReadModel>(), new List<RoleWithoutClaimsReadModel>());
                     users.Add(user);
                 }
 
@@ -50,7 +50,7 @@
                     user.Roles.Add(new(userRole.RoleId, userRole.DisplayName));
             }
 
-            return ResultFactory.CreateSuccessResult<IEnumerable<User>>(users);
+            return ResultFactory.CreateSuccessResult<IEnumerable<UserReadModel>>(users);
         }
 
         private async Task<IEnumerable<UserClaim>> GetUserClaims(SqlConnection connection)

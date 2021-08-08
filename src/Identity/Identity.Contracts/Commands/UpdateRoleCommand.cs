@@ -7,7 +7,7 @@
 
     public class UpdateRoleCommand : IRequest<CommandResult>
     {
-        public UpdateRoleCommand(string id, string displayName, IEnumerable<Claim> claims)
+        public UpdateRoleCommand(string id, string displayName, IEnumerable<ClaimReadModel> claims)
         {
             Id = id;
             DisplayName = displayName;
@@ -16,6 +16,6 @@
 
         public string Id { get; private set; }
         public string DisplayName { get; private set; }
-        public IEnumerable<Claim> Claims { get; private set; }
+        public IEnumerable<ClaimReadModel> Claims { get; private set; }
     }
 }

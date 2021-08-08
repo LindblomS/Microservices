@@ -5,7 +5,7 @@
     using Services.Identity.Contracts.Results;
     using System.Collections.Generic;
 
-    public class GetRolesQuery : IRequest<QueryResult<IEnumerable<RoleWithoutClaims>>>
+    public class GetRolesQuery : IRequest<QueryResult<IEnumerable<RoleReadModel>>>
     {
     }
 }

@@ -55,9 +55,11 @@
                     _logger.LogError(result.Exception, "error");
                     return Problem("internal server error", null, (int)HttpStatusCode.InternalServerError);
                 }
+
+                return Ok();
             }
 
-            return Ok();
+            return BadRequest("invalid request_id");
         }
 
         [HttpPut]
@@ -90,15 +92,18 @@
                     _logger.LogError(result.Exception, "error");
                     return Problem("internal server error", null, (int)HttpStatusCode.InternalServerError);
                 }
+
+                return Ok();
             }
 
-            return Ok();
+            return BadRequest("invalid request_id");
+
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<User>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<UserReadModel>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserReadModel>>> GetUsers()
         {
             var result = await _mediator.Send(new GetUsersQuery());
 

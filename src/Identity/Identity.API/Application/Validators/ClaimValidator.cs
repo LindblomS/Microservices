@@ -3,7 +3,7 @@
     using FluentValidation;
     using Services.Identity.Contracts.Models;
 
-    public class ClaimValidator : AbstractValidator<Claim>
+    public class ClaimValidator : AbstractValidator<ClaimReadModel>
     {
         public ClaimValidator()
         {

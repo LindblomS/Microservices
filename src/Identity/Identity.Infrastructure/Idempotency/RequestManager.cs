@@ -24,8 +24,8 @@
             using var connection = _connectionProvider.GetConnection();
             await connection.OpenAsync();
 
-            var sql = "insert into client_request (id, name, time) values (@id, @name, @time)";
-            _ = await connection.ExecuteAsync(sql, new { id = request.Id, name = request.Name, time = request.Time });
+            //var sql = "insert into client_request (id, name, time) values (@id, @name, @time)";
+            //_ = await connection.ExecuteAsync(sql, new { id = request.Id, name = request.Name, time = request.Time });
 
         }
 

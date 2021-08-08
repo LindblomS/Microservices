@@ -51,6 +51,7 @@
                 user.AddRole(role);
 
             await _userRepository.UpdateAsync(user);
+            _ = await _userRepository.UnitOfWork.SaveChangesAsync();
 
             if (!(transaction is null))
                 await _context.CommitTransactionAsync(transaction);

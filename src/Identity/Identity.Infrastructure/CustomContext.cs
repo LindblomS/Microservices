@@ -9,6 +9,7 @@
     using System.Threading.Tasks;
     using Dapper;
     using System.Linq;
+    using Services.Identity.Infrastructure.Models;
 
     public interface IDbContext
     {
@@ -18,7 +19,7 @@
 
         Task<IEnumerable<T>> QueryAsync<T>(string sql, object parameters);
         Task<T> QuerySingleOrDefaultAsync<T>(string sql, object parameters);
-        void Execute(string sql, object parameters, IEnumerable<INotification> notifications);
+        void Execute(Command command);
     }
 
     public class CustomContext : IUnitOfWork, IDbContext
@@ -36,9 +37,9 @@
             _commands = new List<Command>();
         }
 
-        public void Execute(string sql, object parameters, IEnumerable<INotification> notifications)
+        public void Execute(Command command)
         {
-            _commands.Add(new (sql, parameters, notifications));
+            _commands.Add(command);
         }
 
         public async Task<T> QuerySingleOrDefaultAsync<T>(string sql, object parameters)
@@ -82,8 +83,8 @@
                 await CommitTransactionAsync(transaction);
                 return affectedRows;
             }
-            else
-                return await SaveChangesAsync(_transaction, commands, cancellationToken);
+
+            return await SaveChangesAsync(_transaction, commands, cancellationToken);
         }
 
         private async Task<int> SaveChangesAsync(SqlTransaction transaction, IEnumerable<Command> commands, CancellationToken token)
@@ -169,18 +170,18 @@
             _connection?.Close();
         }
 
-        public class Command
-        {
-            public Command(string sql, object parameters, IEnumerable<INotification> notifications)
-            {
-                Sql = sql;
-                Parameters = parameters;
-                Notifications = notifications;
-            }
+        //public class Command
+        //{
+        //    public Command(string sql, object parameters, IEnumerable<INotification> notifications)
+        //    {
+        //        Sql = sql;
+        //        Parameters = parameters;
+        //        Notifications = notifications;
+        //    }
 
-            public string Sql { get; private set; }
-            public object Parameters { get; private set; }
-            public IEnumerable<INotification> Notifications { get; private set; }
-        }
+        //    public string Sql { get; private set; }
+        //    public object Parameters { get; private set; }
+        //    public IEnumerable<INotification> Notifications { get; private set; }
+        //}
     }
 }

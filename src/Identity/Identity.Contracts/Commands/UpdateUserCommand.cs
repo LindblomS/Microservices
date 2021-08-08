@@ -9,7 +9,7 @@
     public class UpdateUserCommand : IRequest<CommandResult>
     {
         public Guid Id { get; private set; }
-        public IEnumerable<Claim> Claims { get; private set; }
+        public IEnumerable<ClaimReadModel> Claims { get; private set; }
         public IEnumerable<string> Roles { get; private set; }
 
     }

@@ -5,7 +5,7 @@
     using Services.Identity.Contracts.Results;
     using System.Collections.Generic;
 
-    public class GetUsersQuery : IRequest<QueryResult<IEnumerable<User>>>
+    public class GetUsersQuery : IRequest<QueryResult<IEnumerable<UserReadModel>>>
     {
     }
 }
