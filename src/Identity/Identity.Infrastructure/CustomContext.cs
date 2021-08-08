@@ -169,19 +169,5 @@
         {
             _connection?.Close();
         }
-
-        //public class Command
-        //{
-        //    public Command(string sql, object parameters, IEnumerable<INotification> notifications)
-        //    {
-        //        Sql = sql;
-        //        Parameters = parameters;
-        //        Notifications = notifications;
-        //    }
-
-        //    public string Sql { get; private set; }
-        //    public object Parameters { get; private set; }
-        //    public IEnumerable<INotification> Notifications { get; private set; }
-        //}
     }
 }

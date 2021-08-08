@@ -159,7 +159,14 @@
 
         private async Task<IEnumerable<Role>> GetUserRoles(Guid userId)
         {
-            var sql = $"select role_id as {nameof(RoleDto.id)}, display_name as {nameof(RoleDto.displayName)} from user_role where user_id = @user_id";
+            var sql = $@"
+                select 
+                    role_id as {nameof(RoleDto.id)}, 
+                    display_name as {nameof(RoleDto.displayName)} 
+                from user_role 
+                join [role] on [role].id = user_role.role_id
+                where user_id = @user_id";
+
             var dtos = await _context.QueryAsync<RoleDto>(sql, new { user_id = userId });
             var roles = new List<Role>();
 

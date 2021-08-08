@@ -28,6 +28,7 @@
             _roleRepository = roleRepository ?? throw new ArgumentNullException(nameof(roleRepository));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
+        
         public async Task<CommandResult> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             SqlTransaction transaction = null;
@@ -35,20 +36,9 @@
                 transaction = await _context.BeginTransactionAsync();
 
             var user = await _userRepository.GetAsync(request.Id);
-            var claims = GetClaims(request);
-            var roles = await _roleRepository.GetAsync(request.Roles);
 
-            foreach (var claim in user.Claims.Where(userClaim => claims.Any(c => c.Type != userClaim.Type && c.Value != userClaim.Value)))
-                user.RemoveClaim(claim);
-
-            foreach (var claim in claims.Where(c => user.Claims.Any(userClaim => userClaim.Type != c.Type && userClaim.Value != c.Value)))
-                user.AddClaim(claim);
-
-            foreach (var role in user.Roles.Where(userRole => roles.Any(r => r.Id != userRole.Id)))
-                user.RemoveRole(role);
-
-            foreach (var role in roles.Where(r => user.Roles.Any(userRole => userRole.Id != r.Id)))
-                user.AddRole(role);
+            UpdateClaims(request, user);
+            await UpdateRoles(request, user);
 
             await _userRepository.UpdateAsync(user);
             _ = await _userRepository.UnitOfWork.SaveChangesAsync();
@@ -57,6 +47,36 @@
                 await _context.CommitTransactionAsync(transaction);
 
             return ResultFactory.CreateSuccessResult();
+        }
+
+        private async Task UpdateRoles(UpdateUserCommand request, User user)
+        {
+            var roles = await _roleRepository.GetAsync(request.Roles);
+
+            var rolesToRemove = user.Roles.Where(userRole => !roles.Any(r => r.Id == userRole.Id));
+
+            foreach (var role in rolesToRemove.ToList())
+                user.RemoveRole(role);
+
+            var rolesToAdd = roles.Where(r => !user.Roles.Any(userRole => userRole.Id == r.Id));
+
+            foreach (var role in rolesToAdd)
+                user.AddRole(role);
+        }
+
+        private void UpdateClaims(UpdateUserCommand request, User user)
+        {
+            var claims = GetClaims(request);
+
+            var claimsToRemove = user.Claims.Except(claims);
+
+            foreach (var claim in claimsToRemove.ToList())
+                user.RemoveClaim(claim);
+
+            var claimsToAdd = claims.Except(user.Claims);
+
+            foreach (var claim in claimsToAdd)
+                user.AddClaim(claim);
         }
 
         private IEnumerable<Claim> GetClaims(UpdateUserCommand request)
