@@ -7,6 +7,7 @@ namespace Identity.API.Controllers
     using System.Threading.Tasks;
     using System;
     using IdentityServer4.Services;
+    using Services.Identity.Infrastructure;
 
     [AllowAnonymous]
     public class AccountController : Controller

@@ -1,6 +1,7 @@
 ﻿create table [dbo].[user](
-	[id] UNIQUEIDENTIFIER not null,
+	[id] char(36) not null,
 	[username] nvarchar(200),
+	[normailized_username] nvarchar(200) not null,
 	[password_hash] nvarchar(max) not null
 	constraint [pk_user] primary key clustered([id] asc)
 )
@@ -23,12 +24,12 @@ create table [dbo].[user_claim](
 	[id] int identity(1,1) not null,
 	[claim_type] nvarchar(50) not null,
 	[claim_value] nvarchar(50) not null,
-	[user_id] UNIQUEIDENTIFIER not null references [dbo].[user](id) on delete cascade,
+	[user_id] char(36) not null references [dbo].[user](id) on delete cascade,
 	constraint [pk_user_claim] primary key clustered ([id] asc)
 )
 
 create table [dbo].[user_role](
-	[user_id] UNIQUEIDENTIFIER not null references [dbo].[user](id) on delete cascade,
+	[user_id] char(36) not null references [dbo].[user](id) on delete cascade,
 	[role_id] nvarchar(25) not null references [dbo].[role](id) on delete cascade,
 	constraint [pk_user_role] primary key (
 		[user_id] asc, 
@@ -44,9 +45,9 @@ create table [dbo].[client_request](
 )
 
 create table [dbo].[user_token](
-	[user_id] UNIQUEIDENTIFIER not null references [dbo].[user](id) on delete cascade,
-	[name] varchar(max) not null,
-	[login_provider] varchar(max) not null,
+	[user_id] char(36) not null references [dbo].[user](id) on delete cascade,
+	[name] varchar(256) not null,
+	[login_provider] varchar(256) not null,
 	[value] varchar(max) not null,
 	constraint [pk_user_token] primary key clustered (
 		[user_id] asc, 
@@ -56,7 +57,7 @@ create table [dbo].[user_token](
 )
 
 create table [dbo].[user_login](
-	[user_id] uniqueidentifier not null references [dbo].[user](id) on delete cascade,
+	[user_id] char(36) not null references [dbo].[user](id) on delete cascade,
 	[provider_key] varchar(128) not null,
 	[login_provider] varchar(128) not null,
 	[provider_display_name] varchar(256) null,
