@@ -28,12 +28,12 @@ namespace Services.Order.API
 
             try
             {
-                Log.Information("Configuraing web host ({ApplicationContext])...", AppName);
+                Log.Information("Configuraing web host ({ApplicationContext})...", AppName);
                 var host = CreateHostBuilder(args).Build();
 
                 Log.Information("Creating database ({ApplicationContext})...", AppName);
-                host.MigrateDbContext<OrderContext>((_, __) => { });
-                host.MigrateDbContext<IntegrationEventLogContext>((_, __) => { });
+                host.MigrateDbContext<OrderContext>((_, _) => { });
+                host.MigrateDbContext<IntegrationEventLogContext>((_, _) => { });
 
                 Log.Information("Starting web host ({ApplicationContext})", AppName);
                 host.Run();

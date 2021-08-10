@@ -1,6 +1,7 @@
 ﻿namespace Services.Customer.API.Controllers
 {
     using MediatR;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Services.Customer.API.Application.Commands;
@@ -12,6 +13,7 @@
 
     [Route("api/{controller}")]
     [ApiController]
+    [Authorize]
     public class CustomerController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -101,6 +103,7 @@
 
         [HttpGet]
         [ProducesResponseType(typeof(IList<CustomerViewModel>), (int)HttpStatusCode.OK)]
+        [Authorize(Policy = "readPolicy")]
         public async Task<ActionResult<IList<CustomerViewModel>>> Get()
         {
             return Ok(await _queries.GetAsync());

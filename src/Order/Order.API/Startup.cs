@@ -6,9 +6,9 @@ namespace Services.Order.API
     using EventBus.EventBusRabbitMQ;
     using EventBus.IntegrationEventLogEF;
     using FluentValidation;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -21,11 +21,8 @@ namespace Services.Order.API
     using Services.Order.API.Infrastructure.AutoFacModules;
     using Services.Order.Infrastructure;
     using System;
-    using System.Collections.Generic;
     using System.Data.Common;
-    using System.Linq;
     using System.Reflection;
-    using System.Threading.Tasks;
 
     public class Startup
     {
@@ -38,19 +35,23 @@ namespace Services.Order.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication("Bearer")
+                .AddIdentityServerAuthentication("Bearer", options =>
+                {
+                    options.ApiName = "order";
+                    options.Authority = "https://localhost:5003";
+                });
+
+            //services.AddSingleton<IAuthorizationHandler, authhandler>();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("readPolicy", policy => policy.RequireClaim("scope", "order.read"));
+            });
+
             services.AddCustomDbContext(Configuration);
             services.AddControllers();
             services.AddEventBus(Configuration);
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder
-                    .SetIsOriginAllowed((host) => true)
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials());
-            });
-
 
             services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(sp => (DbConnection connection) => new IntegrationEventLogService(connection));
             services.AddTransient<IOrderIntegrationEventService, OrderIntegrationEventService>();
@@ -63,21 +64,17 @@ namespace Services.Order.API
             builder.RegisterModule(new ApplicationModule());
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
 
             app.UseRouting();
-            app.UseCors("CorsPolicy");
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapDefaultControllerRoute();
-            });
+                endpoints.MapDefaultControllerRoute());
 
             ConfigureEventBus(app);
         }

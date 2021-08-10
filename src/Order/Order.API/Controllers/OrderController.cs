@@ -1,6 +1,7 @@
 ﻿namespace Services.Order.API.Controllers
 {
     using MediatR;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Services.Order.API.Application.Commands.Commands;
@@ -61,11 +62,12 @@
                 return BadRequest();
         }
 
-        [HttpGet]
+        [HttpGet("{customerId}")]
         [ProducesResponseType(typeof(IEnumerable<OrderViewModel>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<OrderViewModel>>> Get()
+        [Authorize(Policy = "readPolicy")]
+        public async Task<ActionResult<IEnumerable<OrderViewModel>>> Get(string customerId)
         {
-            return Ok(await _queries.GetOrdersAsync());
+            return Ok(await _queries.GetOrdersAsync(Guid.Parse(customerId)));
         }
     }
 }
