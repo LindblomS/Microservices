@@ -1,8 +1,6 @@
 namespace Identity.API
 {
-    using Autofac;
     using Identity.API.Configurations;
-    using Identity.API.Infrastructure;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -15,7 +13,6 @@ namespace Identity.API
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IConnectionProvider>(sp => new ConnectionProvider("server=(localdb)\\mssqllocaldb;database=identity;integrated security=true;"));
             services.AddDbContext<IdentityContext>(c => c.UseSqlServer("server=(localdb)\\mssqllocaldb;database=identity;integrated security=true;"));
 
             services.AddIdentity<IdentityUser, IdentityRole>(c =>
@@ -44,11 +41,6 @@ namespace Identity.API
                 .AddDeveloperSigningCredential();
 
             services.AddControllersWithViews();
-        }
-
-        public void ConfigureContainer(ContainerBuilder builder)
-        {
-            builder.RegisterModule(new MediatorModule());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

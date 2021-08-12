@@ -8,6 +8,11 @@ namespace Identity.API.Controllers
     using System;
     using IdentityServer4.Services;
     using Services.Identity.Infrastructure;
+    using System.Net.Http;
+    using System.Collections.Generic;
+    using System.Security.Cryptography;
+    using System.Text;
+    using Newtonsoft.Json;
 
     [AllowAnonymous]
     public class AccountController : Controller
@@ -15,15 +20,18 @@ namespace Identity.API.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IIdentityServerInteractionService _interactionService;
+        private readonly IHttpClientFactory _httpClientFactory;
 
         public AccountController(
             UserManager<IdentityUser> userManager, 
             SignInManager<IdentityUser> signInManager,
-            IIdentityServerInteractionService interactionService)
+            IIdentityServerInteractionService interactionService,
+            IHttpClientFactory httpClientFactory)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
             _interactionService = interactionService ?? throw new ArgumentNullException(nameof(interactionService));
+            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
 
         [HttpGet]
@@ -57,12 +65,18 @@ namespace Identity.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser(vm.Username);
-                user.Id = Guid.NewGuid().ToString();
-                var result = await _userManager.CreateAsync(user, vm.Password);
+                using var client = _httpClientFactory.CreateClient();
+                client.DefaultRequestHeaders.Add("request_id", Guid.NewGuid().ToString());
+                var password = SHA256.HashData(Encoding.Default.GetBytes(vm.Password));
+                var command = new CreateUserCommand(vm.Username, password.ToString(), new List<Claim>(), new List<string>());
 
-                if (result.Succeeded)
+                var json = JsonConvert.SerializeObject(command);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var result = await client.PostAsync("https://localhost:5001/api/user", content);
+
+                if (result.IsSuccessStatusCode)
                 {
+                    var user = await _userManager.FindByNameAsync(vm.Username);
                     await _signInManager.SignInAsync(user, false);
                     return Redirect(vm.ReturnUrl);
                 }
@@ -88,6 +102,9 @@ namespace Identity.API.Controllers
         {
             return "Hola";
         }
+
+        private record CreateUserCommand(string username, string passwordHash, IEnumerable<Claim> claims, IEnumerable<string> roles);
+        private record Claim(string type, string value);
 
     }
 }
