@@ -1,7 +1,7 @@
 ﻿create table [dbo].[user](
 	[id] char(36) not null,
 	[username] nvarchar(200),
-	[normailized_username] nvarchar(200) not null default 'asdf aspnet identity stuff',
+	[normalized_username] nvarchar(200) not null,
 	[password_hash] nvarchar(max) not null
 	constraint [pk_user] primary key clustered([id] asc)
 )

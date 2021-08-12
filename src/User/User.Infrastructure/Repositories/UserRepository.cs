@@ -26,8 +26,8 @@
         public void Create(User user)
         {
             var commands = new List<Command>();
-            var sql = $@"insert into [user] (id, username, password_hash) values (@id, @username, @password)";
-            commands.Add(new(sql, new { id = user.Id, username = user.Username, password = user.PasswordHash }, new List<INotification>()));
+            var sql = $@"insert into [user] (id, username, password_hash, normalized_username) values (@id, @username, @password, @normalized_username)";
+            commands.Add(new(sql, new { id = user.Id, username = user.Username, password = user.PasswordHash, normalized_username = user.Username }, new List<INotification>()));
 
             foreach (var command in GetAddClaimCommands(user.Claims, user.Id))
                 commands.Add(command);

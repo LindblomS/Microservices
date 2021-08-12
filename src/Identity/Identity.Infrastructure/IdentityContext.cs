@@ -23,7 +23,7 @@
                 b.Property(u => u.Id).HasColumnName("id");
                 b.Property(u => u.UserName).HasColumnName("username");
                 b.Property(u => u.PasswordHash).HasColumnName("password_hash");
-                b.Property(u => u.NormalizedUserName).HasColumnName("normailized_username");
+                b.Property(u => u.NormalizedUserName).HasColumnName("normalized_username");
 
                 b.Ignore(u => u.Email);
                 b.Ignore(u => u.NormalizedEmail);

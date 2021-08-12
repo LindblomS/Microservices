@@ -7,10 +7,8 @@ namespace Identity.API.Controllers
     using System.Threading.Tasks;
     using System;
     using IdentityServer4.Services;
-    using Services.Identity.Infrastructure;
     using System.Net.Http;
     using System.Collections.Generic;
-    using System.Security.Cryptography;
     using System.Text;
     using Newtonsoft.Json;
 
@@ -67,10 +65,9 @@ namespace Identity.API.Controllers
             {
                 using var client = _httpClientFactory.CreateClient();
                 client.DefaultRequestHeaders.Add("request_id", Guid.NewGuid().ToString());
-                var password = SHA256.HashData(Encoding.Default.GetBytes(vm.Password));
-                var command = new CreateUserCommand(vm.Username, password.ToString(), new List<Claim>(), new List<string>());
-
-                var json = JsonConvert.SerializeObject(command);
+                var password = _userManager.PasswordHasher.HashPassword(new(vm.Username), vm.Password);
+                var request = new CreateUserCommand(vm.Username, password, new List<Claim>(), new List<string>());
+                var json = JsonConvert.SerializeObject(request);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 var result = await client.PostAsync("https://localhost:5001/api/user", content);
 
