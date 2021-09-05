@@ -5,16 +5,25 @@ namespace Identity.API
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Services.Identity.Infrastructure;
+    using System.Net.Http.Headers;
 
     public class Startup
     {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; set; }
+
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<IdentityContext>(c => c.UseSqlServer("server=(localdb)\\mssqllocaldb;database=identity;integrated security=true;"));
-
+            services.AddDbContext<IdentityContext>(c => c.UseSqlServer(Configuration.GetValue<string>("ConnectionString")));
+            services.AddSingleton<TokenFactory>();
             services.AddIdentity<IdentityUser, IdentityRole>(c =>
             {
                 c.Password.RequiredLength = 4;

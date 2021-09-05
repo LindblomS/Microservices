@@ -27,9 +27,6 @@ namespace Services.Order.API.Infrastructure.Migrations.Order
                         .HasColumnName("id");
 
                     b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("_customerId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("customer_id");
 

@@ -4,6 +4,9 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using MvcClient.Models;
+    using Newtonsoft.Json;
+    using System.Collections.Generic;
     using System.Net.Http;
     using System.Security.Claims;
     using System.Threading.Tasks;
@@ -27,6 +30,12 @@
                 var token = await HttpContext.GetTokenAsync("access_token");
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
                 var response = await client.GetAsync("https://localhost:5001/api/order/" + id);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var orders = JsonConvert.DeserializeObject<IEnumerable<OrderViewModel>>(await response.Content.ReadAsStringAsync());
+                    return View(new OrdersViewModel { Orders = orders });
+                }
             }
 
             return View();

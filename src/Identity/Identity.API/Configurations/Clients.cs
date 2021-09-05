@@ -35,6 +35,13 @@
                         { "order.read" }
                     }
                 },
+                new Client
+                {
+                    ClientId = "identity",
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    ClientSecrets = {new Secret("secret".Sha256())},
+                    AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, "user.write" }
+                }
             };
         }
     }

@@ -42,8 +42,6 @@ namespace Services.Order.API
                     options.Authority = "https://localhost:5003";
                 });
 
-            //services.AddSingleton<IAuthorizationHandler, authhandler>();
-
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("readPolicy", policy => policy.RequireClaim("scope", "order.read"));

@@ -14,6 +14,18 @@ namespace Services.User.API
         {
             services.AddTransient<IConnectionProvider>(sp => new ConnectionProvider("server=(localdb)\\mssqllocaldb;database=identity;integrated security=true;"));
 
+            services.AddAuthentication("Bearer")
+                .AddIdentityServerAuthentication("Bearer", options =>
+                {
+                    options.ApiName = "user";
+                    options.Authority = "https://localhost:5003";
+                });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("user", policy => policy.RequireClaim("scope", "user.write"));
+            });
+
             services.ConfigureApplicationCookie(c =>
             {
                 c.Cookie.Name = "IdentityServer.Cookie";
@@ -21,6 +33,7 @@ namespace Services.User.API
                 c.LogoutPath = "/Account/Logout";
             });
 
+            
             services.AddControllers();
         }
 
@@ -37,6 +50,7 @@ namespace Services.User.API
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

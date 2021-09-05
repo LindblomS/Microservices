@@ -1,6 +1,7 @@
 ﻿namespace Services.User.API.Controllers
 {
     using MediatR;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Services.User.API.Application.Models;
@@ -29,6 +30,7 @@
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [Authorize(Policy = "user")]
         public async Task<IActionResult> Create([FromBody] CreateUserCommand request, [FromHeader(Name = "request_id")] string requestId)
         {
             if (Guid.TryParse(requestId, out Guid guid) && guid != default)
@@ -66,6 +68,7 @@
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [Authorize(Policy = "user")]
         public async Task<IActionResult> Update([FromBody] UpdateUserCommand request, [FromHeader(Name = "request_id")] string requestId)
         {
             if (Guid.TryParse(requestId, out Guid guid) && guid != default)

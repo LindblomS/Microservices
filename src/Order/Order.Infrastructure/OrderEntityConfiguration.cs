@@ -13,8 +13,8 @@
             builder.HasKey(e => e.Id);
             builder.Property(e => e.Id).HasColumnName("id");
             builder
-                .Property<Guid>("_customerId")
-                .UsePropertyAccessMode(PropertyAccessMode.Field)
+                .Property(e => e.CustomerId)
+                .HasField("_customerId")
                 .HasColumnName("customer_id")
                 .IsRequired();
         }

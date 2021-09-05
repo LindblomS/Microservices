@@ -32,11 +32,10 @@
             if (existingOrderItem != null)
             {
                 existingOrderItem.AddQuantity(orderItem.Quantity);
+                return;
             }
-            else
-            {
-                _orderItems.Add(orderItem);
-            }
+
+            _orderItems.Add(orderItem);
         }
     }
 }

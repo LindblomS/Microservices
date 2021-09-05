@@ -11,6 +11,8 @@ namespace Identity.API.Controllers
     using System.Collections.Generic;
     using System.Text;
     using Newtonsoft.Json;
+    using IdentityModel.Client;
+    using Microsoft.AspNetCore.Authentication;
 
     [AllowAnonymous]
     public class AccountController : Controller
@@ -19,17 +21,20 @@ namespace Identity.API.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IIdentityServerInteractionService _interactionService;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly TokenFactory _tokenFactory;
 
         public AccountController(
             UserManager<IdentityUser> userManager, 
             SignInManager<IdentityUser> signInManager,
             IIdentityServerInteractionService interactionService,
-            IHttpClientFactory httpClientFactory)
+            IHttpClientFactory httpClientFactory,
+            TokenFactory tokenFactory)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
             _interactionService = interactionService ?? throw new ArgumentNullException(nameof(interactionService));
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _tokenFactory = tokenFactory;
         }
 
         [HttpGet]
@@ -65,11 +70,12 @@ namespace Identity.API.Controllers
             {
                 using var client = _httpClientFactory.CreateClient();
                 client.DefaultRequestHeaders.Add("request_id", Guid.NewGuid().ToString());
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await _tokenFactory.GetTokenAsync());
                 var password = _userManager.PasswordHasher.HashPassword(new(vm.Username), vm.Password);
                 var request = new CreateUserCommand(vm.Username, password, new List<Claim>(), new List<string>());
                 var json = JsonConvert.SerializeObject(request);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var result = await client.PostAsync("https://localhost:5001/api/user", content);
+                var result = await client.PostAsync("https://localhost:5005/api/user", content);
 
                 if (result.IsSuccessStatusCode)
                 {

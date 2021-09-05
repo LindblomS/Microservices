@@ -20,28 +20,27 @@
             {
                 new ApiResource
                 {
-                    Name = "customer",
-                    Scopes = {"customer.read", "customer.write"},
-                    ApiSecrets = { new Secret("secret".Sha256()) }
+                    Name = "order",
+                    Scopes = {"order.read", "order.write"},
+                    ApiSecrets = { new("secret".Sha256()) }
                 },
                 new ApiResource
                 {
-                    Name = "order",
-                    Scopes = {"order.read", "order.write", "id"},
-                    ApiSecrets = { new Secret("secret".Sha256()) }
+                    Name = "user",
+                    Scopes = {"user.write"},
+                    ApiSecrets = { new("secret".Sha256())}
                 }
             };
         }
 
         public static IEnumerable<ApiScope> GetApiScopes()
         {
-            return new[]
+            return new ApiScope[]
             {
-                new ApiScope("customer.read"),
-                new ApiScope("customer.write"),
-                new ApiScope("order.read"),
-                new ApiScope("order.write"),
-                new ApiScope("id")
+                new("order.read"),
+                new("order.write"),
+                new("user.write")
+                //new("id")
             };
         }
     }
