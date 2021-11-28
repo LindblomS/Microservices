@@ -1,32 +1,31 @@
 ﻿namespace Services.Order.Domain.AggregateModels.Order;
 
-using Services.Order.Domain.Exceptions;
 using Services.Order.Domain.SeedWork;
 using System;
 
 public class OrderItem : Entity
 {
-    string productName;
-    decimal unitPrice;
-    int units;
+    ProductName productName;
+    UnitPrice unitPrice;
+    Units units;
 
-    public string ProductName { get => productName; }
-    public decimal UnitPrice { get => unitPrice; }
-    public int Units { get => units; }
+    public string ProductName { get => productName.Name; }
+    public decimal UnitPrice { get => unitPrice.Price; }
+    public int Units { get => units.Value; }
 
-    public OrderItem(Guid id, string productName, decimal unitPrice, int units)
+    public OrderItem(Guid id, ProductName productName, UnitPrice unitPrice, Units units)
     {
         if (id == default)
-            throw new OrderingDomainException("invalid id");
+            throw new ArgumentNullException(nameof(id));
 
-        if (string.IsNullOrEmpty(productName))
-            throw new OrderingDomainException("product name cannot be empty");
+        if (productName is null)
+            throw new ArgumentNullException(nameof(productName));
 
-        if (unitPrice < 1)
-            throw new OrderingDomainException($"Unit price cannot be lower than 1. Unit price was {unitPrice}");
+        if (unitPrice is null)
+            throw new ArgumentNullException(nameof(unitPrice));
 
-        if (units < 0)
-            throw new OrderingDomainException($"Units cannot be less than 0. Units was {units}");
+        if (units is null)
+            throw new ArgumentNullException(nameof(units));
 
         this.id = id;
         this.productName = productName;
@@ -36,11 +35,6 @@ public class OrderItem : Entity
 
     public void AddUnits(int units)
     {
-        if (units > 0)
-            throw new OrderingDomainException("Invalid units");
-
-        this.units += units;
+        this.units.AddUnits(units);
     }
-
-   
 }

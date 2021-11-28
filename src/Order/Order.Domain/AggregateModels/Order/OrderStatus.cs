@@ -1,11 +1,10 @@
 ﻿namespace Services.Order.Domain.AggregateModels.Order;
 
+using Services.Order.Domain.Exceptions;
 using Services.Order.Domain.SeedWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 public class OrderStatus
     : Enumeration

@@ -28,6 +28,10 @@ public class Card : ValueObject
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        throw new NotImplementedException();
+        yield return CardTypeId;
+        yield return CardNumber;
+        yield return CardSecurityNumber;
+        yield return CardHolderName;
+        yield return CardExpiration;
     }
 }
