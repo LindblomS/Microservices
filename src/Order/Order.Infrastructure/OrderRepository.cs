@@ -1,7 +1,6 @@
 ﻿namespace Services.Order.Infrastructure
 {
     using Services.Order.Domain;
-    using Services.Order.Domain.SeedWork;
     using System;
     using System.Collections.Generic;
     using System.Linq;

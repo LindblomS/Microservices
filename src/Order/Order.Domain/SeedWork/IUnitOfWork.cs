@@ -1,4 +1,4 @@
-﻿namespace Services.Order.Domain.SeedWork;
+﻿namespace Ordering.Domain.SeedWork;
 
 using System;
 using System.Threading;

@@ -1,7 +1,6 @@
 ﻿namespace Services.Order.Infrastructure
 {
     using MediatR;
-    using Services.Order.Domain.SeedWork;
     using System.Linq;
     using System.Threading.Tasks;
 

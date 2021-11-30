@@ -3,7 +3,7 @@
 using MediatR;
 using System;
 
-class IdentifiedCommand<TCommand, TResponse> : IRequest<TResponse>
+public class IdentifiedCommand<TCommand, TResponse> : IRequest<TResponse>
     where TCommand : IRequest<TResponse>
 {
     public IdentifiedCommand(TCommand command, Guid id)

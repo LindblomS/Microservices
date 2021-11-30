@@ -1,4 +1,4 @@
-﻿namespace Services.Order.Domain.SeedWork;
+﻿namespace Ordering.Domain.SeedWork;
 
 using MediatR;
 using System;
@@ -43,15 +43,15 @@ public abstract class Entity
         if (obj == null || !(obj is Entity))
             return false;
 
-        if (Object.ReferenceEquals(this, obj))
+        if (ReferenceEquals(this, obj))
             return true;
 
-        if (this.GetType() != obj.GetType())
+        if (GetType() != obj.GetType())
             return false;
 
-        Entity item = (Entity)obj;
+        var item = (Entity)obj;
 
-        if (item.IsTransient() || this.IsTransient())
+        if (item.IsTransient() || IsTransient())
             return false;
         else
             return item.Id == id;
@@ -72,8 +72,8 @@ public abstract class Entity
     }
     public static bool operator ==(Entity left, Entity right)
     {
-        if (Object.Equals(left, null))
-            return (Object.Equals(right, null)) ? true : false;
+        if (Equals(left, null))
+            return Equals(right, null) ? true : false;
         else
             return left.Equals(right);
     }

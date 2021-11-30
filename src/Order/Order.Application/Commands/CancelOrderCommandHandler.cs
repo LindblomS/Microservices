@@ -1,10 +1,46 @@
 ﻿namespace Order.Application.Commands;
+
+using MediatR;
+using Order.Application.Services;
+using Ordering.Domain.AggregateModels.Order;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
-internal class CancelOrderCommandHandler
+public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, bool>
 {
+    readonly IOrderRepository orderRepository;
+
+    public CancelOrderCommandHandler(IOrderRepository orderRepository)
+    {
+        this.orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
+    }
+
+    public async Task<bool> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
+    {
+        var order = await orderRepository.GetAsync(request.OrderId);
+
+        if (order is null)
+            return false;
+
+        order.SetCancelledStatus();
+        _ = await orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        return true;
+    }
+}
+
+public class CancelOrderIdentifiedCommandHandler : IdentifiedCommandHandler<CancelOrderCommand, bool>
+{
+    public CancelOrderIdentifiedCommandHandler(
+        IRequestManager requestManager, 
+        IMediator mediator)
+        : base(requestManager, mediator)
+    {
+
+    }
+
+    protected override bool CreateResultForDuplicateRequest()
+    {
+        return true;
+    }
 }

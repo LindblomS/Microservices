@@ -1,9 +1,9 @@
-﻿namespace Services.Order.Domain.AggregateModels.Buyer;
+﻿namespace Ordering.Domain.AggregateModels.Buyer;
 
-using Services.Order.Domain.SeedWork;
+using Ordering.Domain.SeedWork;
 
 public class CardType
-    : Enumeration
+: Enumeration
 {
     public static CardType Amex = new(1, nameof(Amex));
     public static CardType Visa = new(2, nameof(Visa));

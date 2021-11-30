@@ -1,7 +1,7 @@
-﻿namespace Services.Order.Domain.Events;
+﻿namespace Ordering.Domain.Events;
 
 using MediatR;
-using Services.Order.Domain.AggregateModels.Order;
+using Ordering.Domain.AggregateModels.Order;
 using System;
 using System.Collections.Generic;
 

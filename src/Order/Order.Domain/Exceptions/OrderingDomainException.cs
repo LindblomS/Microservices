@@ -1,4 +1,4 @@
-﻿namespace Services.Order.Domain.Exceptions;
+﻿namespace Ordering.Domain.Exceptions;
 
 using System;
 

@@ -23,7 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Order", "Order", "{8FA19683
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Order.API", "Order\Order.API\Order.API.csproj", "{7F6A7F51-5CE8-4574-A06B-E63FF03C612C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Order.Domain", "Order\Order.Domain\Order.Domain.csproj", "{AEBC6832-CCC8-4B4F-8E13-A21F07495AAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering.Domain", "Order\Order.Domain\Ordering.Domain.csproj", "{AEBC6832-CCC8-4B4F-8E13-A21F07495AAF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Order.Infrastructure", "Order\Order.Infrastructure\Order.Infrastructure.csproj", "{2416CA05-44A9-46E0-85A6-83A4A14F196E}"
 EndProject
@@ -37,9 +37,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mvcclient", "Clients\MvcCli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Infrastructure", "Identity\Identity.Infrastructure\Identity.Infrastructure.csproj", "{2AE1CF00-C886-41FA-8CB9-BB6384D7DB1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Order.Contracts", "Order\Order.Contracts\Order.Contracts.csproj", "{142EDEA0-4E38-4930-B09D-7A969F06EDD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Order.Contracts", "Order\Order.Contracts\Order.Contracts.csproj", "{142EDEA0-4E38-4930-B09D-7A969F06EDD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Order.Application", "Order\Order.Application\Order.Application.csproj", "{1906F379-0022-47E7-B279-EBBFE2CD27A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Order.Application", "Order\Order.Application\Order.Application.csproj", "{1906F379-0022-47E7-B279-EBBFE2CD27A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

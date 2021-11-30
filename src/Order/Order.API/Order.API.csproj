@@ -26,7 +26,7 @@
     <ProjectReference Include="..\..\EventBus\EventBus\EventBus.csproj" />
     <ProjectReference Include="..\..\EventBus\IntegrationEventLogEF\IntegrationEventLogEF.csproj" />
     <ProjectReference Include="..\..\WebHost\WebHost.Customization\WebHost.Customization.csproj" />
-    <ProjectReference Include="..\Order.Domain\Order.Domain.csproj" />
+    <ProjectReference Include="..\Order.Domain\Ordering.Domain.csproj" />
     <ProjectReference Include="..\Order.Infrastructure\Order.Infrastructure.csproj" />
   </ItemGroup>
 

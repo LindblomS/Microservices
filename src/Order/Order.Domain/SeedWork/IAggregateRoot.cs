@@ -1,2 +1,2 @@
-﻿namespace Services.Order.Domain.SeedWork;
+﻿namespace Ordering.Domain.SeedWork;
 public interface IAggregateRoot { }

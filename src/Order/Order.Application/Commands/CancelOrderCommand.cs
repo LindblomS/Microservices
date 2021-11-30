@@ -2,7 +2,7 @@
 
 using MediatR;
 
-class CancelOrderCommand : IRequest<bool>
+public class CancelOrderCommand : IRequest<bool>
 {
     public CancelOrderCommand(Guid orderId)
     {

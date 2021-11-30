@@ -1,7 +1,7 @@
-﻿namespace Services.Order.Domain.Events;
+﻿namespace Ordering.Domain.Events;
 
 using MediatR;
-using Services.Order.Domain.AggregateModels.Buyer;
+using Ordering.Domain.AggregateModels.Buyer;
 using System;
 
 public class BuyerAndCardVerifiedDomainEvent : INotification

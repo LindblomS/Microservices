@@ -1,4 +1,4 @@
-﻿namespace Services.Order.Domain.Events;
+﻿namespace Ordering.Domain.Events;
 
 using MediatR;
 

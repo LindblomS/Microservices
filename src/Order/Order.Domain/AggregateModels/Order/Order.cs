@@ -1,8 +1,8 @@
-﻿namespace Services.Order.Domain.AggregateModels.Order;
+﻿namespace Ordering.Domain.AggregateModels.Order;
 
-using Services.Order.Domain.Events;
-using Services.Order.Domain.Exceptions;
-using Services.Order.Domain.SeedWork;
+using Ordering.Domain.Events;
+using Ordering.Domain.Exceptions;
+using Ordering.Domain.SeedWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;

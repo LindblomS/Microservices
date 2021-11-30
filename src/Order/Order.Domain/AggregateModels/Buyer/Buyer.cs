@@ -1,7 +1,7 @@
-﻿namespace Services.Order.Domain.AggregateModels.Buyer;
+﻿namespace Ordering.Domain.AggregateModels.Buyer;
 
-using Services.Order.Domain.Events;
-using Services.Order.Domain.SeedWork;
+using Ordering.Domain.Events;
+using Ordering.Domain.SeedWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;

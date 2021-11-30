@@ -3,7 +3,6 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Storage;
-    using Services.Order.Domain.SeedWork;
     using System;
     using System.Data;
     using System.Threading;

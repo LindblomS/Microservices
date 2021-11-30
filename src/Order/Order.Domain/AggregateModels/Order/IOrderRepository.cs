@@ -1,6 +1,6 @@
-﻿namespace Services.Order.Domain.AggregateModels.Order;
+﻿namespace Ordering.Domain.AggregateModels.Order;
 
-using Services.Order.Domain.SeedWork;
+using Ordering.Domain.SeedWork;
 using System;
 using System.Threading.Tasks;
 
