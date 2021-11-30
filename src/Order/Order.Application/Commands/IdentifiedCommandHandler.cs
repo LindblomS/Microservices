@@ -1,7 +1,7 @@
-﻿namespace Order.Application.Commands;
+﻿namespace Ordering.Application.Commands;
 
 using MediatR;
-using Order.Application.Services;
+using Ordering.Application.Services;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

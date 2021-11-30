@@ -1,4 +1,4 @@
-﻿namespace Order.Application.Commands;
+﻿namespace Ordering.Application.Commands;
 
 using MediatR;
 using System;

@@ -1,7 +1,7 @@
-﻿namespace Order.Application.Commands;
+﻿namespace Ordering.Application.Commands;
 
 using MediatR;
-using Order.Application.Services;
+using Ordering.Application.Services;
 using Ordering.Domain.AggregateModels.Order;
 using System;
 using System.Threading;
@@ -32,7 +32,7 @@ public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, boo
 public class CancelOrderIdentifiedCommandHandler : IdentifiedCommandHandler<CancelOrderCommand, bool>
 {
     public CancelOrderIdentifiedCommandHandler(
-        IRequestManager requestManager, 
+        IRequestManager requestManager,
         IMediator mediator)
         : base(requestManager, mediator)
     {

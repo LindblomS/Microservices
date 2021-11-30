@@ -1,4 +1,4 @@
-﻿namespace Order.Application.IntegrationEvents;
+﻿namespace Ordering.Application.IntegrationEvents;
 
 using EventBus.EventBus.Events;
 using System;

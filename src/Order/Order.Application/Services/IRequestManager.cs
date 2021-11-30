@@ -1,4 +1,4 @@
-﻿namespace Order.Application.Services;
+﻿namespace Ordering.Application.Services;
 
 using System;
 using System.Threading.Tasks;

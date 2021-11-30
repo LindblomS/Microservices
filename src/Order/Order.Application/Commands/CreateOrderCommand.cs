@@ -1,17 +1,17 @@
-﻿namespace Order.Application.Commands;
+﻿namespace Ordering.Application.Commands;
 
 using MediatR;
 using System;
 using System.Collections.Generic;
 
-class CreateOrderCommand : IRequest<bool>
+public class CreateOrderCommand : IRequest<bool>
 {
     public CreateOrderCommand(
         Guid userId,
         string username,
         AddressDto address,
         CardDto card,
-        IEnumerable<OrderItemDto> orderItems)
+        IEnumerable<OrderItem> orderItems)
     {
         UserId = userId;
         Username = username;
@@ -24,7 +24,7 @@ class CreateOrderCommand : IRequest<bool>
     public string Username { get; private set; }
     public AddressDto Address { get; private set; }
     public CardDto Card { get; private set; }
-    public IEnumerable<OrderItemDto> OrderItems { get; private set; }
+    public IEnumerable<OrderItem> OrderItems { get; private set; }
 
     public record CardDto(
         int TypeId,
@@ -39,7 +39,7 @@ class CreateOrderCommand : IRequest<bool>
         string Country,
         string ZipCode);
 
-    public record OrderItemDto(
+    public record OrderItem(
         Guid ProductId,
         string ProductName,
         decimal UnitPrice,
