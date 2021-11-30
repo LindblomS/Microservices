@@ -27,12 +27,10 @@ public class OrderStatus
     public static OrderStatus FromName(string name)
     {
         var state = List()
-            .SingleOrDefault(s => String.Equals(s.Name, name, StringComparison.CurrentCultureIgnoreCase));
+            .SingleOrDefault(s => string.Equals(s.Name, name, StringComparison.CurrentCultureIgnoreCase));
 
-        if (state == null)
-        {
-            throw new OrderingDomainException($"Possible values for OrderStatus: {String.Join(",", List().Select(s => s.Name))}");
-        }
+        if (state is null)
+            throw new OrderingDomainException($"Possible values for OrderStatus: {string.Join(",", List().Select(s => s.Name))}");
 
         return state;
     }
@@ -41,10 +39,8 @@ public class OrderStatus
     {
         var state = List().SingleOrDefault(s => s.Id == id);
 
-        if (state == null)
-        {
-            throw new OrderingDomainException($"Possible values for OrderStatus: {String.Join(",", List().Select(s => s.Name))}");
-        }
+        if (state is null)
+            throw new OrderingDomainException($"Possible values for OrderStatus: {string.Join(",", List().Select(s => s.Name))}");
 
         return state;
     }

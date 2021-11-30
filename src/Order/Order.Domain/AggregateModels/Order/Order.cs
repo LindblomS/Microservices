@@ -10,34 +10,45 @@ using System.Linq;
 public class Order : Entity, IAggregateRoot
 {
     List<OrderItem> orderItems;
-    Address adress;
+    Address address;
     Guid buyerId;
     Guid paymentMethodId;
     OrderStatus status;
     string description;
     DateTime created;
 
-    public Order(Guid id)
+    Order(Guid id, Address address)
     {
         if (id == default)
             throw new ArgumentNullException(nameof(id));
 
+        if (address is null)
+            throw new ArgumentNullException(nameof(address));
+
         this.id = id;
         status = OrderStatus.Submitted;
-        orderItems = new List<OrderItem>();
+        orderItems = new();
+        this.address = address;
         created = DateTime.UtcNow;
     }
 
     public Order(
         Guid id,
         User user,
-        Card card) : this(id)
+        Card card,
+        Address address) : this(id, address)
     {
+        if (user is null)
+            throw new ArgumentNullException(nameof(user));
+
+        if (user is null)
+            throw new ArgumentNullException(nameof(card));
+
         AddOrderStartedDomainEvent(user, card);
     }
 
     public IReadOnlyCollection<OrderItem> OrderItems { get => orderItems.AsReadOnly(); }
-    public Address Address { get => adress; }
+    public Address Address { get => address; }
     public Guid BuyerId { get => buyerId; }
     public Guid PaymentMethodId { get => paymentMethodId; }
     public OrderStatus Status { get => status; }

@@ -8,9 +8,8 @@ public abstract class ValueObject
     protected static bool EqualOperator(ValueObject left, ValueObject right)
     {
         if (ReferenceEquals(left, null) ^ ReferenceEquals(right, null))
-        {
             return false;
-        }
+
         return ReferenceEquals(left, null) || left.Equals(right);
     }
 
@@ -23,14 +22,12 @@ public abstract class ValueObject
 
     public override bool Equals(object obj)
     {
-        if (obj == null || obj.GetType() != GetType())
-        {
+        if (obj is null || obj.GetType() != GetType())
             return false;
-        }
 
         var other = (ValueObject)obj;
 
-        return this.GetEqualityComponents().SequenceEqual(other.GetEqualityComponents());
+        return GetEqualityComponents().SequenceEqual(other.GetEqualityComponents());
     }
 
     public override int GetHashCode()
@@ -42,6 +39,6 @@ public abstract class ValueObject
 
     public ValueObject GetCopy()
     {
-        return this.MemberwiseClone() as ValueObject;
+        return MemberwiseClone() as ValueObject;
     }
 }
