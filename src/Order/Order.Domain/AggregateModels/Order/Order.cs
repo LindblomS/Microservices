@@ -30,6 +30,7 @@ public class Order : Entity, IAggregateRoot
         orderItems = new();
         this.address = address;
         created = DateTime.UtcNow;
+        description = "";
     }
 
     public Order(
