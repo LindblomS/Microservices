@@ -6,18 +6,19 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FluentValidation" Version="10.3.4" />
+		<PackageReference Include="FluentValidation" Version="10.3.5" />
 		<PackageReference Include="MediatR" Version="9.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Folder Include="Behaviours\" />
 		<Folder Include="DomainEventHandlers\" />
-		<Folder Include="IntegrationEvents\EventHandlers\" />
+		<Folder Include="IntegrationEventHandlers\" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\EventBus\EventBus\EventBus.csproj" />
+		<ProjectReference Include="..\Order.Contracts\Order.Contracts.csproj" />
 		<ProjectReference Include="..\Order.Domain\Ordering.Domain.csproj" />
 	</ItemGroup>
 

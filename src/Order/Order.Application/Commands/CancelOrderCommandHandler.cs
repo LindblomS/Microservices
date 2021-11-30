@@ -24,8 +24,7 @@ public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, boo
             return false;
 
         order.SetCancelledStatus();
-        _ = await orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
-        return true;
+        return await orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }
 }
 

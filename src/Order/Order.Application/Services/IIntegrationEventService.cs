@@ -1,10 +1,10 @@
-﻿namespace Ordering.Application.IntegrationEvents;
+﻿namespace Ordering.Application.Services;
 
 using EventBus.EventBus.Events;
 using System;
 using System.Threading.Tasks;
 
-internal interface IIntegrationEventService
+public interface IIntegrationEventService
 {
     Task PublishEventsThroughEventBusAsync(Guid transactionId);
     Task AddAndSaveEventAsync(IntegrationEvent e);
