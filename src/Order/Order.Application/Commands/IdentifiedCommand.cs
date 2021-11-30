@@ -1,10 +1,17 @@
 ﻿namespace Order.Application.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-internal class IdentifiedCommand
+using MediatR;
+using System;
+
+class IdentifiedCommand<TCommand, TResponse> : IRequest<TResponse>
+    where TCommand : IRequest<TResponse>
 {
+    public IdentifiedCommand(TCommand command, Guid id)
+    {
+        Command = command;
+        Id = id;
+    }
+
+    public TCommand Command { get; private set; }
+    public Guid Id { get; private set; }
 }

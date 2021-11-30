@@ -2,6 +2,12 @@
 
 using MediatR;
 
-internal class CancelOrderCommand : IRequest<bool>
+class CancelOrderCommand : IRequest<bool>
 {
+    public CancelOrderCommand(Guid orderId)
+    {
+        OrderId = orderId;
+    }
+
+    public Guid OrderId { get; private set; }
 }

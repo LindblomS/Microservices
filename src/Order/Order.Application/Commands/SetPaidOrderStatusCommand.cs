@@ -2,7 +2,12 @@
 
 using MediatR;
 
-internal class SetPaidOrderStatusCommand : IRequest<bool>
+class SetPaidOrderStatusCommand : IRequest<bool>
 {
+    public SetPaidOrderStatusCommand(Guid orderId)
+    {
+        OrderId = orderId;
+    }
 
+    public Guid OrderId { get; private set; }
 }

@@ -2,6 +2,12 @@
 
 using MediatR;
 
-internal class SetAwaitingValidationOrderStatusCommand : IRequest<bool>
+class SetAwaitingValidationOrderStatusCommand : IRequest<bool>
 {
+    public SetAwaitingValidationOrderStatusCommand(Guid orderId)
+    {
+        OrderId = orderId;
+    }
+
+    public Guid OrderId { get; private set; }
 }

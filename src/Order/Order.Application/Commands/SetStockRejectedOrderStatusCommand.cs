@@ -2,7 +2,14 @@
 
 using MediatR;
 
-internal class SetStockRejectedOrderStatusCommand : IRequest<bool>
+class SetStockRejectedOrderStatusCommand : IRequest<bool>
 {
+    public SetStockRejectedOrderStatusCommand(Guid orderId, IEnumerable<int> stockItems)
+    {
+        OrderId = orderId;
+        StockItems = stockItems;
+    }
 
+    public Guid OrderId { get; private set; }
+    public IEnumerable<int> StockItems { get; private set; }
 }
