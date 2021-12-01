@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mvcclient", "Clients\MvcCli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Infrastructure", "Identity\Identity.Infrastructure\Identity.Infrastructure.csproj", "{2AE1CF00-C886-41FA-8CB9-BB6384D7DB1A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Order.Contracts", "Order\Order.Contracts\Order.Contracts.csproj", "{142EDEA0-4E38-4930-B09D-7A969F06EDD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering.Contracts", "Order\Order.Contracts\Ordering.Contracts.csproj", "{142EDEA0-4E38-4930-B09D-7A969F06EDD9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering.Application", "Order\Order.Application\Ordering.Application.csproj", "{1906F379-0022-47E7-B279-EBBFE2CD27A9}"
 EndProject

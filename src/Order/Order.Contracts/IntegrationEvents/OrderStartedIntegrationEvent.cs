@@ -1,4 +1,4 @@
-﻿namespace Order.Contracts.IntegrationEvents;
+﻿namespace Ordering.Contracts.IntegrationEvents;
 
 using EventBus.EventBus.Events;
 using System;

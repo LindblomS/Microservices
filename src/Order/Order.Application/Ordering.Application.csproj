@@ -18,7 +18,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\EventBus\EventBus\EventBus.csproj" />
-		<ProjectReference Include="..\Order.Contracts\Order.Contracts.csproj" />
+		<ProjectReference Include="..\Order.Contracts\Ordering.Contracts.csproj" />
 		<ProjectReference Include="..\Order.Domain\Ordering.Domain.csproj" />
 	</ItemGroup>
 
