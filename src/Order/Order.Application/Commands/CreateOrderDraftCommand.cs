@@ -4,7 +4,7 @@ using MediatR;
 using System;
 using System.Collections.Generic;
 
-class CreateOrderDraftCommand : IRequest<CreateOrderDraftCommand.Draft>
+public class CreateOrderDraftCommand : IRequest<CreateOrderDraftCommand.Draft>
 {
     public CreateOrderDraftCommand(Guid buyerId, IEnumerable<OrderItem> orderItems)
     {

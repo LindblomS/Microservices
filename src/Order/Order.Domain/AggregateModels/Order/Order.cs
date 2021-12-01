@@ -144,6 +144,14 @@ public class Order : Entity, IAggregateRoot
         }
     }
 
+    public static decimal GetDraftTotal(IEnumerable<OrderItem> items)
+    {
+        if (items is null)
+            throw new ArgumentNullException(nameof(items));
+
+        return items.Sum(i => i.Units * i.UnitPrice);
+    }
+
     void AddOrderStartedDomainEvent(
         User user,
         Card card)

@@ -2,7 +2,7 @@
 
 using MediatR;
 
-class SetPaidOrderStatusCommand : IRequest<bool>
+public class SetPaidOrderStatusCommand : IRequest<bool>
 {
     public SetPaidOrderStatusCommand(Guid orderId)
     {

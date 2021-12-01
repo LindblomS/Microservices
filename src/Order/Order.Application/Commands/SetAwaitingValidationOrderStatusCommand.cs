@@ -2,7 +2,7 @@
 
 using MediatR;
 
-class SetAwaitingValidationOrderStatusCommand : IRequest<bool>
+public class SetAwaitingValidationOrderStatusCommand : IRequest<bool>
 {
     public SetAwaitingValidationOrderStatusCommand(Guid orderId)
     {
