@@ -31,7 +31,19 @@ public class Buyer : Entity, IAggregateRoot
     public string Name { get => name; }
     public IReadOnlyCollection<Card> Cards { get => cards.AsReadOnly(); }
 
-    public void VerifyOrAddCard(Card card, Guid orderId)
+    CardType type;
+    string number;
+    string securityNumber;
+    string holderName;
+    DateTime expiration;
+
+    public void VerifyOrAddCard(
+        CardType type,
+        string number,
+        string securityNumber,
+        string holderName,
+        DateTime expiration,
+        Guid orderId)
     {
         var existingCard = cards.SingleOrDefault(x => x == card);
 

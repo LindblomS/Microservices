@@ -12,7 +12,7 @@ public class Order : Entity, IAggregateRoot
     List<OrderItem> orderItems;
     Address address;
     Guid buyerId;
-    Guid paymentMethodId;
+    Guid cardId;
     OrderStatus status;
     string description;
     DateTime created;
@@ -51,7 +51,7 @@ public class Order : Entity, IAggregateRoot
     public IReadOnlyCollection<OrderItem> OrderItems { get => orderItems.AsReadOnly(); }
     public Address Address { get => address; }
     public Guid BuyerId { get => buyerId; }
-    public Guid PaymentMethodId { get => paymentMethodId; }
+    public Guid CardId { get => cardId; }
     public OrderStatus Status { get => status; }
     public string Description { get => description; }
     public DateTime Created { get => created; }
@@ -74,12 +74,12 @@ public class Order : Entity, IAggregateRoot
         existingItem.AddUnits(1);
     }
 
-    public void SetPaymentId(Guid id)
+    public void SetCardId(Guid id)
     {
         if (id == default)
             throw new ArgumentNullException(nameof(id));
 
-        paymentMethodId = id;
+        cardId = id;
     }
 
     public void SetBuyerId(Guid id)

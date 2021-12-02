@@ -2,34 +2,57 @@
 
 using Ordering.Domain.SeedWork;
 using System;
-using System.Collections.Generic;
 
-public class Card : ValueObject
+public class Card : Entity
 {
+    CardType type;
+    string number;
+    string securityNumber;
+    string holderName;
+    DateTime expiration;
+
     public Card(
-        CardType cardType,
-        string cardNumber,
-        string cardSecurityNumber,
-        string cardHolderName,
-        DateTime cardExpiration)
+        Guid id,
+        CardType type,
+        string number,
+        string securityNumber,
+        string holderName,
+        DateTime expiration)
     {
-        CardType = cardType;
-        CardNumber = cardNumber;
-        CardSecurityNumber = cardSecurityNumber;
-        CardHolderName = cardHolderName;
-        CardExpiration = cardExpiration;
+        if (id == default)
+            throw new ArgumentNullException(nameof(id));
+
+        if (type is null)
+            throw new ArgumentNullException(nameof(type));
+
+        if (string.IsNullOrWhiteSpace(number))
+            throw new ArgumentNullException(nameof(number));
+
+        if (string.IsNullOrWhiteSpace(securityNumber))
+            throw new ArgumentNullException(nameof(securityNumber));
+
+        if (string.IsNullOrWhiteSpace(holderName))
+            throw new ArgumentNullException(nameof(holderName));
+
+        if (expiration == default)
+            throw new ArgumentNullException(nameof(expiration));
+
+        this.id = id;
+        this.type = type;
+        this.number = number;
+        this.securityNumber = securityNumber;
+        this.holderName = holderName;
+        this.expiration = expiration;
     }
 
-    public CardType CardType { get; private set; }
-    public string CardNumber { get; private set; }
-    public string CardSecurityNumber { get; private set; }
-    public string CardHolderName { get; private set; }
-    public DateTime CardExpiration { get; private set; }
+    public CardType Type { get => type; }
+    public string Number { get => number; }
+    public string SecurityNumber { get => securityNumber; }
+    public string HolderName { get => holderName; }
+    public DateTime Expiration { get => expiration; }
 
-    protected override IEnumerable<object> GetEqualityComponents()
+    public override bool Equals(object obj)
     {
-        yield return CardType;
-        yield return CardNumber;
-        yield return CardExpiration;
+        return base.Equals(obj);
     }
 }

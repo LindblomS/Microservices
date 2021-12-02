@@ -6,36 +6,31 @@ using System.Collections.Generic;
 
 public abstract class Entity
 {
-    int? requestedHashCode;
     protected Guid id;
+    List<INotification> domainEvents;
 
-    public virtual Guid Id
+    public Entity()
     {
-        get => id;
+        domainEvents = new();
     }
 
-    List<INotification> _domainEvents;
-    public IReadOnlyCollection<INotification> DomainEvents => _domainEvents?.AsReadOnly();
+    public Guid Id { get => id; }
+
+    public IReadOnlyCollection<INotification> DomainEvents { get => domainEvents.AsReadOnly(); }
 
     public void AddDomainEvent(INotification eventItem)
     {
-        _domainEvents = _domainEvents ?? new List<INotification>();
-        _domainEvents.Add(eventItem);
+        domainEvents.Add(eventItem);
     }
 
     public void RemoveDomainEvent(INotification eventItem)
     {
-        _domainEvents?.Remove(eventItem);
+        domainEvents?.Remove(eventItem);
     }
 
     public void ClearDomainEvents()
     {
-        _domainEvents?.Clear();
-    }
-
-    public bool IsTransient()
-    {
-        return id == default;
+        domainEvents?.Clear();
     }
 
     public override bool Equals(object obj)
@@ -51,25 +46,9 @@ public abstract class Entity
 
         var item = (Entity)obj;
 
-        if (item.IsTransient() || IsTransient())
-            return false;
-        else
             return item.Id == id;
     }
 
-    public override int GetHashCode()
-    {
-        if (!IsTransient())
-        {
-            if (!requestedHashCode.HasValue)
-                requestedHashCode = id.GetHashCode() ^ 31;
-
-            return requestedHashCode.Value;
-        }
-        else
-            return base.GetHashCode();
-
-    }
     public static bool operator ==(Entity left, Entity right)
     {
         if (Equals(left, null))
@@ -81,5 +60,10 @@ public abstract class Entity
     public static bool operator !=(Entity left, Entity right)
     {
         return !(left == right);
+    }
+
+    public override int GetHashCode()
+    {
+        throw new NotImplementedException();
     }
 }
