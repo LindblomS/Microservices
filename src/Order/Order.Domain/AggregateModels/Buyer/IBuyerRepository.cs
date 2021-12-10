@@ -8,6 +8,7 @@ public interface IBuyerRepository : IRepository<Buyer>
 {
     Task<Buyer> AddAsync(Buyer order);
     Task<Buyer> GetAsync(Guid buyerId);
+    Task<Buyer> UpdateAsync(Buyer buyer);
     Task<Card> GetCardAsync(
         int typeId,
         string number,
