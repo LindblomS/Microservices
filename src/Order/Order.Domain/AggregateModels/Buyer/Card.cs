@@ -50,9 +50,4 @@ public class Card : Entity
     public string SecurityNumber { get => securityNumber; }
     public string HolderName { get => holderName; }
     public DateTime Expiration { get => expiration; }
-
-    public override bool Equals(object obj)
-    {
-        return base.Equals(obj);
-    }
 }

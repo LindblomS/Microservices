@@ -1,8 +1,8 @@
 ﻿namespace Ordering.Application.Commands;
 
 using MediatR;
-using Order.Contracts.IntegrationEvents;
 using Ordering.Application.Services;
+using Ordering.Contracts.IntegrationEvents;
 using Ordering.Domain.AggregateModels.Order;
 using System;
 using System.Threading;

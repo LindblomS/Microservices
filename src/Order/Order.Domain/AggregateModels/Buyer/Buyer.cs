@@ -31,21 +31,12 @@ public class Buyer : Entity, IAggregateRoot
     public string Name { get => name; }
     public IReadOnlyCollection<Card> Cards { get => cards.AsReadOnly(); }
 
-    CardType type;
-    string number;
-    string securityNumber;
-    string holderName;
-    DateTime expiration;
-
-    public void VerifyOrAddCard(
-        CardType type,
-        string number,
-        string securityNumber,
-        string holderName,
-        DateTime expiration,
-        Guid orderId)
+    public void VerifyOrAddCard(Card card, Guid orderId)
     {
-        var existingCard = cards.SingleOrDefault(x => x == card);
+        if (card is null)
+            throw new ArgumentNullException(nameof(card));
+
+        var existingCard = cards.SingleOrDefault(x => x.Id == card.Id);
 
         if (existingCard is null)
             cards.Add(card);
