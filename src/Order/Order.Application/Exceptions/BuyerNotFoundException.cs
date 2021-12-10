@@ -1,4 +1,4 @@
-﻿namespace Ordering.Contracts.Exceptions;
+﻿namespace Ordering.Application.Exceptions;
 
 using System;
 

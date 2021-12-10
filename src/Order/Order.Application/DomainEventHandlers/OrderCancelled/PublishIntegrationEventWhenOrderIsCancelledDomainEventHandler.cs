@@ -3,7 +3,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Ordering.Application.Services;
-using Ordering.Contracts.Exceptions;
+using Ordering.Application.Exceptions;
 using Ordering.Contracts.IntegrationEvents;
 using Ordering.Domain.AggregateModels.Buyer;
 using Ordering.Domain.AggregateModels.Order;

@@ -1,7 +1,7 @@
 ﻿namespace Ordering.Application.Commands;
 
 using MediatR;
-using Ordering.Contracts.Exceptions;
+using Ordering.Application.Exceptions;
 using Ordering.Application.Services;
 using Ordering.Domain.AggregateModels.Order;
 using System;

@@ -9,7 +9,7 @@ public class Units : ValueObject
 {
     public Units(int units)
     {
-        if (units < 0)
+        if (units < 1)
             throw new ArgumentException($"Invalid units. Units must be greater than 0. Units was {units}");
 
         Value = units;

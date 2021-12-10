@@ -2,7 +2,7 @@
 
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Ordering.Contracts.Exceptions;
+using Ordering.Application.Exceptions;
 using Ordering.Domain.AggregateModels.Order;
 using Ordering.Domain.Events;
 using System;
