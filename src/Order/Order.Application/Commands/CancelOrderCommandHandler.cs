@@ -11,10 +11,12 @@ using System.Threading.Tasks;
 public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, bool>
 {
     readonly IOrderRepository orderRepository;
+    readonly DomainEventPublisher domainEventPublisher;
 
-    public CancelOrderCommandHandler(IOrderRepository orderRepository)
+    public CancelOrderCommandHandler(IOrderRepository orderRepository, DomainEventPublisher domainEventPublisher)
     {
         this.orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
+        this.domainEventPublisher = domainEventPublisher ?? throw new ArgumentNullException(nameof(domainEventPublisher));
     }
 
     public async Task<bool> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
@@ -25,7 +27,11 @@ public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, boo
             throw new OrderNotFoundException(request.OrderId);
 
         order.SetCancelledStatus();
-        return await orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+        await orderRepository.UpdateAsync(order);
+        await domainEventPublisher.PublishAsync(order);
+
+        return true;
     }
 }
 

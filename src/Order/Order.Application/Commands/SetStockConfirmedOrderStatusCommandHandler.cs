@@ -10,10 +10,12 @@ using System.Threading.Tasks;
 public class SetStockConfirmedOrderStatusCommandHandler : IRequestHandler<SetStockConfirmedOrderStatusCommand, bool>
 {
     readonly IOrderRepository orderRepository;
+    readonly DomainEventPublisher domainEventPublisher;
 
-    public SetStockConfirmedOrderStatusCommandHandler(IOrderRepository orderRepository)
+    public SetStockConfirmedOrderStatusCommandHandler(IOrderRepository orderRepository, DomainEventPublisher domainEventPublisher)
     {
         this.orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
+        this.domainEventPublisher = domainEventPublisher ?? throw new ArgumentNullException(nameof(domainEventPublisher));
     }
 
     public async Task<bool> Handle(SetStockConfirmedOrderStatusCommand request, CancellationToken cancellationToken)
@@ -24,7 +26,11 @@ public class SetStockConfirmedOrderStatusCommandHandler : IRequestHandler<SetSto
             throw new OrderNotFoundException(request.OrderId);
 
         order.SetStockConfirmedStatus();
-        return await orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+        await orderRepository.UpdateAsync(order);
+        await domainEventPublisher.PublishAsync(order);
+
+        return true;
     }
 }
 public class SetStockConfirmedOrderStatusIdentifiedCommandHandler : IdentifiedCommandHandler<SetStockConfirmedOrderStatusCommand, bool>

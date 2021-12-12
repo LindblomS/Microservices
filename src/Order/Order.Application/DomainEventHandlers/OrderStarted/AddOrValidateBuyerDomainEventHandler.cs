@@ -16,15 +16,18 @@ public class AddOrValidateBuyerDomainEventHandler : INotificationHandler<OrderSt
     readonly IBuyerRepository buyerRepository;
     readonly IIntegrationEventService integrationEventService;
     readonly ILogger<AddOrValidateBuyerDomainEventHandler> logger;
+    readonly DomainEventPublisher domainEventPublisher;
 
     public AddOrValidateBuyerDomainEventHandler(
         IBuyerRepository buyerRepository, 
         IIntegrationEventService integrationEventService,
-        ILogger<AddOrValidateBuyerDomainEventHandler> logger)
+        ILogger<AddOrValidateBuyerDomainEventHandler> logger,
+        DomainEventPublisher domainEventPublisher)
     {
         this.buyerRepository = buyerRepository ?? throw new ArgumentNullException(nameof(buyerRepository));
         this.integrationEventService = integrationEventService ?? throw new ArgumentNullException(nameof(integrationEventService));
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.domainEventPublisher = domainEventPublisher ?? throw new ArgumentNullException(nameof(domainEventPublisher));
     }
 
     public async Task Handle(OrderStartedDomainEvent notification, CancellationToken cancellationToken)
@@ -52,7 +55,7 @@ public class AddOrValidateBuyerDomainEventHandler : INotificationHandler<OrderSt
 
         logger.LogInformation("Buyer {BuyerId} and card were validated or updated for order {OrderId}", buyer.Id, notification.Order.Id);
 
-        _ = await buyerRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        await domainEventPublisher.PublishAsync(buyer);
 
         return buyer;
     }

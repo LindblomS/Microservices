@@ -33,6 +33,6 @@ public class UpdateOrderWhenBuyerAndCardVerifiedDomainEventHandler : INotificati
         order.SetCardId(notification.Card.Id);
 
         logger.LogInformation("Order {OrderId} has been updated with card {CardId}", order.BuyerId, order.CardId);
-        await orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        await orderRepository.UpdateAsync(order);
     }
 }

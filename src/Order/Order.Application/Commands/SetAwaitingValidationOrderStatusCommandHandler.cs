@@ -11,10 +11,12 @@ using System.Threading.Tasks;
 public class SetAwaitingValidationOrderStatusCommandHandler : IRequestHandler<SetAwaitingValidationOrderStatusCommand, bool>
 {
     readonly IOrderRepository orderRepository;
+    readonly DomainEventPublisher domainEventPublisher;
 
-    public SetAwaitingValidationOrderStatusCommandHandler(IOrderRepository orderRepository)
+    public SetAwaitingValidationOrderStatusCommandHandler(IOrderRepository orderRepository, DomainEventPublisher domainEventPublisher)
     {
         this.orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
+        this.domainEventPublisher = domainEventPublisher ?? throw new ArgumentNullException(nameof(domainEventPublisher));
     }
 
     public async Task<bool> Handle(SetAwaitingValidationOrderStatusCommand request, CancellationToken cancellationToken)
@@ -25,7 +27,11 @@ public class SetAwaitingValidationOrderStatusCommandHandler : IRequestHandler<Se
             throw new OrderNotFoundException(request.OrderId);
 
         order.SetAwaitingValidationStatus();
-        return await orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+        await orderRepository.UpdateAsync(order);
+        await domainEventPublisher.PublishAsync(order);
+
+        return true;
     }
 }
 

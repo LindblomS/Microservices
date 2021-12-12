@@ -24,7 +24,10 @@ public class SetStockRejectedOrderStatusCommandHandler : IRequestHandler<SetStoc
             throw new OrderNotFoundException(request.OrderId);
 
         order.SetCancelledStatusWhenStockIsRejected(request.StockItems);
-        return await orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+        await orderRepository.UpdateAsync(order);
+
+        return true;
     }
 }
 

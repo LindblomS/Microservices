@@ -17,8 +17,15 @@ public class DomainEventPublisher
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task Publish(IAggregateRoot entity)
+    public async Task PublishAsync(Entity entity)
     {
+        var events = entity.DomainEvents.ToList();
+        entity.ClearDomainEvents();
 
+        foreach(var e in events)
+        {
+            logger.LogInformation("Publishing domain event {DomainEvent} {@DomainEvent}", e.GetType().Name, e);
+            await mediator.Publish(e);
+        }
     }
 }

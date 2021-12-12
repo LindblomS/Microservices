@@ -12,11 +12,13 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, boo
 {
     readonly IOrderRepository orderRepository;
     readonly IIntegrationEventService integrationEventService;
+    readonly DomainEventPublisher domainEventPublisher;
 
-    public CreateOrderCommandHandler(IOrderRepository orderRepository, IIntegrationEventService integrationEventService)
+    public CreateOrderCommandHandler(IOrderRepository orderRepository, IIntegrationEventService integrationEventService, DomainEventPublisher domainEventPublisher)
     {
         this.orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
         this.integrationEventService = integrationEventService ?? throw new ArgumentNullException(nameof(integrationEventService));
+        this.domainEventPublisher = domainEventPublisher ?? throw new ArgumentNullException(nameof(domainEventPublisher));
     }
 
     public async Task<bool> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -29,12 +31,13 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, boo
         foreach (var item in request.OrderItems)
             order.AddOrderItem(CreateOrderItem(item));
 
-        _ = await orderRepository.AddAsync(order);
+        await orderRepository.AddAsync(order);
+        await domainEventPublisher.PublishAsync(order);
 
         var orderStartedEvent = new OrderStartedIntegrationEvent(request.UserId);
         await integrationEventService.AddAndSaveEventAsync(orderStartedEvent);
 
-        return await orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        return true;
     }
 
     User CreateUser(Guid userId, string username)
