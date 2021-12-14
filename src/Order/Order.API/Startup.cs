@@ -14,12 +14,12 @@ namespace Services.Order.API
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
+    using Ordering.Infrastructure;
     using RabbitMQ.Client;
     using Services.Order.API.Application.Factories;
     using Services.Order.API.Application.IntegrationEvents;
     using Services.Order.API.Application.IntegrationEvents.Events;
     using Services.Order.API.Infrastructure.AutoFacModules;
-    using Services.Order.Infrastructure;
     using System;
     using System.Data.Common;
     using System.Reflection;

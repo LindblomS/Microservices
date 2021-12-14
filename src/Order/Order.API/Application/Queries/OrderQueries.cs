@@ -1,11 +1,11 @@
 ﻿namespace Services.Order.API.Application.Queries
 {
     using Services.Order.API.Application.Mappers;
-    using Services.Order.Infrastructure;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using System.Linq;
+    using Ordering.Infrastructure;
 
     public class OrderQueries : IOrderQueries
     {

@@ -3,8 +3,8 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
+    using Ordering.Infrastructure;
     using Services.Order.API.Application.IntegrationEvents;
-    using Services.Order.Infrastructure;
     using System;
     using System.Threading;
     using System.Threading.Tasks;

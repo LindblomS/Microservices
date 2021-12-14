@@ -9,7 +9,7 @@ namespace Services.Order.API
     using System.IO;
     using WebHost.Customization;
     using EventBus.IntegrationEventLogEF;
-    using Services.Order.Infrastructure;
+    using Ordering.Infrastructure;
 
     public class Program
     {

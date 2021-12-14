@@ -5,10 +5,11 @@
     using EventBus.IntegrationEventLogEF;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
-    using Services.Order.Infrastructure;
+    using Ordering.Infrastructure;
     using System;
     using System.Data.Common;
     using System.Threading.Tasks;
+
 
     public class OrderIntegrationEventService : IOrderIntegrationEventService
     {

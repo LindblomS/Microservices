@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Services.Order.Infrastructure;
+using Ordering.Infrastructure;
 
 namespace Services.Order.API.Infrastructure.Migrations.Order
 {

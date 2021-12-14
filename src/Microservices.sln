@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Order.API", "Order\Order.AP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering.Domain", "Order\Order.Domain\Ordering.Domain.csproj", "{AEBC6832-CCC8-4B4F-8E13-A21F07495AAF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Order.Infrastructure", "Order\Order.Infrastructure\Order.Infrastructure.csproj", "{2416CA05-44A9-46E0-85A6-83A4A14F196E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering.Infrastructure", "Order\Order.Infrastructure\Ordering.Infrastructure.csproj", "{2416CA05-44A9-46E0-85A6-83A4A14F196E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{8A13C604-7820-4817-AC88-19CAA6ED5AB6}"
 EndProject

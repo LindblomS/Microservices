@@ -26,7 +26,7 @@ public class IdentifiedCommandHandler<TCommand, TResponse> : IRequestHandler<Ide
         if (exists)
             return CreateResultForDuplicateRequest();
 
-        await requestManager.CreateRequestAsync(request.Id);
+        await requestManager.CreateRequestAsync<TCommand>(request.Id);
         return await mediator.Send(request.Command);
     }
 
