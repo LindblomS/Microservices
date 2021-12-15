@@ -1,10 +1,10 @@
-﻿namespace Ordering.Infrastructure.Services.RequestManager;
+﻿namespace Ordering.Infrastructure.Models;
 
 using System;
 
-internal class ClientRequest
+public class ClientRequestEntity
 {
-    public ClientRequest(Guid id, string name, DateTime time)
+    public ClientRequestEntity(Guid id, string name, DateTime time)
     {
         Id = id;
         Name = name;

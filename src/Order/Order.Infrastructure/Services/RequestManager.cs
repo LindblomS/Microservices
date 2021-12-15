@@ -3,6 +3,7 @@
 using Ordering.Application.Services;
 using Ordering.Infrastructure.EntityFramework;
 using Ordering.Infrastructure.Exceptions;
+using Ordering.Infrastructure.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -22,7 +23,7 @@ public class RequestManager : IRequestManager
         if (exists)
             throw new RequestAlreadyExistsException(id);
 
-        var request = new ClientRequest(id, typeof(T).Name, DateTime.UtcNow);
+        var request = new ClientRequestEntity(id, typeof(T).Name, DateTime.UtcNow);
 
         context.Add(request);
         await context.SaveChangesAsync();
@@ -30,7 +31,7 @@ public class RequestManager : IRequestManager
 
     public async Task<bool> ExistsAsync(Guid id)
     {
-        var request = await context.FindAsync<ClientRequest>(id);
+        var request = await context.FindAsync<ClientRequestEntity>(id);
         return request is not null;
     }
 }

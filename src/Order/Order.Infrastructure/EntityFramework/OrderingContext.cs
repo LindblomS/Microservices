@@ -3,16 +3,25 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Ordering.Application.Services;
+using Ordering.Infrastructure.EntityFramework.Configurations;
+using Ordering.Infrastructure.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 public class OrderingContext : DbContext, IUnitOfWork
 {
-    public Guid Id => throw new NotImplementedException();
+    internal const string defaultSchema = "ordering";
 
+    public OrderingContext(DbContextOptions<OrderingContext> options) : base(options)
+    {
+    }
+
+    public DbSet<OrderEntity> Orders { get; private set; }
+    public DbSet<OrderItemEntity> OrderItems { get; private set; }
+    public DbSet<BuyerEntity> Buyers { get; private set; }
+    public DbSet<CardEntity> Cards { get; private set; }
+
+    public Guid Id => throw new NotImplementedException();
     public bool Active => throw new NotImplementedException();
 
     public void Begin()
@@ -26,4 +35,13 @@ public class OrderingContext : DbContext, IUnitOfWork
     }
 
     public IDbContextTransaction GetCurrentTransaction() => throw new NotImplementedException();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfiguration(new OrderEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new OrderItemEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new BuyerEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new CardEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new ClientRequestEntityTypeConfiguration());
+    }
 }

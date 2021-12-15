@@ -16,9 +16,5 @@
     <ProjectReference Include="..\Order.Application\Ordering.Application.csproj" />
     <ProjectReference Include="..\Order.Domain\Ordering.Domain.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="EntityFramework\Configurations\" />
-  </ItemGroup>
   
 </Project>
