@@ -40,8 +40,10 @@ public class OrderingContext : DbContext, IUnitOfWork
     {
         modelBuilder.ApplyConfiguration(new OrderEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new OrderItemEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new OrderStatusEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new BuyerEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new CardEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new CardTypeEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ClientRequestEntityTypeConfiguration());
     }
 }
