@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 public interface IOrderRepository : IRepository<Order>
 {
-    Task<Order> AddAsync(Order order);
+    Task AddAsync(Order order);
     Task<Order> GetAsync(Guid orderId);
-    Task<Order> UpdateAsync(Order order);
+    Task UpdateAsync(Order order);
 }

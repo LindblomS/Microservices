@@ -2,6 +2,7 @@
 
 using Ordering.Domain.AggregateModels.Order;
 using Ordering.Infrastructure.EntityFramework;
+using Ordering.Infrastructure.Mappers;
 using System;
 using System.Threading.Tasks;
 
@@ -14,17 +15,22 @@ public class OrderRepository : IOrderRepository
         this.context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public async Task<Order> AddAsync(Order order)
+    public async Task AddAsync(Order order)
     {
+        await context.Orders.AddAsync(OrderMapper.Map(order));
+        await context.SaveChangesAsync();
     }
 
-    public Task<Order> GetAsync(Guid orderId)
+    public async Task<Order> GetAsync(Guid orderId)
     {
-        throw new NotImplementedException();
+        var entity = await context.Orders.FindAsync(orderId);
+        return OrderMapper.Map(entity);
     }
 
-    public Task<Order> UpdateAsync(Order order)
+    public async Task UpdateAsync(Order order)
     {
-        throw new NotImplementedException();
+        var entity = OrderMapper.Map(order);
+        context.Orders.Update(entity);
+        await context.SaveChangesAsync();
     }
 }

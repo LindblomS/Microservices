@@ -42,7 +42,7 @@ public class Order : Entity, IAggregateRoot
         if (user is null)
             throw new ArgumentNullException(nameof(user));
 
-        if (user is null)
+        if (card is null)
             throw new ArgumentNullException(nameof(card));
 
         AddOrderStartedDomainEvent(user, card);
@@ -150,6 +150,14 @@ public class Order : Entity, IAggregateRoot
             throw new ArgumentNullException(nameof(items));
 
         return items.Sum(i => i.Units * i.UnitPrice);
+    }
+
+    public void SetCreated(DateTime created)
+    {
+        if (status.Id != OrderStatus.Submitted.Id)
+            throw new OrderingDomainException($"Can't change created date when order status isn't {OrderStatus.Submitted.Name}");
+
+        this.created = created;
     }
 
     void AddOrderStartedDomainEvent(
