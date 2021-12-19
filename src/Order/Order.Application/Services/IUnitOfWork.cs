@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 public interface IUnitOfWork
 {
-    Task Commit(Guid unitOfWorkId);
+    Task CommitAsync(IUnitOfWork unitOfWork);
     Guid Id { get; }
     bool Active { get; }
-    void Begin();
+    Task BeginAsync();
 }

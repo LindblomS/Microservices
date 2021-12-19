@@ -11,9 +11,11 @@ using System.Threading.Tasks;
 public class OrderingContext : DbContext, IUnitOfWork
 {
     internal const string defaultSchema = "ordering";
+    IDbContextTransaction currentTransaction;
 
     public OrderingContext(DbContextOptions<OrderingContext> options) : base(options)
     {
+        Id = Guid.NewGuid();
     }
 
     public DbSet<OrderEntity> Orders { get; private set; }
@@ -21,20 +23,43 @@ public class OrderingContext : DbContext, IUnitOfWork
     public DbSet<BuyerEntity> Buyers { get; private set; }
     public DbSet<CardEntity> Cards { get; private set; }
 
-    public Guid Id => throw new NotImplementedException();
-    public bool Active => throw new NotImplementedException();
+    public Guid Id { get; }
+    public bool Active { get => currentTransaction is not null; }
 
-    public void Begin()
+    public async Task BeginAsync()
     {
-        throw new NotImplementedException();
+        if (Active)
+            throw new InvalidOperationException("Unit of work is active");
+
+        currentTransaction = await Database.BeginTransactionAsync();
     }
 
-    public Task Commit(Guid unitOfWorkId)
+    public async Task CommitAsync(IUnitOfWork unitOfWork)
     {
-        throw new NotImplementedException();
+        if (unitOfWork?.Id != Id)
+            throw new InvalidOperationException("Unit of work is not current");
+
+        try
+        {
+            await currentTransaction.CommitAsync();
+        }
+        catch
+        {
+            throw;
+        }
+        finally
+        {
+            await currentTransaction?.RollbackAsync();
+
+            if (currentTransaction is not null)
+            {
+                await currentTransaction.DisposeAsync();
+                currentTransaction = null;
+            }
+        }
     }
 
-    public IDbContextTransaction GetCurrentTransaction() => throw new NotImplementedException();
+    public IDbContextTransaction GetCurrentTransaction() => currentTransaction;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
