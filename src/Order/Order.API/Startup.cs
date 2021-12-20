@@ -1,4 +1,4 @@
-namespace Services.Order.API
+namespace Ordering.API
 {
     using Autofac;
     using EventBus.EventBus;
@@ -6,7 +6,6 @@ namespace Services.Order.API
     using EventBus.EventBusRabbitMQ;
     using EventBus.IntegrationEventLogEF;
     using FluentValidation;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
@@ -14,12 +13,8 @@ namespace Services.Order.API
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
-    using Ordering.Infrastructure;
+    using Ordering.Infrastructure.EntityFramework;
     using RabbitMQ.Client;
-    using Services.Order.API.Application.Factories;
-    using Services.Order.API.Application.IntegrationEvents;
-    using Services.Order.API.Application.IntegrationEvents.Events;
-    using Services.Order.API.Infrastructure.AutoFacModules;
     using System;
     using System.Data.Common;
     using System.Reflection;
@@ -35,23 +30,10 @@ namespace Services.Order.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication("Bearer")
-                .AddIdentityServerAuthentication("Bearer", options =>
-                {
-                    options.ApiName = "order";
-                    options.Authority = "https://localhost:5003";
-                });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("readPolicy", policy => policy.RequireClaim("scope", "order.read"));
-            });
-
             services.AddCustomDbContext(Configuration);
-            services.AddControllers();
             services.AddEventBus(Configuration);
-
-            services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(sp => (DbConnection connection) => new IntegrationEventLogService(connection));
+            
+            services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(sp => (connection) => new IntegrationEventLogService(connection));
             services.AddTransient<IOrderIntegrationEventService, OrderIntegrationEventService>();
             services.AddSingleton<IValidatorFactory, ValidatorFactory>();
         }
@@ -88,11 +70,10 @@ namespace Services.Order.API
     {
         public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<OrderContext>(options =>
+            services.AddDbContext<OrderingContext>(options =>
             {
                 options.UseSqlServer(configuration["ConnectionString"], sqlServerOptionsAction: sqlOptions =>
                 {
-                    sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
                     sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                 });
 
@@ -104,7 +85,6 @@ namespace Services.Order.API
                 options.UseSqlServer(configuration["ConnectionString"],
                                      sqlServerOptionsAction: sqlOptions =>
                                      {
-                                         sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
                                          sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                                      });
             }, ServiceLifetime.Scoped);

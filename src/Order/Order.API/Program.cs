@@ -1,4 +1,4 @@
-namespace Services.Order.API
+namespace Ordering.API
 {
     using Autofac.Extensions.DependencyInjection;
     using Microsoft.AspNetCore.Hosting;
@@ -59,16 +59,5 @@ namespace Services.Order.API
                 })
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
             .UseSerilog();
-
-        private static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
-        {
-            return new LoggerConfiguration()
-                .MinimumLevel.Verbose()
-                .Enrich.WithProperty("ApplicationContext", AppName)
-                .Enrich.FromLogContext()
-                .WriteTo.Console()
-                .ReadFrom.Configuration(configuration)
-                .CreateLogger();
-        }
     }
 }
