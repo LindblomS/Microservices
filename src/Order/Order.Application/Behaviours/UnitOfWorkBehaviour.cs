@@ -9,7 +9,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-internal class UnitOfWorkBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public class UnitOfWorkBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
 {
     readonly IUnitOfWork unitOfWork;
     readonly ILogger<UnitOfWorkBehaviour<TRequest, TResponse>> logger;

@@ -1,4 +1,4 @@
-﻿namespace Ordering.Infrastructure.Services.RequestManager;
+﻿namespace Ordering.Infrastructure.Services;
 
 using Ordering.Application.Services;
 using Ordering.Infrastructure.EntityFramework;
