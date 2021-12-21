@@ -29,12 +29,12 @@ public class UnitOfWorkBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
             try
             {
                 logger.LogInformation("Beginning UnitOfWork {UnitOfWorkId}", unitOfWork.Id);
-                unitOfWork.Begin();
+                await unitOfWork.BeginAsync();
 
                 var response = await next();
 
                 logger.LogInformation("Commiting UnitOfWork {UnitOfWorkId}", unitOfWork.Id);
-                await unitOfWork.Commit(unitOfWork.Id);
+                await unitOfWork.CommitAsync(unitOfWork);
                 return response;
 
             }

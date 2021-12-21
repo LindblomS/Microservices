@@ -1,138 +1,115 @@
-namespace Ordering.API
+namespace Ordering.API;
+
+using Autofac;
+using EventBus.EventBus;
+using EventBus.EventBus.Abstractions;
+using EventBus.EventBusRabbitMQ;
+using EventBus.IntegrationEventLogEF;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Ordering.API.AutoFac;
+using Ordering.Infrastructure.EntityFramework;
+using RabbitMQ.Client;
+using System;
+
+public class Startup
 {
-    using Autofac;
-    using EventBus.EventBus;
-    using EventBus.EventBus.Abstractions;
-    using EventBus.EventBusRabbitMQ;
-    using EventBus.IntegrationEventLogEF;
-    using FluentValidation;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Logging;
-    using Ordering.Infrastructure.EntityFramework;
-    using RabbitMQ.Client;
-    using System;
-    using System.Data.Common;
-    using System.Reflection;
-
-    public class Startup
+    public Startup(IConfiguration configuration)
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; set; }
-
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddCustomDbContext(Configuration);
-            services.AddEventBus(Configuration);
-            
-            services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(sp => (connection) => new IntegrationEventLogService(connection));
-            services.AddTransient<IOrderIntegrationEventService, OrderIntegrationEventService>();
-            services.AddSingleton<IValidatorFactory, ValidatorFactory>();
-        }
-
-        public void ConfigureContainer(ContainerBuilder builder)
-        {
-            builder.RegisterModule(new MediatorModule());
-            builder.RegisterModule(new ApplicationModule());
-        }
-
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-                app.UseDeveloperExceptionPage();
-
-            app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-                endpoints.MapDefaultControllerRoute());
-
-            ConfigureEventBus(app);
-        }
-
-        private void ConfigureEventBus(IApplicationBuilder app)
-        {
-            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-            eventBus.Subscribe<CustomerDeletedIntegrationEvent, IIntegrationEventHandler<CustomerDeletedIntegrationEvent>>();
-        }
+        Configuration = configuration;
     }
 
-    static class CustomExtensionsMethods
+    public IConfiguration Configuration { get; set; }
+
+    public void ConfigureServices(IServiceCollection services)
     {
-        public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddDbContext<OrderingContext>(options =>
-            {
-                options.UseSqlServer(configuration["ConnectionString"], sqlServerOptionsAction: sqlOptions =>
-                {
-                    sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                });
+        services.AddCustomDbContext(Configuration);
+        services.AddEventBus(Configuration);
+    }
 
-            },
-                ServiceLifetime.Scoped);
+    public void ConfigureContainer(ContainerBuilder builder)
+    {
+        builder.RegisterModule(new ApplicationModule());
+    }
 
-            services.AddDbContext<IntegrationEventLogContext>(options =>
-            {
-                options.UseSqlServer(configuration["ConnectionString"],
-                                     sqlServerOptionsAction: sqlOptions =>
-                                     {
-                                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                                     });
-            }, ServiceLifetime.Scoped);
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
+            app.UseDeveloperExceptionPage();
 
-            return services;
-        }
+        app.UseRouting();
 
-        public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
-            {
-                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+        app.UseEndpoints(endpoints =>
+            endpoints.MapDefaultControllerRoute());
 
-                var factory = new ConnectionFactory()
-                {
-                    HostName = configuration["EventBusConnection"],
-                    DispatchConsumersAsync = true
-                };
+        ConfigureEventBus(app);
+    }
 
-                var retryCount = 5;
-                if (!string.IsNullOrEmpty(configuration["EventBusRetryCount"]))
-                {
-                    retryCount = int.Parse(configuration["EventBusRetryCount"]);
-                }
-
-                return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
-            });
-
-            services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
-            {
-                var subscriptionClientName = configuration["SubscriptionClientName"];
-                var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
-                var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
-                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
-                var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
-
-                var retryCount = 5;
-                if (!string.IsNullOrEmpty(configuration["EventBusRetryCount"]))
-                {
-                    retryCount = int.Parse(configuration["EventBusRetryCount"]);
-                }
-
-                return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, iLifetimeScope, eventBusSubcriptionsManager, subscriptionClientName, retryCount);
-            });
-
-            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-
-            return services;
-        }
+    private void ConfigureEventBus(IApplicationBuilder app)
+    {
+        var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
     }
 }
+
+static class CustomExtensionsMethods
+{
+    public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddDbContext<OrderingContext>(options =>
+        {
+            options.UseSqlServer(configuration["ConnectionString"], sqlServerOptionsAction: sqlOptions =>
+            {
+                sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+            });
+
+        }, ServiceLifetime.Scoped);
+
+        services.AddDbContext<IntegrationEventLogContext>(options =>
+        {
+            options.UseSqlServer(configuration["ConnectionString"],
+                                 sqlServerOptionsAction: sqlOptions =>
+                                 {
+                                     sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                                 });
+        }, ServiceLifetime.Scoped);
+
+        return services;
+    }
+
+    public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
+        {
+            var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+
+            var factory = new ConnectionFactory()
+            {
+                HostName = configuration["EventBus:Connection"],
+                DispatchConsumersAsync = true
+            };
+
+            return new DefaultRabbitMQPersistentConnection(factory, logger, 5);
+        });
+
+        services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
+        {
+            var subscriptionClientName = configuration["EventBus:SubscriptionClientName"];
+            var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
+            var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
+            var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
+            var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+
+            return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, iLifetimeScope, eventBusSubcriptionsManager, subscriptionClientName, 5);
+        });
+
+        services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+
+        return services;
+    }
+}
+

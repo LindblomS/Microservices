@@ -37,7 +37,7 @@ public class PublishIntegrationEventWhenOrderIsCancelledDomainEventHandler : INo
         if (order is null)
             throw new OrderNotFoundException(notification.OrderId);
 
-        var buyer = await buyerRepository.GetAsync(order.BuyerId);
+        var buyer = await buyerRepository.GetAsync(order.BuyerId, order.Id);
 
         if (buyer is null)
             throw new BuyerNotFoundException(order.BuyerId);

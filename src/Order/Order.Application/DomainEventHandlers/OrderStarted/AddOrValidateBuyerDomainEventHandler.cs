@@ -40,7 +40,7 @@ public class AddOrValidateBuyerDomainEventHandler : INotificationHandler<OrderSt
 
     async Task<Buyer> AddOrValidateBuyer(OrderStartedDomainEvent notification, CancellationToken cancellationToken)
     {
-        var buyer = await buyerRepository.GetAsync(notification.User.Id);
+        var buyer = await buyerRepository.GetAsync(notification.User.Id, notification.Order.Id);
         var buyerExists = buyer is not null;
 
         if (!buyerExists)
