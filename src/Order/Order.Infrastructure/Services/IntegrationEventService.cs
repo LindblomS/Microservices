@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Ordering.Application.Services;
 using Ordering.Infrastructure.EntityFramework;
 using System;
-using System.Data;
+using System.Data.Common;
 using System.Threading.Tasks;
 
 public class IntegrationEventService : IIntegrationEventService
@@ -20,7 +20,7 @@ public class IntegrationEventService : IIntegrationEventService
 
     public IntegrationEventService(
         IEventBus eventBus,
-        Func<IDbConnection, IIntegrationEventLogService> eventLogServiceFactory,
+        Func<DbConnection, IIntegrationEventLogService> eventLogServiceFactory,
         OrderingContext context,
         ILogger<IntegrationEventService> logger)
     {

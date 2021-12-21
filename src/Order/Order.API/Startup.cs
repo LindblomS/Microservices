@@ -16,6 +16,7 @@ using Ordering.API.AutoFac;
 using Ordering.Infrastructure.EntityFramework;
 using RabbitMQ.Client;
 using System;
+using System.Data.Common;
 
 public class Startup
 {
@@ -83,6 +84,8 @@ static class CustomExtensionsMethods
 
     public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(sp => (DbConnection c) => new IntegrationEventLogService(c));
+
         services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
         {
             var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
