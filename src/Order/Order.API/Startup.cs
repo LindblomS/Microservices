@@ -1,6 +1,8 @@
 namespace Ordering.API;
 
 using Autofac;
+using Basket.Contracts.IntegrationEvents;
+using Catalog.Contracts.IntegrationEvents;
 using EventBus.EventBus;
 using EventBus.EventBus.Abstractions;
 using EventBus.EventBusRabbitMQ;
@@ -14,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Ordering.API.AutoFac;
 using Ordering.Infrastructure.EntityFramework;
+using Payment.Contracts.IntegrationEvents;
 using RabbitMQ.Client;
 using System;
 using System.Data.Common;
@@ -54,6 +57,11 @@ public class Startup
     private void ConfigureEventBus(IApplicationBuilder app)
     {
         var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+        eventBus.Subscribe<OrderPaymentFailedIntegrationEvent, IIntegrationEventHandler<OrderPaymentFailedIntegrationEvent>>();
+        eventBus.Subscribe<OrderPaymentSucceededIntegrationEvent, IIntegrationEventHandler<OrderPaymentSucceededIntegrationEvent>>();
+        eventBus.Subscribe<OrderStockConfirmedIntegrationEvent, IIntegrationEventHandler<OrderStockConfirmedIntegrationEvent>>();
+        eventBus.Subscribe<OrderStockRejectedIntegrationEvent, IIntegrationEventHandler<OrderStockRejectedIntegrationEvent>>();
+        eventBus.Subscribe<UserCheckoutAcceptedIntegrationEvent, IIntegrationEventHandler<UserCheckoutAcceptedIntegrationEvent>>();
     }
 }
 

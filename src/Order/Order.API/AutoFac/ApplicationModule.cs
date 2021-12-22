@@ -1,11 +1,13 @@
 ﻿namespace Ordering.API.AutoFac;
 
 using Autofac;
+using EventBus.EventBus.Abstractions;
 using FluentValidation;
 using MediatR;
 using Ordering.Application.Behaviours;
 using Ordering.Application.Commands;
 using Ordering.Application.DomainEventHandlers.OrderStarted;
+using Ordering.Application.IntegrationEventHandlers;
 using Ordering.Application.Services;
 using Ordering.Application.Validation;
 using Ordering.Domain.AggregateModels.Buyer;
@@ -22,6 +24,7 @@ public class ApplicationModule : Autofac.Module
         RegisterMediator(builder);
         RegisterCommandHandlers(builder);
         RegisterDomainEventHandlers(builder);
+        RegisterIntegrationEventHandlers(builder);
         RegisterValidation(builder);
         RegisterServices(builder);
         RegisterBehaviours(builder);
@@ -71,6 +74,13 @@ public class ApplicationModule : Autofac.Module
         builder
             .RegisterAssemblyTypes(typeof(AddOrValidateBuyerDomainEventHandler).GetTypeInfo().Assembly)
             .AsClosedTypesOf(typeof(INotificationHandler<>));
+    }
+
+    void RegisterIntegrationEventHandlers(ContainerBuilder builder)
+    {
+        builder
+            .RegisterAssemblyTypes(typeof(OrderPaymentFailedIntegrationEventHandler).GetTypeInfo().Assembly)
+            .AsClosedTypesOf(typeof(IIntegrationEventHandler<>));
     }
 
     void RegisterValidation(ContainerBuilder builder)
