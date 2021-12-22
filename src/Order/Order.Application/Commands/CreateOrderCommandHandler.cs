@@ -52,7 +52,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, boo
 
     Address CreateAddress(CreateOrderCommand.AddressDto address)
     {
-        return new(address.Street, address.City, address.Street, address.Country, address.ZipCode);
+        return new(address.Street, address.City, address.State, address.Country, address.ZipCode);
     }
 
     OrderItem CreateOrderItem(CreateOrderCommand.OrderItem item)

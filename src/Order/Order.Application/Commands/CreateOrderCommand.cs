@@ -37,7 +37,8 @@ public class CreateOrderCommand : IRequest<bool>
         string City,
         string Street,
         string Country,
-        string ZipCode);
+        string ZipCode,
+        string State);
 
     public record OrderItem(
         Guid ProductId,
