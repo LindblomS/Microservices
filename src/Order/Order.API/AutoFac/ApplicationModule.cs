@@ -12,6 +12,7 @@ using Ordering.Application.Services;
 using Ordering.Application.Validation;
 using Ordering.Domain.AggregateModels.Buyer;
 using Ordering.Domain.AggregateModels.Order;
+using Ordering.Infrastructure.EntityFramework;
 using Ordering.Infrastructure.Repositories;
 using Ordering.Infrastructure.Services;
 using System.Reflection;
@@ -95,6 +96,7 @@ public class ApplicationModule : Autofac.Module
         builder.RegisterType<DomainEventPublisher>();
         builder.RegisterType<RequestManager>().As<IRequestManager>();
         builder.RegisterType<IntegrationEventService>().As<IIntegrationEventService>();
+        builder.RegisterType<OrderingContext>().As<IUnitOfWork>();
     }
 
     void RegisterBehaviours(ContainerBuilder builder)
