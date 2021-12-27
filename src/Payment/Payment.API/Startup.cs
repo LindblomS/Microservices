@@ -4,6 +4,8 @@ using Autofac;
 using EventBus.EventBus;
 using EventBus.EventBus.Abstractions;
 using EventBus.EventBusRabbitMQ;
+using Ordering.Contracts.IntegrationEvents;
+using Payment.API.IntegrationEventHandlers;
 using RabbitMQ.Client;
 
 public class Startup
@@ -18,11 +20,18 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddEventBus(Configuration);
+        services.AddTransient<OrderStatusChangedToStockConfirmedIntegrationEventHandler>();
     }
 
     public void Configure(IApplicationBuilder app)
     {
+        ConfigureEventBus(app);
+    }
 
+    private void ConfigureEventBus(IApplicationBuilder app)
+    {
+        var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+        eventBus.Subscribe<OrderStatusChangedToStockConfirmedIntegrationEvent, IIntegrationEventHandler<OrderStatusChangedToStockConfirmedIntegrationEvent>>();
     }
 }
 
