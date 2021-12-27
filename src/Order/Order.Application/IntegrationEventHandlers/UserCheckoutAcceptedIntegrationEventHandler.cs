@@ -5,16 +5,16 @@ using EventBus.EventBus.Abstractions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Ordering.Application.Commands;
-using Serilog.Context;
 using System;
 using System.Threading.Tasks;
 
-public class UserCheckoutAcceptedIntegrationEventHandler : IIntegrationEventHandler<UserCheckoutAcceptedIntegrationEvent>
+public class UserCheckoutAcceptedIntegrationEventHandler : BaseIntegrationHandler, IIntegrationEventHandler<UserCheckoutAcceptedIntegrationEvent>
 {
     readonly IMediator mediator;
     readonly ILogger<UserCheckoutAcceptedIntegrationEventHandler> logger;
 
     public UserCheckoutAcceptedIntegrationEventHandler(IMediator mediator, ILogger<UserCheckoutAcceptedIntegrationEventHandler> logger)
+        : base(logger)
     {
         this.mediator = mediator;
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -22,10 +22,8 @@ public class UserCheckoutAcceptedIntegrationEventHandler : IIntegrationEventHand
 
     public async Task Handle(UserCheckoutAcceptedIntegrationEvent @event)
     {
-        using (LogContext.PushProperty("IntegrationEvent", $"{@event.Id}-Ordering"))
+        await Handle(async () =>
         {
-            logger.LogInformation("Handling integration event {IntegrationEventId} as Ordering - ({@IntegrationEvent})", @event.Id, @event);
-
             if (@event.RequestId == default)
             {
                 logger.LogWarning("Invalid integration event - RequestId is missing - {@IntegrationEvent}", @event);
@@ -42,7 +40,8 @@ public class UserCheckoutAcceptedIntegrationEventHandler : IIntegrationEventHand
             var identifiedCommand = new IdentifiedCommand<CreateOrderCommand, bool>(command, @event.RequestId);
 
             _ = await mediator.Send(identifiedCommand);
-        }
+        }, @event);
+
     }
 
     static CreateOrderCommand.AddressDto Map(UserCheckoutAcceptedIntegrationEvent.AddressDto address)

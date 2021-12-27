@@ -2,6 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Ordering.Application.Exceptions;
 using Ordering.Application.Services;
 using Ordering.Infrastructure.EntityFramework.Configurations;
 using Ordering.Infrastructure.Models;
@@ -43,9 +44,9 @@ public class OrderingContext : DbContext, IUnitOfWork
         {
             await currentTransaction.CommitAsync();
         }
-        catch
+        catch (Exception exception)
         {
-            throw;
+            throw new UnitOfWorkException(Id, "Something went wrong commiting unit of work", exception);
         }
         finally
         {

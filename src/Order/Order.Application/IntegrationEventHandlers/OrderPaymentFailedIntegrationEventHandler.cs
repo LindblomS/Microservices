@@ -7,28 +7,19 @@ using Payment.Contracts.IntegrationEvents;
 using System;
 using System.Threading.Tasks;
 using Commands;
-using Serilog.Context;
 
-public class OrderPaymentFailedIntegrationEventHandler : IIntegrationEventHandler<OrderPaymentFailedIntegrationEvent>
+public class OrderPaymentFailedIntegrationEventHandler : BaseIntegrationHandler, IIntegrationEventHandler<OrderPaymentFailedIntegrationEvent>
 {
     readonly IMediator mediator;
-    readonly ILogger<OrderPaymentFailedIntegrationEventHandler> logger;
 
     public OrderPaymentFailedIntegrationEventHandler(IMediator mediator, ILogger<OrderPaymentFailedIntegrationEventHandler> logger)
+        : base(logger)
     {
         this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public async Task Handle(OrderPaymentFailedIntegrationEvent @event)
     {
-        using (LogContext.PushProperty("IntegrationEvent", $"{@event.Id}-Ordering"))
-        {
-            logger.LogInformation("Handling integration event {IntegrationEventId} as Ordering - ({@IntegrationEvent})", @event.Id, @event);
-
-            var command = new CancelOrderCommand(@event.OrderId);
-
-            _ = await mediator.Send(command);
-        }
+        await Handle(async () => await mediator.Send(new CancelOrderCommand(@event.OrderId)), @event);
     }
 }

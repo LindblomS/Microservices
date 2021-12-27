@@ -2,7 +2,7 @@
 
 using System;
 
-internal class UnitOfWorkException : Exception
+public class UnitOfWorkException : Exception
 {
     public UnitOfWorkException(Guid unitOfWorkId, string message, Exception exception) : base(message, exception)
     {

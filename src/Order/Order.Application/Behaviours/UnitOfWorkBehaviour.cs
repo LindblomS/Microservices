@@ -2,7 +2,6 @@
 
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Ordering.Application.Exceptions;
 using Ordering.Application.Services;
 using Serilog.Context;
 using System;
@@ -19,6 +18,7 @@ public class UnitOfWorkBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
         this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
+
     public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
     {
         if (unitOfWork.Active)
@@ -26,23 +26,14 @@ public class UnitOfWorkBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
 
         using (LogContext.PushProperty("UnitOfWork", unitOfWork.Id))
         {
-            try
-            {
-                logger.LogInformation("Beginning UnitOfWork {UnitOfWorkId}", unitOfWork.Id);
-                await unitOfWork.BeginAsync();
+            logger.LogInformation("Beginning UnitOfWork {UnitOfWorkId}", unitOfWork.Id);
+            await unitOfWork.BeginAsync();
 
-                var response = await next();
+            var response = await next();
 
-                logger.LogInformation("Commiting UnitOfWork {UnitOfWorkId}", unitOfWork.Id);
-                await unitOfWork.CommitAsync(unitOfWork);
-                return response;
-
-            }
-            catch (Exception exception)
-            {
-                logger.LogError(exception, "Error commiting UnitOfWork {UnitOfWork}", unitOfWork.Id);
-                throw new UnitOfWorkException(unitOfWork.Id, "Something went wrong when commiting the UnitOfWork", exception);
-            }
+            logger.LogInformation("Commiting UnitOfWork {UnitOfWorkId}", unitOfWork.Id);
+            await unitOfWork.CommitAsync(unitOfWork);
+            return response;
         }
     }
 }
