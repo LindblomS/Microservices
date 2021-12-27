@@ -42,7 +42,7 @@ public class PublishIntegrationEventWhenOrderIsAwaitingValidationDomainEventHand
         await integrationEventService.AddAndSaveEventAsync(integrationEvent);
     }
 
-    OrderStatusChangedToAwaitingValidationIntegrationEvent.OrderItem Map(OrderItem item)
+    static OrderStatusChangedToAwaitingValidationIntegrationEvent.OrderItem Map(OrderItem item)
     {
         return new(item.Id, item.Units);
     }
