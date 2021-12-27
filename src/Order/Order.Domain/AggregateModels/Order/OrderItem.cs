@@ -1,28 +1,40 @@
-﻿namespace Services.Order.Domain
+﻿namespace Ordering.Domain.AggregateModels.Order;
+
+using Ordering.Domain.SeedWork;
+using System;
+
+public class OrderItem : Entity
 {
-    using Services.Order.Domain.SeedWork;
-    using System;
+    ProductName productName;
+    UnitPrice unitPrice;
+    Units units;
 
-    public class OrderItem : Entity
+    public string ProductName { get => productName.Name; }
+    public decimal UnitPrice { get => unitPrice.Price; }
+    public int Units { get => units.Value; }
+
+    public OrderItem(Guid id, ProductName productName, UnitPrice unitPrice, Units units)
     {
-        private Guid _orderId;
-        private string _name;
-        private int _quantity;
+        if (id == default)
+            throw new ArgumentNullException(nameof(id));
 
-        public OrderItem(Guid orderId, string name, int quantity)
-        {
-            _orderId = orderId;
-            _name = name;
-            _quantity = quantity;
-        }
+        if (productName is null)
+            throw new ArgumentNullException(nameof(productName));
 
-        public Guid OrderId => _orderId;
-        public string Name => _name;
-        public int Quantity => _quantity;
+        if (unitPrice is null)
+            throw new ArgumentNullException(nameof(unitPrice));
 
-        public void AddQuantity(int value)
-        {
-            _quantity += value;
-        }
+        if (units is null)
+            throw new ArgumentNullException(nameof(units));
+
+        this.id = id;
+        this.productName = productName;
+        this.unitPrice = unitPrice;
+        this.units = units;
+    }
+
+    public void AddUnits(int units)
+    {
+        this.units.AddUnits(units);
     }
 }

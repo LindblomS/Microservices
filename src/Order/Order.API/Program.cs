@@ -1,74 +1,57 @@
-namespace Services.Order.API
+namespace Ordering.API;
+
+using Autofac.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Serilog;
+using System;
+using System.IO;
+
+public class Program
 {
-    using Autofac.Extensions.DependencyInjection;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.Hosting;
-    using Serilog;
-    using System;
-    using System.IO;
-    using WebHost.Customization;
-    using EventBus.IntegrationEventLogEF;
-    using Services.Order.Infrastructure;
+    public static readonly string Namespace = typeof(Program).Namespace;
+    public static readonly string AppName = Namespace.Substring(Namespace.LastIndexOf('.', Namespace.LastIndexOf('.') - 1) + 1);
 
-    public class Program
+    public static int Main(string[] args)
     {
-        public static readonly string Namespace = typeof(Program).Namespace;
-        public static readonly string AppName = Namespace.Substring(Namespace.LastIndexOf('.', Namespace.LastIndexOf('.') - 1) + 1);
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
+            .Build();
 
-        public static int Main(string[] args)
+        Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(configuration)
+            .CreateLogger();
+
+        try
         {
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
+            var host = CreateHostBuilder(args).Build();
 
-            Log.Logger = CreateSerilogLogger(configuration);
+            Log.Information("Starting web host ({ApplicationContext})", AppName);
+            host.Run();
 
-            try
-            {
-                Log.Information("Configuraing web host ({ApplicationContext})...", AppName);
-                var host = CreateHostBuilder(args).Build();
-
-                Log.Information("Creating database ({ApplicationContext})...", AppName);
-                host.MigrateDbContext<OrderContext>((_, _) => { });
-                host.MigrateDbContext<IntegrationEventLogContext>((_, _) => { });
-
-                Log.Information("Starting web host ({ApplicationContext})", AppName);
-                host.Run();
-
-                return 0;
-            }
-            catch (Exception exception)
-            {
-                Log.Fatal(exception, "Program terminated unexpectedly ({ApplicationContext})!", AppName);
-                return 1;
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
+            return 0;
         }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                })
-            .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-            .UseSerilog();
-
-        private static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
+        catch (Exception exception)
         {
-            return new LoggerConfiguration()
-                .MinimumLevel.Verbose()
-                .Enrich.WithProperty("ApplicationContext", AppName)
-                .Enrich.FromLogContext()
-                .WriteTo.Console()
-                .ReadFrom.Configuration(configuration)
-                .CreateLogger();
+            Log.Fatal(exception, "Program terminated unexpectedly ({ApplicationContext})!", AppName);
+            return 1;
+        }
+        finally
+        {
+            Log.CloseAndFlush();
         }
     }
+
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            })
+        .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+        .UseSerilog();
 }
+

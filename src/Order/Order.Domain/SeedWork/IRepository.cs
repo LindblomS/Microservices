@@ -1,7 +1,5 @@
-﻿namespace Services.Order.Domain.SeedWork
+﻿namespace Ordering.Domain.SeedWork;
+
+public interface IRepository<T> where T : IAggregateRoot
 {
-    public interface IRepository<T> where T : IAggregateRoot
-    {
-        IUnitOfWork UnitOfWork { get; }
-    }
 }
