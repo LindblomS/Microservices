@@ -51,7 +51,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{F231
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Contracts", "Catalog\Catalog.Contracts\Catalog.Contracts.csproj", "{F7C8259A-83B5-4000-A3AD-F2B8A84A3445}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering.Worker", "Order\Ordering.Worker\Ordering.Worker.csproj", "{5AACE1DC-DA51-4ACC-A157-4CDB94B3E3ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering.Worker", "Order\Ordering.Worker\Ordering.Worker.csproj", "{5AACE1DC-DA51-4ACC-A157-4CDB94B3E3ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.API", "Payment\Payment.API\Payment.API.csproj", "{6E265EE4-22AF-4061-9AF4-A9F6D9A83C0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,6 +125,10 @@ Global
 		{5AACE1DC-DA51-4ACC-A157-4CDB94B3E3ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5AACE1DC-DA51-4ACC-A157-4CDB94B3E3ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5AACE1DC-DA51-4ACC-A157-4CDB94B3E3ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E265EE4-22AF-4061-9AF4-A9F6D9A83C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E265EE4-22AF-4061-9AF4-A9F6D9A83C0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E265EE4-22AF-4061-9AF4-A9F6D9A83C0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E265EE4-22AF-4061-9AF4-A9F6D9A83C0E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -149,6 +155,7 @@ Global
 		{F2317AFF-A0B6-4BED-9751-C629D2E17BA8} = {2ABD3F52-8CF2-4FA7-8BC7-5C9ECC2C5551}
 		{F7C8259A-83B5-4000-A3AD-F2B8A84A3445} = {F2317AFF-A0B6-4BED-9751-C629D2E17BA8}
 		{5AACE1DC-DA51-4ACC-A157-4CDB94B3E3ED} = {8FA19683-9172-44B5-BB2A-236F528DA95F}
+		{6E265EE4-22AF-4061-9AF4-A9F6D9A83C0E} = {D1BBCEEF-9701-4EE1-BEEE-62C2180DF64B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {64151344-227D-48F0-BD0D-BCA86CFD69C1}
