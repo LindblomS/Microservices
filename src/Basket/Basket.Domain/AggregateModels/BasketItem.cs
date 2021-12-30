@@ -5,18 +5,14 @@ using System;
 
 public class BasketItem
 {
-    readonly Guid id;
     readonly Guid productId;
     readonly string productName;
     decimal unitPrice;
     decimal oldUnitPrice;
     readonly int units;
 
-    public BasketItem(Guid id, Guid productId, string productName, decimal unitPrice, int units)
+    public BasketItem(Guid productId, string productName, decimal unitPrice, decimal oldUnitPrice, int units)
     {
-        if (id == default)
-            throw new ArgumentNullException(nameof(id));
-
         if (productId == default)
             throw new ArgumentNullException(nameof(productId));
 
@@ -26,15 +22,13 @@ public class BasketItem
         if (units < 1)
             throw new BasketDomainException("Units cannot be lower than 1");
 
-        this.id = id;
         this.productId = productId;
         this.productName = productName;
         this.unitPrice = unitPrice;
-        oldUnitPrice = unitPrice;
+        this.oldUnitPrice = oldUnitPrice;
         this.units = units;
     }
 
-    public Guid Id { get => id; }
     public Guid ProductId { get => productId; }
     public string ProductName { get => productName; }
     public decimal UnitPrice { get => unitPrice; }

@@ -6,24 +6,18 @@ using System.Collections.Generic;
 
 public class Basket : IAggregateRoot
 {
-    readonly Guid id;
     readonly Guid buyerId;
     readonly List<BasketItem> items;
 
-    public Basket(Guid id, Guid buyerId)
+    public Basket(Guid buyerId)
     {
-        if (id == default)
-            throw new ArgumentNullException(nameof(id));
-
         if (buyerId == default)
             throw new ArgumentNullException(nameof(buyerId));
 
-        this.id = id;
         this.buyerId = buyerId;
         items = new List<BasketItem>();
     }
 
-    public Guid Id { get => id; }
     public Guid BuyerId { get => buyerId; }
     public IReadOnlyCollection<BasketItem> Items { get => items.AsReadOnly(); }
 

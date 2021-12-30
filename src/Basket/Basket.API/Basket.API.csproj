@@ -15,8 +15,13 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Basket.Contracts\Basket.Contracts.csproj" />
+    <ProjectReference Include="..\Basket.Domain\Basket.Domain.csproj" />
+  </ItemGroup>
+
 	<ItemGroup>
-		<Protobuf Include="Protos\basket.proto" GrpcServices="Server" Generator="MSBuild:Compile"/>
+		<Protobuf Include="Protos\basket.proto" GrpcServices="Server" Generator="MSBuild:Compile" />
 	</ItemGroup>
 	
 </Project>

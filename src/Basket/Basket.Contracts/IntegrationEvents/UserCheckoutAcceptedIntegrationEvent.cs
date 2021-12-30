@@ -4,7 +4,13 @@ using EventBus.EventBus.Events;
 
 public class UserCheckoutAcceptedIntegrationEvent : IntegrationEvent
 {
-    public UserCheckoutAcceptedIntegrationEvent(Guid userId, string username, Guid requestId, AddressDto address, CardDto card, IEnumerable<BasketItem> basketItems)
+    public UserCheckoutAcceptedIntegrationEvent(
+        Guid userId,
+        string username,
+        Guid requestId,
+        AddressDto address,
+        CardDto card,
+        IEnumerable<BasketItem> basketItems)
     {
         UserId = userId;
         Username = username;

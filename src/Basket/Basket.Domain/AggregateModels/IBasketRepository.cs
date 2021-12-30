@@ -9,5 +9,6 @@ public interface IBasketRepository : IRepository<Basket>
 {
     IEnumerable<Guid> GetUsers();
     Task CreateUpdateBasketAsync(Basket basket);
-    Task DeleteBasketAsync(Guid userId);
+    Task DeleteBasketAsync(Guid buyerId);
+    Task<Basket> GetBasketAsync(Guid buyerId);
 }

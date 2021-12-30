@@ -12,7 +12,12 @@ public class RedisBasketRepository : IBasketRepository
         throw new NotImplementedException();
     }
 
-    public Task DeleteBasketAsync(Guid userId)
+    public Task DeleteBasketAsync(Guid buyerId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Basket> GetBasketAsync(Guid buyerId)
     {
         throw new NotImplementedException();
     }
