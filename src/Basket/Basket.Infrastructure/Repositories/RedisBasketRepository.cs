@@ -1,29 +1,60 @@
 ﻿namespace Basket.Infrastructure.Repositories;
 
 using Basket.Domain.AggregateModels;
+using Basket.Infrastructure.Exceptions;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 public class RedisBasketRepository : IBasketRepository
 {
-    public Task CreateUpdateBasketAsync(Basket basket)
+    readonly ConnectionMultiplexer connection;
+    readonly IDatabase database;
+
+    public RedisBasketRepository(ConnectionMultiplexer connection)
     {
-        throw new NotImplementedException();
+        this.connection = connection ?? throw new ArgumentNullException(nameof(connection));
+        database = connection.GetDatabase();
     }
 
-    public Task DeleteBasketAsync(Guid buyerId)
+    public async Task CreateUpdateBasketAsync(Basket basket)
     {
-        throw new NotImplementedException();
+        var set = await database.StringSetAsync(basket.BuyerId.ToString(), JsonSerializer.Serialize(basket));
+
+        if (!set)
+            throw new BasketRepositoryException($"Could not create or update basket ({basket.BuyerId})");
     }
 
-    public Task<Basket> GetBasketAsync(Guid buyerId)
+    public async Task DeleteBasketAsync(Guid buyerId)
     {
-        throw new NotImplementedException();
+        await database.KeyDeleteAsync(buyerId.ToString());
     }
 
-    public IEnumerable<Guid> GetUsers()
+    public async Task<Basket?> GetBasketAsync(Guid buyerId)
     {
-        throw new NotImplementedException();
+        var basket = await database.StringGetAsync(buyerId.ToString());
+
+        if (basket.IsNullOrEmpty)
+            return null;
+
+        return JsonSerializer.Deserialize<Basket>(basket);
+    }
+
+    public async Task<IEnumerable<Guid>> GetUsersAsync()
+    {
+        var keys = new List<Guid>();
+        var server = GetServer();
+
+        await foreach (var key in server.KeysAsync())
+            keys.Add(Guid.Parse(key));
+
+        return keys;
+    }
+
+    IServer GetServer()
+    {
+        return connection.GetServer(connection.GetEndPoints().First());
     }
 }

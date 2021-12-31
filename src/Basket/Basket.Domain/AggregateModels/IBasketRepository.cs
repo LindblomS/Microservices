@@ -7,8 +7,8 @@ using Domain.SeedWork;
 
 public interface IBasketRepository : IRepository<Basket>
 {
-    IEnumerable<Guid> GetUsers();
+    Task<IEnumerable<Guid>> GetUsersAsync();
     Task CreateUpdateBasketAsync(Basket basket);
     Task DeleteBasketAsync(Guid buyerId);
-    Task<Basket> GetBasketAsync(Guid buyerId);
+    Task<Basket?> GetBasketAsync(Guid buyerId);
 }
