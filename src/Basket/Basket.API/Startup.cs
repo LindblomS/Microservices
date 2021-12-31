@@ -2,12 +2,18 @@
 
 using Autofac;
 using Basket.API.Inteceptors;
+using Basket.API.IntegrationEventHandlers;
 using Basket.API.Services;
+using Basket.Domain.AggregateModels;
+using Basket.Infrastructure.Repositories;
+using Catalog.Contracts.IntegrationEvents;
 using EventBus.EventBus;
 using EventBus.EventBus.Abstractions;
 using EventBus.EventBusRabbitMQ;
+using Ordering.Contracts.IntegrationEvents;
 using RabbitMQ.Client;
 using Serilog;
+using StackExchange.Redis;
 
 public class Startup
 {
@@ -21,11 +27,22 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddEventBus(Configuration);
+        services
+            .AddTransient<IIntegrationEventHandler<OrderStartedIntegrationEvent>, OrderStartedIntegrationEventHandler>()
+            .AddTransient<IIntegrationEventHandler<ProductPriceChangedIntegrationEvent>, ProductPriceChangedIntegrationEventHandler>();
+
         services.AddGrpc(options =>
         {
             options.Interceptors.Add<ExceptionInterceptor>();
         });
-        
+
+        services.AddTransient<IBasketRepository, RedisBasketRepository>();
+
+        services.AddSingleton(services =>
+        {
+            var configuration = ConfigurationOptions.Parse(Configuration["RedisConnectionString"]);
+            return ConnectionMultiplexer.Connect(configuration);
+        });
     }
 
     public void Configure(IApplicationBuilder app)
@@ -37,6 +54,8 @@ public class Startup
         {
             endpoints.MapGrpcService<GrpcBasketService>();
         });
+
+        app.ConfigureEventBus();
     }
 }
 
@@ -71,5 +90,14 @@ internal static class Extensions
         services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
         return services;
+    }
+
+    public static IApplicationBuilder ConfigureEventBus(this IApplicationBuilder app)
+    {
+        var bus = app.ApplicationServices.GetRequiredService<IEventBus>();
+        bus.Subscribe<OrderStartedIntegrationEvent, IIntegrationEventHandler<OrderStartedIntegrationEvent>>();
+        bus.Subscribe<ProductPriceChangedIntegrationEvent, IIntegrationEventHandler<ProductPriceChangedIntegrationEvent>>();
+
+        return app;
     }
 }
