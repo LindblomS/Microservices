@@ -40,4 +40,22 @@ internal static class CatalogMapper
             CatalogBrandId = item.Brand.Id
         };
     }
+
+    public static CatalogTypeEntity Map(CatalogType type)
+    {
+        return new CatalogTypeEntity
+        {
+            Id = type.Id,
+            Type = type.Type,
+        };
+    }
+
+    public static CatalogBrandEntity Map(CatalogBrand brand)
+    {
+        return new CatalogBrandEntity
+        {
+            Id = brand.Id,
+            Brand = brand.Brand
+        };
+    }
 }

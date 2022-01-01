@@ -1,6 +1,7 @@
 ﻿namespace Catalog.Infrastructure.EntityFramework;
 
 using Catalog.Infrastructure.EntityFramework.Configurations;
+using Catalog.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 
 public class CatalogContext : DbContext
@@ -11,6 +12,10 @@ public class CatalogContext : DbContext
     {
 
     }
+
+    public DbSet<CatalogItemEntity> Items { get; private set; }
+    public DbSet<CatalogBrandEntity> Brands { get; private set; }
+    public DbSet<CatalogTypeEntity> Types { get; private set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -6,4 +6,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\EventBus\EventBusRabbitMQ\EventBusRabbitMQ.csproj" />
+    <ProjectReference Include="..\..\EventBus\IntegrationEventLogEF\IntegrationEventLogEF.csproj" />
+    <ProjectReference Include="..\..\Order\Order.Contracts\Ordering.Contracts.csproj" />
+    <ProjectReference Include="..\Catalog.Domain\Catalog.Domain.csproj" />
+    <ProjectReference Include="..\Catalog.Infrastructure\Catalog.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
