@@ -24,25 +24,25 @@ public class CatalogItem : IAggregateRoot
         int availableStock)
     {
         if (id == default)
-            throw new ArgumentNullException(nameof(id));
+            throw new CreateCatalogItemException("Id was not valid");
 
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentNullException(nameof(name));
+            throw new CreateCatalogItemException("Name was empty");
 
         if (string.IsNullOrWhiteSpace(description))
-            throw new ArgumentNullException(nameof(description));
+            throw new CreateCatalogItemException("Description was empty");
 
         if (price < 1)
-            throw new CatalogDomainException($"Cannot create catalog item. Price must be greater than 0. Price was {price}");
+            throw new CreateCatalogItemException($"Price must be greater than 0. Price was {price}");
 
         if (type is null)
-            throw new ArgumentNullException(nameof(type));
+            throw new CreateCatalogItemException("Catalog type was missing");
 
         if (brand is null)
-            throw new ArgumentNullException(nameof(brand));
+            throw new CreateCatalogItemException("Catalog brand was missing");
 
         if (availableStock < 0)
-            throw new CatalogDomainException($"Cannot create catalog item. Available stock cannot be less than 0. Available stock was {availableStock}");
+            throw new CreateCatalogItemException($"Available stock cannot be less than 0. Available stock was {availableStock}");
 
         this.id = id;
         this.name = name;

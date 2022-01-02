@@ -43,9 +43,29 @@ public class CatalogRepository : ICatalogRepository
 
     public async Task UpdateAsync(CatalogItem catalogItem)
     {
+        var type = await context.Types.FindAsync(catalogItem.Type.Id);
+
+        if (type is null)
+            await CreateCatalogType(catalogItem.Type);
+
+        var brand = await context.Brands.FindAsync(catalogItem.Brand.Id);
+
+        if (brand is null)
+            await CreateCatalogBrand(catalogItem.Brand);
+
         var entity = CatalogMapper.Map(catalogItem);
         context.Update(entity);
         await context.SaveChangesAsync();
+    }
+
+    public async Task<CatalogItem?> GetAsync(Guid id)
+    {
+        var item = await context.Items.FindAsync(id);
+
+        if (item is null)
+            return null;
+
+        return CatalogMapper.Map(item);
     }
 
     async Task CreateCatalogType(CatalogType type)
@@ -57,4 +77,5 @@ public class CatalogRepository : ICatalogRepository
     {
         await context.Brands.AddAsync(CatalogMapper.Map(brand));
     }
+
 }
