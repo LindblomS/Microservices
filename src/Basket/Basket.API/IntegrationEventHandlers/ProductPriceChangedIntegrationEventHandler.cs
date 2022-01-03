@@ -32,6 +32,7 @@ public class ProductPriceChangedIntegrationEventHandler : IIntegrationEventHandl
                     return;
 
                 basket.UpdatePrice(@event.ProductId, @event.NewPrice);
+                await repository.CreateUpdateBasketAsync(basket);
             }
         }
     }

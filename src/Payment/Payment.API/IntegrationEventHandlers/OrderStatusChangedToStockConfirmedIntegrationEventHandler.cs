@@ -28,7 +28,6 @@ public class OrderStatusChangedToStockConfirmedIntegrationEventHandler : IIntegr
             {
                 var random = new Random().Next(1, 3);
 
-                logger.LogInformation("Publishing integration event: {IntegrationEventId} from Payment", @event.Id);
 
                 IntegrationEvent integrationEvent = random switch
                 {
@@ -36,6 +35,7 @@ public class OrderStatusChangedToStockConfirmedIntegrationEventHandler : IIntegr
                     _ => new OrderPaymentSucceededIntegrationEvent(@event.OrderId),
                 };
 
+                logger.LogInformation("Publishing integration event: {IntegrationEventId} from Payment", integrationEvent.Id);
                 eventBus.Publish(integrationEvent);
             }
             catch
