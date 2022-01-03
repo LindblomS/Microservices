@@ -14,13 +14,13 @@ public class BasketItem
     public BasketItem(Guid productId, string productName, decimal unitPrice, decimal oldUnitPrice, int units)
     {
         if (productId == default)
-            throw new ArgumentNullException(nameof(productId));
+            throw new CreateBasketItemException("Product id was not valid. Product id must be a vaild GUID");
 
         if (string.IsNullOrWhiteSpace(productName))
-            throw new ArgumentNullException(nameof(productName));
+            throw new CreateBasketItemException("Product name was missing");
 
         if (units < 1)
-            throw new BasketDomainException("Units cannot be lower than 1");
+            throw new CreateBasketItemException($"Units cannot be lower than 1. Units was {units}");
 
         this.productId = productId;
         this.productName = productName;

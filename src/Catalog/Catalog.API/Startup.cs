@@ -10,7 +10,6 @@ using Catalog.Infrastructure.Repositories;
 using EventBus.EventBus;
 using EventBus.EventBus.Abstractions;
 using EventBus.EventBusRabbitMQ;
-using EventBus.IntegrationEventLogEF;
 using Microsoft.EntityFrameworkCore;
 using Ordering.Contracts.IntegrationEvents;
 using RabbitMQ.Client;

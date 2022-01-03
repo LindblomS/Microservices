@@ -3,10 +3,10 @@
 public class CatalogItem
 {
     public Guid Id { get; set; }
-    public string? Name { get; set; }
-    public string? Description { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
     public decimal Price { get; set; }
-    public CatalogType? Type { get; set; }
-    public CatalogBrand? Brand { get; set; }
+    public CatalogType Type { get; set; }
+    public CatalogBrand Brand { get; set; }
     public int AvailableStock { get; set; }
 }

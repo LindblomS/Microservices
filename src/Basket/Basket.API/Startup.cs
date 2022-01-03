@@ -1,9 +1,8 @@
 ﻿namespace Basket.API;
 
 using Autofac;
-using Basket.API.Inteceptors;
+using Basket.API.Filters;
 using Basket.API.IntegrationEventHandlers;
-using Basket.API.Services;
 using Basket.Domain.AggregateModels;
 using Basket.Infrastructure.Repositories;
 using Catalog.Contracts.IntegrationEvents;
@@ -31,9 +30,9 @@ public class Startup
             .AddTransient<IIntegrationEventHandler<OrderStartedIntegrationEvent>, OrderStartedIntegrationEventHandler>()
             .AddTransient<IIntegrationEventHandler<ProductPriceChangedIntegrationEvent>, ProductPriceChangedIntegrationEventHandler>();
 
-        services.AddGrpc(options =>
+        services.AddControllers(options =>
         {
-            options.Interceptors.Add<ExceptionInterceptor>();
+            options.Filters.Add<ExceptionFilter>();
         });
 
         services.AddTransient<IBasketRepository, RedisBasketRepository>();
@@ -49,10 +48,9 @@ public class Startup
     {
         app.UseSerilogRequestLogging();
         app.UseRouting();
-
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapGrpcService<GrpcBasketService>();
+            endpoints.MapControllers();
         });
 
         app.ConfigureEventBus();

@@ -28,22 +28,22 @@ public class UserCheckoutAcceptedIntegrationEvent : IntegrationEvent
     public IEnumerable<BasketItem> BasketItems { get; }
 
     public record AddressDto(
-        string Street,
-        string State,
-        string Country,
-        string City,
-        string ZipCode);
+        string? Street,
+        string? State,
+        string? Country,
+        string? City,
+        string? ZipCode);
 
     public record CardDto(
         int TypeId,
-        string Number,
-        string SecurityNumber,
-        string HolderName,
+        string? Number,
+        string? SecurityNumber,
+        string? HolderName,
         DateTime Expiration);
 
     public record BasketItem(
         Guid ProductId,
-        string ProductName,
+        string? ProductName,
         decimal UnitPrice,
         int Units);
 }

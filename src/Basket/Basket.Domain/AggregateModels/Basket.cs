@@ -1,6 +1,7 @@
 ﻿namespace Basket.Domain.AggregateModels;
 
 using Domain.SeedWork;
+using Domain.Exceptions;
 using System;
 using System.Collections.Generic;
 
@@ -12,7 +13,7 @@ public class Basket : IAggregateRoot
     public Basket(Guid buyerId)
     {
         if (buyerId == default)
-            throw new ArgumentNullException(nameof(buyerId));
+            throw new CreateBasketException("Buyer id was not valid. Buyer id must be a valid GUID");
 
         this.buyerId = buyerId;
         items = new List<BasketItem>();
@@ -24,7 +25,7 @@ public class Basket : IAggregateRoot
     public void AddBasketItem(BasketItem item)
     {
         if (item is null)
-            throw new ArgumentNullException(nameof(item));
+            throw new BasketDomainException("Could not add basket item. Item is missing");
 
         items.Add(item);
     }
@@ -32,7 +33,7 @@ public class Basket : IAggregateRoot
     public void UpdatePrice(Guid productId, decimal newPrice)
     {
         if (productId == default)
-            throw new ArgumentNullException(nameof(productId));
+            throw new BasketDomainException("Could not update price. Product id was not valid. Product id must be a valid GUID");
 
         foreach (var item in items.Where(x => x.ProductId == productId))
             item.UpdatePrice(newPrice);

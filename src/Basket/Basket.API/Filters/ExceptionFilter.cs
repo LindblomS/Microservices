@@ -1,7 +1,7 @@
-﻿namespace Catalog.API.Filters;
+﻿namespace Basket.API.Filters;
 
-using Catalog.API.ActionResults;
-using Catalog.Domain.Exceptions;
+using Basket.API.ActionResults;
+using Basket.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -23,7 +23,7 @@ public class ExceptionFilter : IExceptionFilter
             context.Exception,
             context.Exception.Message);
 
-        if (context.Exception.GetType() == typeof(CatalogDomainException))
+        if (context.Exception.GetType() == typeof(BasketDomainException))
         {
             var details = new ValidationProblemDetails
             {

@@ -28,7 +28,7 @@ public class CatalogController : ControllerBase
         this.eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
     }
 
-    [Route("items")]
+    [Route("")]
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<Models.CatalogItem>), StatusCodes.Status200OK)]
     public ActionResult<IEnumerable<Models.CatalogItem>> GetItems()
@@ -36,7 +36,7 @@ public class CatalogController : ControllerBase
         return Ok(catalogQueryRepository.GetItems());
     }
 
-    [Route("items")]
+    [Route("")]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -47,7 +47,7 @@ public class CatalogController : ControllerBase
         return Ok();
     }
 
-    [Route("items/{id}")]
+    [Route("{id}")]
     [HttpDelete]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -61,7 +61,7 @@ public class CatalogController : ControllerBase
         return Ok();
     }
 
-    [Route("items/{id}")]
+    [Route("{id}")]
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -85,7 +85,16 @@ public class CatalogController : ControllerBase
         if (oldPrice != updated.Price)
         {
             var integrationEvent = new ProductPriceChangedIntegrationEvent(catalogId, updated.Price);
-            eventBus.Publish(integrationEvent);
+
+            try
+            {
+                logger.LogInformation("Publishing integration event: {IntegrationId} from Catalog", integrationEvent.Id);
+                eventBus.Publish(integrationEvent);
+            }
+            catch (Exception exception)
+            {
+                logger.LogError(exception, "Error publishing integration event: {IntegrationEventId} from Catalog", integrationEvent.Id);
+            }
         }
 
         return Ok();
