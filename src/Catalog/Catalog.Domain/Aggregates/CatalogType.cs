@@ -7,10 +7,10 @@ public class CatalogType
     public CatalogType(int id, string type)
     {
         if (id < 1)
-            throw new CatalogDomainException($"Cannot create catalog type. Id must be greater than 0. Id was {id}");
+            throw new CreateCatalogTypeException($"Id must be greater than 0. Id was {id}");
 
         if (string.IsNullOrWhiteSpace(type))
-            throw new ArgumentNullException(nameof(type));
+            throw new CreateCatalogTypeException("Type is empty");
 
         Id = id;
         Type = type;

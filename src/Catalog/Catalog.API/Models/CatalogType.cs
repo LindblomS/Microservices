@@ -2,6 +2,6 @@
 
 public class CatalogType
 {
-    public int Id { get; private set; }
-    public string Type { get; private set; }
+    public int Id { get; set; }
+    public string? Type { get; set; }
 }

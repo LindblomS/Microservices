@@ -2,10 +2,11 @@
 
 public class CatalogItem
 {
-    public string Name { get; private set; }
-    public string Description { get; private set; }
-    public decimal Price { get; private set; }
-    public CatalogType Type { get; private set; }
-    public CatalogBrand Brand { get; set; }
+    public Guid Id { get; set; }
+    public string? Name { get; set; }
+    public string? Description { get; set; }
+    public decimal Price { get; set; }
+    public CatalogType? Type { get; set; }
+    public CatalogBrand? Brand { get; set; }
     public int AvailableStock { get; set; }
 }

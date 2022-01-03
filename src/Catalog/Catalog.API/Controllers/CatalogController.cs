@@ -1,34 +1,45 @@
 ﻿namespace Catalog.API.Controllers;
 
 using Catalog.API.Mappers;
+using Catalog.API.Repositories;
 using Catalog.Contracts.IntegrationEvents;
 using Catalog.Domain.Aggregates;
 using EventBus.EventBus.Abstractions;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 [Route("api/[controller]")]
 [ApiController]
 public class CatalogController : ControllerBase
 {
     readonly ICatalogRepository catalogRepository;
+    readonly ICatalogQueryRepository catalogQueryRepository;
     readonly ILogger<CatalogController> logger;
     readonly IEventBus eventBus;
 
     public CatalogController(
-        ICatalogRepository catalogRepository, 
+        ICatalogRepository catalogRepository,
+        ICatalogQueryRepository catalogQueryRepository,
         ILogger<CatalogController> logger,
         IEventBus eventBus)
     {
         this.catalogRepository = catalogRepository ?? throw new ArgumentNullException(nameof(catalogRepository));
+        this.catalogQueryRepository = catalogQueryRepository ?? throw new ArgumentNullException(nameof(catalogQueryRepository));
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
     }
 
     [Route("items")]
+    [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<Models.CatalogItem>), StatusCodes.Status200OK)]
+    public ActionResult<IEnumerable<Models.CatalogItem>> GetItems()
+    {
+        return Ok(catalogQueryRepository.GetItems());
+    }
+
+    [Route("items")]
     [HttpPost]
-    [ProducesResponseType((int)HttpStatusCode.Created)]
-    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync([FromBody] Models.CatalogItem item)
     {
         logger.LogInformation("Creating catalog item {@CatalogItem}", item);
@@ -38,8 +49,8 @@ public class CatalogController : ControllerBase
 
     [Route("items/{id}")]
     [HttpDelete]
-    [ProducesResponseType((int)HttpStatusCode.OK)]
-    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteAsync(string id)
     {
         if (!Guid.TryParse(id, out var catalogId))
@@ -52,8 +63,8 @@ public class CatalogController : ControllerBase
 
     [Route("items/{id}")]
     [HttpPut]
-    [ProducesResponseType(((int)HttpStatusCode.OK))]
-    [ProducesResponseType(((int)HttpStatusCode.BadRequest))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateAsync(string id, [FromBody] Models.CatalogItem item)
     {
         if (!Guid.TryParse(id, out var catalogId))

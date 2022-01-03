@@ -1,7 +1,9 @@
 ﻿namespace Catalog.API;
 
 using Autofac;
+using Catalog.API.Filters;
 using Catalog.API.IntegrationHandlers;
+using Catalog.API.Repositories;
 using Catalog.Domain.Aggregates;
 using Catalog.Infrastructure.EntityFramework;
 using Catalog.Infrastructure.Repositories;
@@ -25,11 +27,16 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllers();
+        services.AddControllers(options =>
+        {
+            options.Filters.Add<ExceptionFilter>();
+        });
+
         services.AddEventBus(Configuration);
         services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToPaidIntegrationEvent>, OrderStatusChangedToPaidIntegrationEventHandler>();
         services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToAwaitingValidationIntegrationEvent>, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
         services.AddTransient<ICatalogRepository, CatalogRepository>();
+        services.AddTransient<ICatalogQueryRepository, CatalogQueryRepository>();
         services.AddCustomDbContext(Configuration);
     }
 
@@ -97,15 +104,6 @@ static class Extensions
                 sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
             });
 
-        }, ServiceLifetime.Scoped);
-
-        services.AddDbContext<IntegrationEventLogContext>(options =>
-        {
-            options.UseSqlServer(configuration["ConnectionString"],
-                                 sqlServerOptionsAction: sqlOptions =>
-                                 {
-                                     sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                                 });
         }, ServiceLifetime.Scoped);
 
         return services;

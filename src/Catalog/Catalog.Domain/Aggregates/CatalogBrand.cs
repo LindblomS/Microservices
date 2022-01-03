@@ -7,10 +7,10 @@ public class CatalogBrand
     public CatalogBrand(int id, string brand)
     {
         if (id < 1)
-            throw new CatalogDomainException($"Cannot create catalog brand. Id must be greater than 0. Id was {id}");
+            throw new CreateCatalogBrandException($"Id must be greater than 0. Id was {id}");
 
         if (string.IsNullOrWhiteSpace(brand))
-            throw new ArgumentNullException(nameof(brand));
+            throw new CreateCatalogBrandException("Brand is empty");
 
         Id = id;
         Brand = brand;
