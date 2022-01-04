@@ -24,7 +24,7 @@ public static class CatalogMapper
     {
         return new CatalogItem
         {
-            Id = entity.Id,
+            Id = entity.Id.ToString(),
             Name = entity.Name,
             Description = entity.Description,
             Price = entity.Price,

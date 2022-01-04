@@ -60,7 +60,10 @@ public class CatalogRepository : ICatalogRepository
 
     public async Task<CatalogItem?> GetAsync(Guid id)
     {
+        
         var item = await context.Items.FindAsync(id);
+        item.CatalogBrand = await context.Brands.FindAsync(item.CatalogBrandId);
+        item.CatalogType = await context.Types.FindAsync(item.CatalogTypeId);
 
         if (item is null)
             return null;

@@ -18,26 +18,32 @@
 
         void ConfigureIntegrationEventLogEntry(EntityTypeBuilder<IntegrationEventLogEntry> builder)
         {
-            builder.ToTable("IntegrationEventLog");
+            builder.ToTable("integration_event", "dbo");
 
-            builder.HasKey(e => e.EventId);
+            builder.HasKey(e => e.EventId).HasName("pk_integration_event");
 
             builder.Property(e => e.EventId)
+                .HasColumnName("id")
                 .IsRequired();
 
             builder.Property(e => e.Content)
+                .HasColumnName("content")
                 .IsRequired();
 
             builder.Property(e => e.CreationTime)
+                .HasColumnName("created")
                 .IsRequired();
 
             builder.Property(e => e.State)
+                .HasColumnName("state")
                 .IsRequired();
 
             builder.Property(e => e.TimesSent)
+                .HasColumnName("times_sent")
                 .IsRequired();
 
             builder.Property(e => e.EventTypeName)
+                .HasColumnName("event_type_name")
                 .IsRequired();
 
         }

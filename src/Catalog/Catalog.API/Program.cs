@@ -1,5 +1,6 @@
 using Serilog;
 using Catalog.API;
+using Microsoft.AspNetCore;
 
 var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
@@ -13,11 +14,9 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
-    var host = Host.CreateDefaultBuilder()
-        .ConfigureWebHostDefaults(builder =>
-        {
-            builder.UseStartup<Startup>();
-        })
+    var host = WebHost
+        .CreateDefaultBuilder(args)
+        .UseStartup<Startup>()
         .UseSerilog()
         .Build();
 

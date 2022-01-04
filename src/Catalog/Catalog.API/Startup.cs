@@ -1,6 +1,7 @@
 ﻿namespace Catalog.API;
 
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Catalog.API.Filters;
 using Catalog.API.IntegrationHandlers;
 using Catalog.API.Repositories;
@@ -24,7 +25,7 @@ public class Startup
 
     public IConfiguration Configuration { get; }
 
-    public void ConfigureServices(IServiceCollection services)
+    public IServiceProvider ConfigureServices(IServiceCollection services)
     {
         services.AddControllers(options =>
         {
@@ -37,6 +38,11 @@ public class Startup
         services.AddTransient<ICatalogRepository, CatalogRepository>();
         services.AddTransient<ICatalogQueryRepository, CatalogQueryRepository>();
         services.AddCustomDbContext(Configuration);
+
+        var container = new ContainerBuilder();
+        container.Populate(services);
+
+        return new AutofacServiceProvider(container.Build());
     }
 
     public void Configure(IApplicationBuilder app)

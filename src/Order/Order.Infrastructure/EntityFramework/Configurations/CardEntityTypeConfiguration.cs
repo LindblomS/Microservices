@@ -13,7 +13,7 @@ internal class CardEntityTypeConfiguration : IEntityTypeConfiguration<CardEntity
 
         builder.Property(e => e.Id).HasColumnName("id");
         builder.Property(e => e.BuyerId).HasColumnName("buyer_id");
-        builder.Property(e => e.Type).HasColumnName("type");
+        builder.Property(e => e.Type).HasColumnName("type_id");
         builder.Property(e => e.Number).HasColumnName("number");
         builder.Property(e => e.SecurityNumber).HasColumnName("security_number");
         builder.Property(e => e.HolderName).HasColumnName("holder_name");

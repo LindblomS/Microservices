@@ -16,6 +16,6 @@ internal class BuyerEntityTypeConfiguration : IEntityTypeConfiguration<BuyerEnti
 
         builder.HasMany(e => e.Cards)
             .WithOne()
-            .HasForeignKey("fk_card_buyer");
+            .HasForeignKey("fk_buyer_card");
     }
 }

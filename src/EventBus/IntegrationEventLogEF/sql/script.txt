@@ -1,0 +1,9 @@
+﻿create table [dbo].[integration_event](
+    [id] UNIQUEIDENTIFIER not null,
+    [content] nvarchar(250) not null,
+    [created] DATETIME2 not null,
+    [state] nvarchar(250) not null,
+    [times_sent] int not null,
+    [event_type_name] nvarchar(250) not null,
+    CONSTRAINT [pk_integration_event] PRIMARY key ([id] asc)
+)

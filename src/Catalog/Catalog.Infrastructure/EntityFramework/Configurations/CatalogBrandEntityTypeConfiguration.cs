@@ -9,7 +9,7 @@ internal class CatalogBrandEntityTypeConfiguration : IEntityTypeConfiguration<Ca
     public void Configure(EntityTypeBuilder<CatalogBrandEntity> builder)
     {
         builder.ToTable("brand", CatalogContext.defaultSchema);
-        builder.HasKey(e => e.Id).HasName("pk_id");
+        builder.HasKey(e => e.Id).HasName("pk_brand");
 
         builder.Property(e => e.Id).HasColumnName("id");
         builder.Property(e => e.Brand).HasColumnName("brand");
