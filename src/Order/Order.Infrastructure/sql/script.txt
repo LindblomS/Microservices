@@ -53,7 +53,7 @@ create table [ordering].[order_item](
     [id] UNIQUEIDENTIFIER not null,
     [order_id] UNIQUEIDENTIFIER not null,
     [product_name] nvarchar(250) not null,
-    [unit_price] DECIMAL(4,2) not null,
+    [unit_price] decimal(18,2) not null,
     [units] int not null,
     CONSTRAINT [pk_order_item] PRIMARY key CLUSTERED ([id] asc),
     CONSTRAINT [fk_order_order_items] FOREIGN key ([order_id]) REFERENCES [ordering].[order] ([id])
@@ -65,3 +65,10 @@ create table [ordering].[client_request](
     [time] DATETIME2 not null,
     CONSTRAINT [pk_client_request] PRIMARY key CLUSTERED ([id] asc)
 )
+
+insert into [ordering].[order_status]([id], [name]) values (1, 'Submitted')
+insert into [ordering].[order_status]([id], [name]) values (2, 'AwaitingValidation')
+insert into [ordering].[order_status]([id], [name]) values (3, 'StockConfirmed')
+insert into [ordering].[order_status]([id], [name]) values (4, 'Paid')
+insert into [ordering].[order_status]([id], [name]) values (5, 'Shipped')
+insert into [ordering].[order_status]([id], [name]) values (6, 'Cancelled')

@@ -29,8 +29,9 @@ public class OrderRepository : IOrderRepository
 
     public async Task UpdateAsync(Order order)
     {
-        var entity = OrderMapper.Map(order);
-        context.Orders.Update(entity);
+        var updated = OrderMapper.Map(order);
+        var original = await context.Orders.FindAsync(order.Id);
+        context.Entry(original).CurrentValues.SetValues(updated);
         await context.SaveChangesAsync();
     }
 }

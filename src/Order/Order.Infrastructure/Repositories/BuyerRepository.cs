@@ -41,4 +41,12 @@ public class BuyerRepository : IBuyerRepository
 
         return Task.FromResult(BuyerMapper.Map(entity));
     }
+
+    public async Task UpdateAsync(Buyer buyer)
+    {
+        var updated = BuyerMapper.Map(buyer);
+        var original = await context.Buyers.FindAsync(buyer.Id);
+        context.Entry(original).CurrentValues.SetValues(updated);
+        await context.SaveChangesAsync();
+    }
 }

@@ -14,4 +14,6 @@ public interface IBuyerRepository : IRepository<Buyer>
         string securityNumber,
         string holderName,
         DateTime expiration);
+
+    Task UpdateAsync(Buyer buyer);
 }

@@ -72,4 +72,10 @@ public class OrderingContext : DbContext, IUnitOfWork
         modelBuilder.ApplyConfiguration(new CardTypeEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ClientRequestEntityTypeConfiguration());
     }
+
+    public override void Dispose()
+    {
+        currentTransaction?.Dispose();
+        base.Dispose();
+    }
 }

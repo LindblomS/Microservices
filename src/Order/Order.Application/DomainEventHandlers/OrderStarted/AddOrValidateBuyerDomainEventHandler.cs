@@ -52,6 +52,8 @@ public class AddOrValidateBuyerDomainEventHandler : INotificationHandler<OrderSt
 
         if (!buyerExists)
             await buyerRepository.AddAsync(buyer);
+        else 
+            await buyerRepository.UpdateAsync(buyer);
 
         logger.LogInformation("Buyer {BuyerId} and card were validated or updated for order {OrderId}", buyer.Id, notification.Order.Id);
 

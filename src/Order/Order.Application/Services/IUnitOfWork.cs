@@ -2,7 +2,7 @@
 
 using System.Threading.Tasks;
 
-public interface IUnitOfWork
+public interface IUnitOfWork : IDisposable
 {
     Task CommitAsync(IUnitOfWork unitOfWork);
     Guid Id { get; }

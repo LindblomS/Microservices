@@ -1,6 +1,7 @@
 namespace Ordering.API;
 
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Basket.Contracts.IntegrationEvents;
 using Catalog.Contracts.IntegrationEvents;
 using EventBus.EventBus;
@@ -30,15 +31,16 @@ public class Startup
 
     public IConfiguration Configuration { get; set; }
 
-    public void ConfigureServices(IServiceCollection services)
+    public IServiceProvider ConfigureServices(IServiceCollection services)
     {
         services.AddCustomDbContext(Configuration);
         services.AddEventBus(Configuration);
-    }
 
-    public void ConfigureContainer(ContainerBuilder builder)
-    {
-        builder.RegisterModule(new ApplicationModule());
+        var container = new ContainerBuilder();
+
+        container.Populate(services);
+        container.RegisterModule(new ApplicationModule());
+        return new AutofacServiceProvider(container.Build());
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -14,7 +14,7 @@ internal class OrderItemEntityTypeConfiguration : IEntityTypeConfiguration<Order
         builder.Property(e => e.Id).HasColumnName("id");
         builder.Property(e => e.OrderId).HasColumnName("order_id");
         builder.Property(e => e.ProductName).HasColumnName("product_name");
-        builder.Property(e => e.UnitPrice).HasColumnName("unit_price");
+        builder.Property(e => e.UnitPrice).HasColumnName("unit_price").HasPrecision(18,2);
         builder.Property(e => e.Units).HasColumnName("units");
     }
 }
