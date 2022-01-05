@@ -53,20 +53,22 @@ public class CatalogRepository : ICatalogRepository
         if (brand is null)
             await CreateCatalogBrand(catalogItem.Brand);
 
-        var entity = CatalogMapper.Map(catalogItem);
-        context.Update(entity);
+        var updated = CatalogMapper.Map(catalogItem);
+        var original = await context.Items.FindAsync(updated.Id);
+
+        context.Entry(original).CurrentValues.SetValues(updated);
         await context.SaveChangesAsync();
     }
 
-    public async Task<CatalogItem?> GetAsync(Guid id)
+    public async Task<CatalogItem> GetAsync(Guid id)
     {
-        
         var item = await context.Items.FindAsync(id);
-        item.CatalogBrand = await context.Brands.FindAsync(item.CatalogBrandId);
-        item.CatalogType = await context.Types.FindAsync(item.CatalogTypeId);
 
         if (item is null)
             return null;
+
+        item.CatalogBrand = await context.Brands.FindAsync(item.CatalogBrandId);
+        item.CatalogType = await context.Types.FindAsync(item.CatalogTypeId);
 
         return CatalogMapper.Map(item);
     }
