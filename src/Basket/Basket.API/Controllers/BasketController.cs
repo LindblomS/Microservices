@@ -108,7 +108,7 @@ public class BasketController : ControllerBase
     [Route("{buyerId}")]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateAsync(string buyerId, [FromBody] IEnumerable<Models.BasketItem> items)
     {
         if (!Guid.TryParse(buyerId, out var parsedBuyerId))

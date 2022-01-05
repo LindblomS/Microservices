@@ -1,6 +1,7 @@
 ﻿namespace Basket.API;
 
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Basket.API.Filters;
 using Basket.API.IntegrationEventHandlers;
 using Basket.Domain.AggregateModels;
@@ -23,7 +24,7 @@ public class Startup
 
     public IConfiguration Configuration { get; }
 
-    public void ConfigureServices(IServiceCollection services)
+    public IServiceProvider ConfigureServices(IServiceCollection services)
     {
         services.AddEventBus(Configuration);
         services
@@ -42,6 +43,11 @@ public class Startup
             var configuration = ConfigurationOptions.Parse(Configuration["RedisConnectionString"]);
             return ConnectionMultiplexer.Connect(configuration);
         });
+
+        var container = new ContainerBuilder();
+        container.Populate(services);
+
+        return new AutofacServiceProvider(container.Build());
     }
 
     public void Configure(IApplicationBuilder app)

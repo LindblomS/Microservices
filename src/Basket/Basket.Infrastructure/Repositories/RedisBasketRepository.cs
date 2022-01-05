@@ -2,6 +2,7 @@
 
 using Basket.Domain.AggregateModels;
 using Basket.Infrastructure.Exceptions;
+using Basket.Infrastructure.Models;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -39,7 +40,13 @@ public class RedisBasketRepository : IBasketRepository
         if (basket.IsNullOrEmpty)
             return null;
 
-        return JsonSerializer.Deserialize<Basket>(basket);
+        var dto = JsonSerializer.Deserialize<BasketDto>(basket);
+        var domainBasket = new Basket(buyerId);
+
+        foreach (var item in dto.Items)
+            domainBasket.AddBasketItem(item);
+
+        return domainBasket;
     }
 
     public async Task<IEnumerable<Guid>> GetUsersAsync()
