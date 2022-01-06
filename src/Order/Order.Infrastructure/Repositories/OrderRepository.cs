@@ -5,6 +5,8 @@ using Ordering.Infrastructure.EntityFramework;
 using Ordering.Infrastructure.Mappers;
 using System;
 using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 public class OrderRepository : IOrderRepository
 {
@@ -23,7 +25,12 @@ public class OrderRepository : IOrderRepository
 
     public async Task<Order> GetAsync(Guid orderId)
     {
-        var entity = await context.Orders.FindAsync(orderId.ToString());
+        var entity = await context.Orders
+            .Include(e => e.OrderItems)
+            .Include(e => e.Buyer)
+            .Include(e => e.Card)
+            .SingleOrDefaultAsync(e => e.Id == orderId.ToString());
+
         return OrderMapper.Map(entity);
     }
 

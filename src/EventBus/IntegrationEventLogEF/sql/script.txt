@@ -1,7 +1,7 @@
 ﻿create table [dbo].[integration_event](
     [id] char(36) not null,
     [transaction_id] char(36) not null,
-    [content] nvarchar(250) not null,
+    [content] nvarchar(max) not null,
     [created] DATETIME2 not null,
     [state] nvarchar(250) not null,
     [times_sent] int not null,

@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
 using Ordering.Worker;
 using Serilog;
 
@@ -11,23 +13,24 @@ Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
     .CreateLogger();
 
-IHost host = Host.CreateDefaultBuilder(args)
-    .ConfigureServices(services =>
-    {
-        services.Configure<WorkerOptions>(options =>
-        {
-            options.ConnectionString = configuration["ConnectionString"];
-            options.EventBusConnection = configuration["EventBus:Connection"];
-            options.SubscriptionClientName = configuration["EventBus:SubscriptionClientName"];
-            options.CheckUpdateTime = configuration.GetValue<int>("CheckUpdateTime");
-        });
+try
+{
+    var host = WebHost
+        .CreateDefaultBuilder(args)
+        .UseStartup<Startup>()
+        .UseSerilog()
+        .Build();
 
-        services.AddEventBus(configuration);
-        services.AddHostedService<Worker>();
-    })
-    .UseSerilog()
-    .Build();
-
-await host.RunAsync();
+    Log.Information("Starting web host ({ApplicationContext})", "Ordering.Worker");
+    await host.RunAsync();
+}
+catch (Exception exception)
+{
+    Log.Fatal(exception, "Program terminated unexpectedly ({ApplicationContext})", "Ordering.Worker");
+}
+finally
+{
+    Log.CloseAndFlush();
+}
 
 

@@ -26,9 +26,12 @@ public class Worker : BackgroundService
             logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
             foreach (var order in await GetOrders())
+            {
+                await Task.Delay(1000);
                 PublishIntegrationEvent(order);
+            }
 
-            await Task.Delay(options.CheckUpdateTime, stoppingToken);
+            await Task.Delay(options.CheckUpdateTimeSeconds * 1000, stoppingToken);
         }
     }
 
@@ -44,12 +47,11 @@ public class Worker : BackgroundService
         try
         {
             using var connection = new SqlConnection(options.ConnectionString);
-            return await connection.QueryAsync<Guid>("select id from ordering.order where order_status = 1");
-
+            return (await connection.QueryAsync<string>("select [id] from [ordering].[order] where [order_status_id] = 1")).Select(x => Guid.Parse(x));
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Something went wrong while retrieving orders");
+            logger.LogCritical(ex, "Something went wrong while retrieving orders");
             return new List<Guid>();
         }
     }

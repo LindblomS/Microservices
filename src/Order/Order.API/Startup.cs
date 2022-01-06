@@ -6,6 +6,7 @@ using Basket.Contracts.IntegrationEvents;
 using Catalog.Contracts.IntegrationEvents;
 using EventBus.EventBus;
 using EventBus.EventBus.Abstractions;
+using EventBus.EventBus.Events;
 using EventBus.EventBusRabbitMQ;
 using EventBus.IntegrationEventLogEF;
 using Microsoft.AspNetCore.Builder;
@@ -22,6 +23,7 @@ using Payment.Contracts.IntegrationEvents;
 using RabbitMQ.Client;
 using System;
 using System.Data.Common;
+using System.Reflection;
 
 public class Startup
 {
@@ -82,7 +84,7 @@ static class CustomExtensionsMethods
             options.UseSqlServer(configuration["ConnectionString"],
                                  sqlServerOptionsAction: sqlOptions =>
                                  {
-                                     sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                                     //sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                                  });
         }, ServiceLifetime.Scoped);
 
@@ -91,7 +93,15 @@ static class CustomExtensionsMethods
 
     public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(sp => (DbConnection c) => new IntegrationEventLogService(c));
+        services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(sp => (DbConnection c) => 
+        {
+            var eventTypes = typeof(OrderStartedIntegrationEvent).Assembly
+                .GetTypes()
+                .Where(t => t.Name.EndsWith(nameof(IntegrationEvent)))
+                .ToList();
+
+            return new IntegrationEventLogService(c, eventTypes);
+        });
 
         services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
         {

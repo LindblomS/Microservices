@@ -23,28 +23,21 @@ public class UnitOfWorkBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
 
     public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
     {
-        try
+        if (unitOfWork.Active)
+            return await next();
+
+        await unitOfWork.BeginAsync();
+        using (LogContext.PushProperty("UnitOfWork", unitOfWork.TransactionId))
         {
-            if (unitOfWork.Active)
-                return await next();
+            logger.LogInformation("Beginning UnitOfWork {UnitOfWorkId}", unitOfWork.TransactionId);
 
-            await unitOfWork.BeginAsync();
-            using (LogContext.PushProperty("UnitOfWork", unitOfWork.TransactionId))
-            {
-                logger.LogInformation("Beginning UnitOfWork {UnitOfWorkId}", unitOfWork.TransactionId);
+            var response = await next();
 
-                var response = await next();
-
-                logger.LogInformation("Commiting UnitOfWork {UnitOfWorkId}", unitOfWork.TransactionId);
-                await unitOfWork.CommitAsync(unitOfWork);
-                await integrationEventService.PublishEventsThroughEventBusAsync(unitOfWork.TransactionId);
-                return response;
-            }
+            logger.LogInformation("Commiting UnitOfWork {UnitOfWorkId}", unitOfWork.TransactionId);
+            var transactionId = unitOfWork.TransactionId;
+            await unitOfWork.CommitAsync(unitOfWork);
+            await integrationEventService.PublishEventsThroughEventBusAsync(transactionId);
+            return response;
         }
-        finally
-        {
-            //unitOfWork?.Dispose();
-        }
-        
     }
 }

@@ -9,9 +9,9 @@
     public class IntegrationEventLogEntry
     {
         private IntegrationEventLogEntry() { }
-        public IntegrationEventLogEntry(IntegrationEvent @event, Guid transactionId)
+        public IntegrationEventLogEntry(IntegrationEvent @event, string transactionId)
         {
-            EventId = @event.Id;            
+            EventId = @event.Id.ToString();            
             CreationTime = @event.CreationDate;
             EventTypeName = @event.GetType().FullName;
             Content = JsonConvert.SerializeObject(@event);
@@ -19,7 +19,7 @@
             TimesSent = 0;
             TransactionId = transactionId.ToString();
         }
-        public Guid EventId { get; private set; }
+        public string EventId { get; private set; }
         public string EventTypeName { get; private set; }
         [NotMapped]
         public string EventTypeShortName => EventTypeName.Split('.')?.Last();
