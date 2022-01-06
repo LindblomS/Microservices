@@ -12,11 +12,13 @@ public class UnitOfWorkBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
 {
     readonly IUnitOfWork unitOfWork;
     readonly ILogger<UnitOfWorkBehaviour<TRequest, TResponse>> logger;
+    readonly IIntegrationEventService integrationEventService;
 
-    public UnitOfWorkBehaviour(IUnitOfWork unitOfWork, ILogger<UnitOfWorkBehaviour<TRequest, TResponse>> logger)
+    public UnitOfWorkBehaviour(IUnitOfWork unitOfWork, ILogger<UnitOfWorkBehaviour<TRequest, TResponse>> logger, IIntegrationEventService integrationEventService)
     {
         this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.integrationEventService = integrationEventService ?? throw new ArgumentNullException(nameof(integrationEventService));
     }
 
     public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
@@ -26,21 +28,22 @@ public class UnitOfWorkBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
             if (unitOfWork.Active)
                 return await next();
 
-            using (LogContext.PushProperty("UnitOfWork", unitOfWork.Id))
+            await unitOfWork.BeginAsync();
+            using (LogContext.PushProperty("UnitOfWork", unitOfWork.TransactionId))
             {
-                logger.LogInformation("Beginning UnitOfWork {UnitOfWorkId}", unitOfWork.Id);
-                await unitOfWork.BeginAsync();
+                logger.LogInformation("Beginning UnitOfWork {UnitOfWorkId}", unitOfWork.TransactionId);
 
                 var response = await next();
 
-                logger.LogInformation("Commiting UnitOfWork {UnitOfWorkId}", unitOfWork.Id);
+                logger.LogInformation("Commiting UnitOfWork {UnitOfWorkId}", unitOfWork.TransactionId);
                 await unitOfWork.CommitAsync(unitOfWork);
+                await integrationEventService.PublishEventsThroughEventBusAsync(unitOfWork.TransactionId);
                 return response;
             }
         }
         finally
         {
-            unitOfWork?.Dispose();
+            //unitOfWork?.Dispose();
         }
         
     }

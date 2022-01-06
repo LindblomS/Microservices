@@ -10,14 +10,20 @@ internal static class OrderMapper
     public static Order Map(OrderEntity entity)
     {
         var order = new Order(
-            entity.Id,
+            Map(entity.Id),
             Map(entity.Buyer),
             Map(entity.Card),
             MapAddress(entity));
 
         order.SetCreated(entity.Created);
-        order.SetBuyerId(entity.BuyerId);
-        order.SetCardId(entity.CardId);
+
+        var buyerId = Map(entity.BuyerId);
+        if (buyerId != default)
+            order.SetBuyerId(Map(entity.BuyerId));
+
+        var cardId = Map(entity.CardId);
+        if (cardId != default)
+            order.SetCardId(Map(entity.CardId));
 
         foreach (var item in entity.OrderItems)
             order.AddOrderItem(Map(item));
@@ -41,11 +47,17 @@ internal static class OrderMapper
 
     static User Map(BuyerEntity entity)
     {
-        return new User(entity.Id, entity.Name);
+        if (entity is null)
+            return new(Guid.NewGuid(), "fake name");
+
+        return new User(Map(entity.Id), entity.Name);
     }
 
     static Card Map(CardEntity entity)
     {
+        if (entity is null)
+            return new(1, "number", "security_number", "holder_name", DateTime.Now);
+
         return new Card(
             entity.Type,
             entity.Number,
@@ -67,7 +79,7 @@ internal static class OrderMapper
     static OrderItem Map(OrderItemEntity entity)
     {
         return new OrderItem(
-            entity.Id,
+            Map(entity.Id),
             new(entity.ProductName),
             new(entity.UnitPrice),
             new(entity.Units));
@@ -77,9 +89,9 @@ internal static class OrderMapper
     {
         var entity = new OrderEntity
         {
-            Id = order.Id,
-            BuyerId = order.BuyerId,
-            CardId = order.CardId,
+            Id = Map(order.Id),
+            BuyerId = Map(order.BuyerId),
+            CardId = Map(order.CardId),
             OrderStatusId = order.Status.Id,
             Description = order.Description,
             Created = order.Created,
@@ -107,11 +119,21 @@ internal static class OrderMapper
     {
         return new OrderItemEntity
         {
-            Id = item.Id,
-            OrderId = orderId,
+            Id = Map(item.Id),
+            OrderId = Map(orderId),
             ProductName = item.ProductName,
             UnitPrice = item.UnitPrice,
             Units = item.Units
         };
+    }
+
+    static string Map(Guid value)
+    {
+        return value == default ? null : value.ToString();
+    }
+
+    static Guid Map(string value)
+    {
+        return value is null ? Guid.Empty : Guid.Parse(value);
     }
 }

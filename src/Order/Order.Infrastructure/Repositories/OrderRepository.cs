@@ -23,14 +23,14 @@ public class OrderRepository : IOrderRepository
 
     public async Task<Order> GetAsync(Guid orderId)
     {
-        var entity = await context.Orders.FindAsync(orderId);
+        var entity = await context.Orders.FindAsync(orderId.ToString());
         return OrderMapper.Map(entity);
     }
 
     public async Task UpdateAsync(Order order)
     {
         var updated = OrderMapper.Map(order);
-        var original = await context.Orders.FindAsync(order.Id);
+        var original = await context.Orders.FindAsync(order.Id.ToString());
         context.Entry(original).CurrentValues.SetValues(updated);
         await context.SaveChangesAsync();
     }

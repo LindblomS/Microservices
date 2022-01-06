@@ -47,7 +47,7 @@ public class AddOrValidateBuyerDomainEventHandler : INotificationHandler<OrderSt
             buyer = new Buyer(notification.User.Id, notification.User.Name);
 
         buyer.VerifyOrAddCard(
-            await GetCard(notification.Card), 
+            GetCard(notification.Card), 
             notification.Order.Id);
 
         if (!buyerExists)
@@ -62,9 +62,9 @@ public class AddOrValidateBuyerDomainEventHandler : INotificationHandler<OrderSt
         return buyer;
     }
 
-    async Task<Card> GetCard(Domain.AggregateModels.Order.Card card)
+    Card GetCard(Domain.AggregateModels.Order.Card card)
     {
-        var existingCard = await buyerRepository.GetCardAsync(
+        var existingCard = buyerRepository.GetCard(
             card.TypeId,
             card.Number,
             card.SecurityNumber,

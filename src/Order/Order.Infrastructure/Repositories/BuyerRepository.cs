@@ -24,28 +24,33 @@ public class BuyerRepository : IBuyerRepository
 
     public async Task<Buyer> GetAsync(Guid buyerId, Guid orderId)
     {
-        return BuyerMapper.Map(await context.Buyers.FindAsync(buyerId), orderId);
+        var entity = await context.Buyers.FindAsync(buyerId.ToString());
+
+        if (entity is null)
+            return null;
+
+        return BuyerMapper.Map(entity, orderId);
     }
 
-    public Task<Card> GetCardAsync(int typeId, string number, string securityNumber, string holderName, DateTime expiration)
+    public Card GetCard(int typeId, string number, string securityNumber, string holderName, DateTime expiration)
     {
         var entity = context.Cards.SingleOrDefault(e => 
             e.Type == typeId &&
             e.Number == number &&
             e.SecurityNumber == securityNumber &&
             e.HolderName == holderName && 
-            e.Expiration.ToString(datetimeFormat) == expiration.ToString(datetimeFormat));
+            e.Expiration == expiration);
 
         if (entity is null)
             return null;
 
-        return Task.FromResult(BuyerMapper.Map(entity));
+        return BuyerMapper.Map(entity);
     }
 
     public async Task UpdateAsync(Buyer buyer)
     {
         var updated = BuyerMapper.Map(buyer);
-        var original = await context.Buyers.FindAsync(buyer.Id);
+        var original = await context.Buyers.FindAsync(buyer.Id.ToString());
         context.Entry(original).CurrentValues.SetValues(updated);
         await context.SaveChangesAsync();
     }

@@ -26,6 +26,9 @@
                 .HasColumnName("id")
                 .IsRequired();
 
+            builder.Property(e => e.TransactionId)
+                .HasColumnName("transaction_id");
+
             builder.Property(e => e.Content)
                 .HasColumnName("content")
                 .IsRequired();

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 public interface IUnitOfWork : IDisposable
 {
     Task CommitAsync(IUnitOfWork unitOfWork);
-    Guid Id { get; }
+    Guid TransactionId { get; }
     bool Active { get; }
     Task BeginAsync();
 }

@@ -54,7 +54,7 @@ public static class BasketMapper
     {
         return new(
             address.Street,
-            address.Street,
+            address.State,
             address.Country,
             address.City,
             address.ZipCode);

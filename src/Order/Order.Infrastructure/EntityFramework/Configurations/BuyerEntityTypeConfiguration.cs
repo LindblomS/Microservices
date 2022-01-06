@@ -14,8 +14,6 @@ internal class BuyerEntityTypeConfiguration : IEntityTypeConfiguration<BuyerEnti
         builder.Property(e => e.Id).HasColumnName("id");
         builder.Property(e => e.Name).HasColumnName("name");
 
-        builder.HasMany(e => e.Cards)
-            .WithOne()
-            .HasForeignKey("fk_buyer_card");
+        builder.HasMany(e => e.Cards).WithOne().HasForeignKey(e => e.BuyerId).HasConstraintName("fk_buyer_card");
     }
 }

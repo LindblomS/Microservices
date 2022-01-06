@@ -9,7 +9,7 @@ internal class OrderItemEntityTypeConfiguration : IEntityTypeConfiguration<Order
     public void Configure(EntityTypeBuilder<OrderItemEntity> builder)
     {
         builder.ToTable("order_item", OrderingContext.defaultSchema);
-        builder.HasKey(e => e.Id).HasName("pk_order_item");
+        builder.HasKey(e => new { e.Id, e.OrderId }).HasName("pk_order_item");
 
         builder.Property(e => e.Id).HasColumnName("id");
         builder.Property(e => e.OrderId).HasColumnName("order_id");

@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 public class OrderingContext : DbContext, IUnitOfWork
 {
     internal const string defaultSchema = "ordering";
+    bool disposed;
     IDbContextTransaction currentTransaction;
 
     public OrderingContext(DbContextOptions<OrderingContext> options) : base(options)
     {
-        Id = Guid.NewGuid();
     }
 
     public DbSet<OrderEntity> Orders { get; private set; }
@@ -24,7 +24,7 @@ public class OrderingContext : DbContext, IUnitOfWork
     public DbSet<BuyerEntity> Buyers { get; private set; }
     public DbSet<CardEntity> Cards { get; private set; }
 
-    public Guid Id { get; }
+    public Guid TransactionId { get; private set; }
     public bool Active { get => currentTransaction is not null; }
 
     public async Task BeginAsync()
@@ -33,30 +33,22 @@ public class OrderingContext : DbContext, IUnitOfWork
             throw new InvalidOperationException("Unit of work is active");
 
         currentTransaction = await Database.BeginTransactionAsync();
+        TransactionId = currentTransaction.TransactionId;
     }
 
     public async Task CommitAsync(IUnitOfWork unitOfWork)
     {
-        if (unitOfWork?.Id != Id)
+        if (unitOfWork?.TransactionId != TransactionId)
             throw new InvalidOperationException("Unit of work is not current");
 
         try
         {
             await currentTransaction.CommitAsync();
+            TransactionId = Guid.Empty;
         }
         catch (Exception exception)
         {
-            throw new UnitOfWorkException(Id, "Something went wrong commiting unit of work", exception);
-        }
-        finally
-        {
-            await currentTransaction?.RollbackAsync();
-
-            if (currentTransaction is not null)
-            {
-                await currentTransaction.DisposeAsync();
-                currentTransaction = null;
-            }
+            throw new UnitOfWorkException(TransactionId, "Something went wrong commiting unit of work", exception);
         }
     }
 
@@ -75,7 +67,11 @@ public class OrderingContext : DbContext, IUnitOfWork
 
     public override void Dispose()
     {
+        if (disposed)
+            return;
+
         currentTransaction?.Dispose();
         base.Dispose();
+        disposed = true;
     }
 }

@@ -10,10 +10,11 @@ internal static class BuyerMapper
 {
     public static Buyer Map(BuyerEntity entity, Guid orderId)
     {
-        var buyer = new Buyer(entity.Id, entity.Name);
+        var buyer = new Buyer(Map(entity.Id), entity.Name);
 
-        foreach (var card in entity.Cards)
-            buyer.VerifyOrAddCard(Map(card), orderId);
+        if (entity.Cards != null)
+            foreach (var card in entity.Cards)
+                buyer.VerifyOrAddCard(Map(card), orderId);
 
         buyer.ClearDomainEvents();
         return buyer;
@@ -22,7 +23,7 @@ internal static class BuyerMapper
     public static Card Map(CardEntity entity)
     {
         return new Card(
-            entity.Id,
+            Map(entity.Id),
             Enumeration.FromValue<CardType>(entity.Type),
             entity.Number,
             entity.SecurityNumber,
@@ -34,7 +35,7 @@ internal static class BuyerMapper
     {
         return new BuyerEntity
         {
-            Id = buyer.Id,
+            Id = Map(buyer.Id),
             Name = buyer.Name,
             Cards = Map(buyer.Cards, buyer.Id)
         };
@@ -54,13 +55,23 @@ internal static class BuyerMapper
     {
         return new CardEntity
         {
-            Id = card.Id,
-            BuyerId = buyerId,
+            Id = Map(card.Id),
+            BuyerId = Map(buyerId),
             Type = card.Type.Id,
             Number = card.Number,
             SecurityNumber = card.SecurityNumber,
             HolderName = card.HolderName,
             Expiration = card.Expiration
         };
+    }
+
+    static string Map(Guid value)
+    {
+        return value == default ? null : value.ToString();
+    }
+
+    static Guid Map(string value)
+    {
+        return value is null ? Guid.Empty : Guid.Parse(value);
     }
 }

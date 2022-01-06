@@ -5,13 +5,13 @@ using System.Collections.Generic;
 
 public class OrderEntity
 {
-    public Guid Id { get; set; }
+    public string Id { get; set; }
     public ICollection<OrderItemEntity> OrderItems { get; set; }
 
-    public Guid BuyerId { get; set; }
+    public string BuyerId { get; set; }
     public BuyerEntity Buyer { get; set; }
 
-    public Guid CardId { get; set; }
+    public string CardId { get; set; }
     public CardEntity Card { get; set; }
 
     public int OrderStatusId { get; set; }

@@ -4,8 +4,8 @@ using System;
 
 public class CardEntity
 {
-    public Guid Id { get; set; }
-    public Guid BuyerId { get; set; }
+    public string Id { get; set; }
+    public string BuyerId { get; set; }
     public int Type { get; set; }
     public string Number { get; set; }
     public string SecurityNumber { get; set; }

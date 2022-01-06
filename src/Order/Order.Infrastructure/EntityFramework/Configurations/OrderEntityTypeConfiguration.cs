@@ -24,26 +24,17 @@ internal class OrderEntityTypeConfiguration : IEntityTypeConfiguration<OrderEnti
         builder.Property(e => e.ZipCode).HasColumnName("zip_code");
 
         builder
-            .HasOne<BuyerEntity>()
-            .WithMany()
-            .HasForeignKey(e => e.BuyerId)
-            .HasConstraintName("fk_buyer_order");
+            .HasOne(e => e.Buyer)
+            .WithMany();
 
         builder
-            .HasOne<CardEntity>()
-            .WithMany()
-            .HasForeignKey(e => e.CardId)
-            .HasConstraintName("fk_card_order");
-
-        builder
-            .HasOne<OrderStatusEntity>()
-            .WithMany()
-            .HasForeignKey(e => e.OrderStatusId)
-            .HasConstraintName("fk_order_status_order");
+            .HasOne(e => e.Card)
+            .WithMany();
 
         builder
             .HasMany(e => e.OrderItems)
             .WithOne()
-            .HasForeignKey("fk_order_order_item");
+            .HasForeignKey(e => e.OrderId)
+            .HasConstraintName("fk_order_order_item");
     }
 }

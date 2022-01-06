@@ -1,7 +1,6 @@
 ﻿namespace Ordering.Application.Services;
 
 using EventBus.EventBus.Events;
-using System;
 using System.Threading.Tasks;
 
 public interface IIntegrationEventService

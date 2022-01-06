@@ -95,12 +95,12 @@ public class ApplicationModule : Autofac.Module
     {
         builder.RegisterType<DomainEventPublisher>();
         builder.RegisterType<RequestManager>().As<IRequestManager>();
-        builder.RegisterType<IntegrationEventService>().As<IIntegrationEventService>();
-        builder.RegisterType<OrderingContext>().As<IUnitOfWork>();
+        builder.RegisterType<IntegrationEventService>().As<IIntegrationEventService>().InstancePerLifetimeScope();
     }
 
     void RegisterBehaviours(ContainerBuilder builder)
     {
+        builder.RegisterGeneric(typeof(ExceptionBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
         builder.RegisterGeneric(typeof(LoggingBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
         builder.RegisterGeneric(typeof(ValidationBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
         builder.RegisterGeneric(typeof(UnitOfWorkBehaviour<,>)).As(typeof(IPipelineBehavior<,>));

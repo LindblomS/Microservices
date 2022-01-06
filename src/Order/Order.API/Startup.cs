@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Ordering.API.AutoFac;
+using Ordering.Application.Services;
 using Ordering.Contracts.IntegrationEvents;
 using Ordering.Infrastructure.EntityFramework;
 using Payment.Contracts.IntegrationEvents;
@@ -65,11 +66,13 @@ static class CustomExtensionsMethods
 {
     public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<IUnitOfWork>(s => s.GetRequiredService<OrderingContext>());
+
         services.AddDbContext<OrderingContext>(options =>
         {
             options.UseSqlServer(configuration["ConnectionString"], sqlServerOptionsAction: sqlOptions =>
             {
-                sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                //sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
             });
 
         }, ServiceLifetime.Scoped);

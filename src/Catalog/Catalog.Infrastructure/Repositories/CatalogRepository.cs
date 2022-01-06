@@ -62,7 +62,7 @@ public class CatalogRepository : ICatalogRepository
 
     public async Task<CatalogItem> GetAsync(Guid id)
     {
-        var item = await context.Items.FindAsync(id);
+        var item = await context.Items.FindAsync(id.ToString());
 
         if (item is null)
             return null;

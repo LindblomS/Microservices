@@ -8,7 +8,7 @@ internal static class CatalogMapper
     public static CatalogItem Map(CatalogItemEntity entity)
     {
         return new(
-            entity.Id,
+            Map(entity.Id),
             entity.Name,
             entity.Description,
             entity.Price,
@@ -31,7 +31,7 @@ internal static class CatalogMapper
     {
         return new CatalogItemEntity
         {
-            Id = item.Id,
+            Id = Map(item.Id),
             Name = item.Name,
             Description = item.Description,
             Price = item.Price,
@@ -57,5 +57,15 @@ internal static class CatalogMapper
             Id = brand.Id,
             Brand = brand.Brand
         };
+    }
+
+    static string Map(Guid value)
+    {
+        return value == default ? null : value.ToString();
+    }
+
+    static Guid Map(string value)
+    {
+        return value is null ? Guid.Empty : Guid.Parse(value);
     }
 }

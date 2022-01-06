@@ -1,11 +1,9 @@
 ﻿namespace Ordering.Infrastructure.Models;
 
-using System;
-
 public class OrderItemEntity
 {
-    public Guid Id { get; set; }
-    public Guid OrderId { get; set; }
+    public string Id { get; set; }
+    public string OrderId { get; set; }
     public string ProductName { get; set; }
     public decimal UnitPrice { get; set; }
     public int Units { get; set; }

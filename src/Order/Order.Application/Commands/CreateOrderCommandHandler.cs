@@ -32,10 +32,11 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, boo
             order.AddOrderItem(CreateOrderItem(item));
 
         await orderRepository.AddAsync(order);
-        await domainEventPublisher.PublishAsync(order);
 
         var orderStartedEvent = new OrderStartedIntegrationEvent(request.UserId);
         await integrationEventService.AddAndSaveEventAsync(orderStartedEvent);
+
+        await domainEventPublisher.PublishAsync(order);
 
         return true;
     }
