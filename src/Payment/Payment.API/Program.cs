@@ -1,5 +1,6 @@
-using Payment.API;
 using Serilog;
+using Payment.API;
+using Microsoft.AspNetCore;
 
 var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
@@ -13,13 +14,11 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
-    var host = Host.CreateDefaultBuilder()
-    .ConfigureWebHostDefaults(builder =>
-    {
-        builder.UseStartup<Startup>();
-    })
-    .UseSerilog()
-    .Build();
+    var host = WebHost
+        .CreateDefaultBuilder(args)
+        .UseStartup<Startup>()
+        .UseSerilog()
+        .Build();
 
     Log.Information("Starting web host ({ApplicationContext})", "Payment.API");
     await host.RunAsync();
@@ -32,3 +31,4 @@ finally
 {
     Log.CloseAndFlush();
 }
+

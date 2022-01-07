@@ -35,16 +35,9 @@ public class PublishIntegrationEventWhenStockOnOrderIsConfirmedDomainEventHandle
         if (order is null)
             throw new OrderNotFoundException(notification.OrderId);
 
-        var integrationEvent = new OrderStatusChangedToAwaitingValidationIntegrationEvent(
-            order.Id,
-            order.OrderItems.Select(i => Map(i)));
+        var integrationEvent = new OrderStatusChangedToStockConfirmedIntegrationEvent(order.Id);
 
         logger.LogInformation("Stock on order {OrderId} has been confirmed", order.Id);
         await integrationEventService.AddAndSaveEventAsync(integrationEvent);
-    }
-
-    OrderStatusChangedToAwaitingValidationIntegrationEvent.OrderItem Map(OrderItem item)
-    {
-        return new(item.Id, item.Units);
     }
 }

@@ -20,12 +20,12 @@ try
         .UseSerilog()
         .Build();
 
-    Log.Information("Starting web host ({ApplicationContext})", "Catalog.API");
+    Log.Information("Starting web host ({ApplicationContext})", "Ordering.API");
     await host.RunAsync();
 }
 catch (Exception exception)
 {
-    Log.Fatal(exception, "Program terminated unexpectedly ({ApplicationContext})", "Catalog.API");
+    Log.Fatal(exception, "Program terminated unexpectedly ({ApplicationContext})", "Ordering.API");
 }
 finally
 {

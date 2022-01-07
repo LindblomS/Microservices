@@ -5,7 +5,6 @@ using Ordering.Infrastructure.EntityFramework;
 using Ordering.Infrastructure.Mappers;
 using System;
 using System.Threading.Tasks;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
 public class OrderRepository : IOrderRepository

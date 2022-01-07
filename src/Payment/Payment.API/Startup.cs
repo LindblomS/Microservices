@@ -1,6 +1,7 @@
 ﻿namespace Payment.API;
 
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using EventBus.EventBus;
 using EventBus.EventBus.Abstractions;
 using EventBus.EventBusRabbitMQ;
@@ -17,10 +18,14 @@ public class Startup
 
     public IConfiguration Configuration { get; }
 
-    public void ConfigureServices(IServiceCollection services)
+    public IServiceProvider ConfigureServices(IServiceCollection services)
     {
         services.AddEventBus(Configuration);
-        services.AddTransient<OrderStatusChangedToStockConfirmedIntegrationEventHandler>();
+        services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToStockConfirmedIntegrationEvent>, OrderStatusChangedToStockConfirmedIntegrationEventHandler>();
+        var container = new ContainerBuilder();
+
+        container.Populate(services);
+        return new AutofacServiceProvider(container.Build());
     }
 
     public void Configure(IApplicationBuilder app)

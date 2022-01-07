@@ -106,7 +106,7 @@ static class Extensions
         {
             options.UseSqlServer(configuration["ConnectionString"], sqlServerOptionsAction: sqlOptions =>
             {
-                sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                //sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
             });
 
         }, ServiceLifetime.Scoped);
