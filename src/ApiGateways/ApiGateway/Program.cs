@@ -6,6 +6,7 @@ var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json")
             .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
+            .AddJsonFile("ocelot.json")
             .Build();
 
 Log.Logger = new LoggerConfiguration()
@@ -16,6 +17,7 @@ try
 {
     var host = WebHost
         .CreateDefaultBuilder(args)
+        .UseConfiguration(configuration)
         .UseStartup<Startup>()
         .UseSerilog()
         .Build();

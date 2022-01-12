@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:latest
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    
+  ordering-api:
+    image: ordering-api:latest
+    build:
+      context: .
+      dockerfile: Order/Order.API/Dockerfile
+    depends_on:
+      - rabbitmq
+      
+  ordering-worker:
+    image: ordering-worker:latest
+    build:
+      context: .
+      dockerfile: Order/Ordering.Worker/Dockerfile
+    depends_on:
+      - rabbitmq
+    
+  catalog-api:
+    image: catalog-api:latest
+    build:
+      context: .
+      dockerfile: Catalog/Catalog.API/Dockerfile
+    depends_on:
+      - rabbitmq
+    
+  basket-api:
+    image: basket-api:latest
+    build:
+      context: .
+      dockerfile: Basket/Basket.API/Dockerfile
+    depends_on:
+      - rabbitmq
+      - redis
+      
+  payment-api:
+    image: payment-api:latest
+    build:
+      context: .
+      dockerfile: Payment/Payment.API/Dockerfile
+    depends_on:
+      - rabbitmq
+    
+  apigateway:
+    image: apigateway:latest
+    build:
+      context: .
+      dockerfile: Apigateways/Apigateway/Dockerfile
+    depends_on:
+      - ordering-api
+      - catalog-api
+      - basket-api
+      - payment-api
