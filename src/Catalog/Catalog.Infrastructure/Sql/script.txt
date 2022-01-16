@@ -1,6 +1,4 @@
-﻿create schema [catalog]
-
-create table [catalog].[type](
+﻿create table [catalog].[type](
     [id] int not null,
     [type] nvarchar(250) not null,
     CONSTRAINT [pk_type] PRIMARY key CLUSTERED ([id] asc)

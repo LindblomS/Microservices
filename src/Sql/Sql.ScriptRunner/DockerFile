@@ -1,0 +1,13 @@
+FROM mcr.microsoft.com/dotnet/sdk:6.0 as build
+WORKDIR /app
+
+COPY Sql/Sql.ScriptRunner/ Sql/Sql.ScriptRunner/
+
+RUN dotnet publish -c release -o out Sql/Sql.ScriptRunner/Sql.ScriptRunner.csproj
+
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
+WORKDIR /app
+COPY --from=build /app/out .
+COPY Order/Order.Infrastructure/Sql/ Scripts/ordering/ 
+COPY Catalog/Catalog.Infrastructure/Sql/ Scripts/catalog/ 
+ENTRYPOINT ["dotnet", "Sql.ScriptRunner.dll"]

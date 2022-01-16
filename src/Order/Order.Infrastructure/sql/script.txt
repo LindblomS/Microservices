@@ -1,6 +1,4 @@
-﻿create SCHEMA [ordering]
-
-create table [ordering].[buyer](
+﻿create table [ordering].[buyer](
     [id] char(36) not null,
     [name] nvarchar(250) not null,
     CONSTRAINT [pk_buyer] PRIMARY key CLUSTERED ([id] asc)

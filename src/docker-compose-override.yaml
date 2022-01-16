@@ -3,48 +3,48 @@ version: '3.8'
 services:
   ordering-api:
     environment:
-      ASPNETCORE_ENVIRONMENT: Release
+      ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://0.0.0.0:80
-      ConnectionString: "server=host.docker.internal, 1433;database=microservices;integrated security=true;"
+      ConnectionString: ${SQLCONNECTIONSTRING}   
       EventBus__SubscriptionClientName: Ordering.API
       EventBus__Connection: rabbitmq
       
   ordering-worker:
+    restart: on-failure
     environment:
-      ASPNETCORE_ENVIRONMENT: Release
+      ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://0.0.0.0:80
-      ConnectionString: "server=host.docker.internal, 1433;database=microservices;integrated security=true;"
-      EventBus__SubscriptionClientName: Ordering.API
+      ConnectionString: ${SQLCONNECTIONSTRING}   
+      EventBus__SubscriptionClientName: Ordering.Worker
       EventBus__Connection: rabbitmq
       CheckUpdateTimeSeconds: 10
     
   catalog-api:
+    restart: on-failure
     environment:
-      ASPNETCORE_ENVIRONMENT: Release
+      ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://0.0.0.0:80
-      ConnectionString: "server=host.docker.internal, 1433;database=microservices;integrated security=true;"     
+      ConnectionString: ${SQLCONNECTIONSTRING}     
       EventBus__SubscriptionClientName: Catalog.API
       EventBus__Connection: rabbitmq
-    ports:
-      - "80"
       
   payment-api:
     environment:
-      ASPNETCORE_ENVIRONMENT: Release
+      ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://0.0.0.0:80
       EventBus__SubscriptionClientName: Payment.API
       EventBus__Connection: rabbitmq
   
   basket-api:
     environment:
-      ASPNETCORE_ENVIRONMENT: Release
+      ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://0.0.0.0:80      
       EventBus__SubscriptionClientName: Basket.API
       EventBus__Connection: rabbitmq
-    ports:
-      - "80"
     
   apigateway:
     environment:
-      ASPNETCORE_ENVIRONMENT: Release
+      ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://0.0.0.0:80
+    ports:
+      - "5010:80"
