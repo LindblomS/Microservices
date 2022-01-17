@@ -41,6 +41,7 @@ services:
       ASPNETCORE_URLS: http://0.0.0.0:80      
       EventBus__SubscriptionClientName: Basket.API
       EventBus__Connection: rabbitmq
+      RedisConnectionString: redis
     
   apigateway:
     environment:
