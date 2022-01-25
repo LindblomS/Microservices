@@ -3,16 +3,11 @@ version: '3.8'
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server
-    environment:
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: Asdf1234!
     ports:
       - "5011:1433"
       
   sql-scriptrunner:
-    environment:
-      ConnectionString: "server=sqlserver;database=master;user=sa;password=Asdf1234!"
-    image: sql-scriptrunner
+    image: sql-scriptrunner:latest
     build:
       context: .
       dockerfile: Sql/Sql.ScriptRunner/Dockerfile
@@ -21,25 +16,29 @@ services:
       
   redis:
     image: redis:latest
+    restart: on-failure
 
   rabbitmq:
-    image: rabbitmq:3-management-alpine
+    image: rabbitmq:latest
+    restart: on-failure
     
   ordering-api:
     image: ordering-api:latest
     build:
       context: .
-      dockerfile: Order/Order.API/Dockerfile
+      dockerfile: Ordering/Ordering.API/Dockerfile
     depends_on:
       - rabbitmq
+    restart: on-failure
       
   ordering-worker:
     image: ordering-worker:latest
     build:
       context: .
-      dockerfile: Order/Ordering.Worker/Dockerfile
+      dockerfile: Ordering/Ordering.Worker/Dockerfile
     depends_on:
       - rabbitmq
+    restart: on-failure
     
   catalog-api:
     image: catalog-api:latest
@@ -48,6 +47,7 @@ services:
       dockerfile: Catalog/Catalog.API/Dockerfile
     depends_on:
       - rabbitmq
+    restart: on-failure
     
   basket-api:
     image: basket-api:latest
@@ -57,6 +57,7 @@ services:
     depends_on:
       - rabbitmq
       - redis
+    restart: on-failure
       
   payment-api:
     image: payment-api:latest
@@ -65,6 +66,7 @@ services:
       dockerfile: Payment/Payment.API/Dockerfile
     depends_on:
       - rabbitmq
+    restart: on-failure
     
   apigateway:
     image: apigateway:latest
@@ -75,3 +77,4 @@ services:
       - catalog-api
       - basket-api
       - payment-api
+    restart: on-failure

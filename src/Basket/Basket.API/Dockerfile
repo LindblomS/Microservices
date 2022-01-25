@@ -1,7 +1,7 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:6.0 as build
 WORKDIR /app
 
-COPY Order/Order.Contracts/ Order/Order.Contracts/
+COPY Ordering/Ordering.Contracts/ Ordering/Ordering.Contracts/
 COPY Catalog/Catalog.Contracts/ Catalog/Catalog.Contracts/
 COPY Basket/Basket.API/ Basket/Basket.API/
 COPY Basket/Basket.Contracts/ Basket/Basket.Contracts/

@@ -22,10 +22,12 @@ try
 
     Log.Information("Starting web host ({ApplicationContext})", "Ordering.API");
     await host.RunAsync();
+    return 0;
 }
 catch (Exception exception)
 {
     Log.Fatal(exception, "Program terminated unexpectedly ({ApplicationContext})", "Ordering.API");
+    return 1;
 }
 finally
 {

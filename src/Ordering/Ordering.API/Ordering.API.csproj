@@ -17,10 +17,10 @@
     <ProjectReference Include="..\..\EventBus\EventBusRabbitMQ\EventBusRabbitMQ.csproj" />
     <ProjectReference Include="..\..\EventBus\EventBus\EventBus.csproj" />
     <ProjectReference Include="..\..\EventBus\IntegrationEventLogEF\IntegrationEventLogEF.csproj" />
-    <ProjectReference Include="..\Order.Application\Ordering.Application.csproj" />
-    <ProjectReference Include="..\Order.Contracts\Ordering.Contracts.csproj" />
-    <ProjectReference Include="..\Order.Domain\Ordering.Domain.csproj" />
-    <ProjectReference Include="..\Order.Infrastructure\Ordering.Infrastructure.csproj" />
+    <ProjectReference Include="..\Ordering.Application\Ordering.Application.csproj" />
+    <ProjectReference Include="..\Ordering.Contracts\Ordering.Contracts.csproj" />
+    <ProjectReference Include="..\Ordering.Domain\Ordering.Domain.csproj" />
+    <ProjectReference Include="..\Ordering.Infrastructure\Ordering.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

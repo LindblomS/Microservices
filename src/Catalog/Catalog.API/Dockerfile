@@ -5,7 +5,7 @@ COPY Catalog/Catalog.API/ Catalog/Catalog.API/
 COPY Catalog/Catalog.Domain/ Catalog/Catalog.Domain/
 COPY Catalog/Catalog.Contracts/ Catalog/Catalog.Contracts/
 COPY Catalog/Catalog.Infrastructure/ Catalog/Catalog.Infrastructure/
-COPY Order/Order.Contracts/ Order/Order.Contracts/
+COPY Ordering/Ordering.Contracts/ Ordering/Ordering.Contracts/
 COPY EventBus/EventBusRabbitMQ/ EventBus/EventBusRabbitMQ/
 COPY EventBus/EventBus/ EventBus/EventBus/
 

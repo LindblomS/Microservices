@@ -1,16 +1,24 @@
 version: '3.8'
 
 services:
+  sqlserver:
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: Asdf1234!
+
+  sql-scriptrunner:
+    environment:
+      ConnectionString: "server=sqlserver;database=master;user=sa;password=Asdf1234!"
+
   ordering-api:
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_ENVIRONMENT: Relase
       ASPNETCORE_URLS: http://0.0.0.0:80
       ConnectionString: ${SQLCONNECTIONSTRING}   
       EventBus__SubscriptionClientName: Ordering.API
       EventBus__Connection: rabbitmq
       
   ordering-worker:
-    restart: on-failure
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://0.0.0.0:80
@@ -20,7 +28,6 @@ services:
       CheckUpdateTimeSeconds: 10
     
   catalog-api:
-    restart: on-failure
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://0.0.0.0:80

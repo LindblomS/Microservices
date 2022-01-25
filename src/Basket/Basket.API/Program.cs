@@ -22,10 +22,12 @@ try
 
     Log.Information("Starting web host ({ApplicationContext})", "Basket.API");
     await host.RunAsync();
+    return 1;
 }
 catch (Exception exception)
 {
     Log.Fatal(exception, "Program terminated unexpectedly ({ApplicationContext})", "Basket.API");
+    return 0;
 }
 finally
 {

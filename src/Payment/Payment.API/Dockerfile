@@ -4,7 +4,7 @@ WORKDIR /app
 COPY Payment/Payment.API/ Payment/Payment.API/
 COPY Payment/Payment.Contracts/ Payment/Payment.Contracts/
 COPY EventBus/EventBusRabbitMQ/ EventBus/EventBusRabbitMQ/
-COPY Order/Order.Contracts/ Order/Order.Contracts/
+COPY Ordering/Ordering.Contracts/ Ordering/Ordering.Contracts/
 COPY EventBus/EventBus/ EventBus/EventBus/
 
 RUN dotnet publish -c release -o out Payment/Payment.API/Payment.API.csproj

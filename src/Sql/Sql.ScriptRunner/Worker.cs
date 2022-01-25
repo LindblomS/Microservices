@@ -19,7 +19,6 @@ public class Worker : BackgroundService
     {
         if (scriptsAlreadyRun)
         {
-            logger.LogInformation("scripts already run");
             await Task.Delay(10000, stoppingToken);
             return;
         }

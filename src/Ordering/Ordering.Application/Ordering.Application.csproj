@@ -17,8 +17,8 @@
 		<ProjectReference Include="..\..\Basket\Basket.Contracts\Basket.Contracts.csproj" />
 		<ProjectReference Include="..\..\Catalog\Catalog.Contracts\Catalog.Contracts.csproj" />
 		<ProjectReference Include="..\..\Payment\Payment.Contracts\Payment.Contracts.csproj" />
-		<ProjectReference Include="..\Order.Contracts\Ordering.Contracts.csproj" />
-		<ProjectReference Include="..\Order.Domain\Ordering.Domain.csproj" />
+		<ProjectReference Include="..\Ordering.Contracts\Ordering.Contracts.csproj" />
+		<ProjectReference Include="..\Ordering.Domain\Ordering.Domain.csproj" />
 	</ItemGroup>
 
 </Project>

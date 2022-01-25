@@ -2,7 +2,7 @@
 WORKDIR /app
 
 COPY . .
-RUN dotnet publish -c release -o out Order/Order.API/Ordering.API.csproj
+RUN dotnet publish -c release -o out Ordering/Ordering.API/Ordering.API.csproj
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app

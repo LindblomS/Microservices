@@ -23,10 +23,12 @@ try
 
     Log.Information("Starting web host ({ApplicationContext})", "Ordering.Worker");
     await host.RunAsync();
+    return 0;
 }
 catch (Exception exception)
 {
     Log.Fatal(exception, "Program terminated unexpectedly ({ApplicationContext})", "Ordering.Worker");
+    return 1;
 }
 finally
 {
