@@ -7,19 +7,17 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-public class CreateBrandCommandHandler : IRequestHandler<CreateBrandCommand, bool>
+public class DeleteCatalogItemCommandHandler : IRequestHandler<DeleteCatalogItemCommand, bool>
 {
     readonly ICatalogRepository repository;
 
-    public CreateBrandCommandHandler(ICatalogRepository repository)
+    public DeleteCatalogItemCommandHandler(ICatalogRepository repository)
     {
         this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
-
-    public async Task<bool> Handle(CreateBrandCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(DeleteCatalogItemCommand request, CancellationToken cancellationToken)
     {
-        var brand = new CatalogBrand(request.Brand);
-        await repository.AddAsync(brand);
+        await repository.DeleteAsync(request.id);
         return true;
     }
 }

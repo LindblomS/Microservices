@@ -2,6 +2,5 @@
 
 public class CatalogBrandEntity
 {
-    public int Id { get; set; }
-    public string Brand { get; set; }
+    public string Id { get; set; }
 }

@@ -15,8 +15,10 @@ public class CreateTypeCommandHandler : IRequestHandler<CreateTypeCommand, bool>
     {
         this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
-    public Task<bool> Handle(CreateTypeCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(CreateTypeCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var type = new CatalogType(request.Type);
+        await repository.AddAsync(type);
+        return true;
     }
 }

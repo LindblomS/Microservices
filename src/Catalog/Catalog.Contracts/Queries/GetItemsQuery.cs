@@ -10,13 +10,8 @@ public record Item(
     string Name,
     string Description,
     decimal Price,
-    Item.CatalogType Type,
-    Item.CatalogBrand Brand,
-    int AvailableStock)
-{
-    public record CatalogType(int Id, string Type);
-
-    public record CatalogBrand(int Id, string Brand);
-}
+    string Type,
+    string Brand,
+    int AvailableStock);
 
 

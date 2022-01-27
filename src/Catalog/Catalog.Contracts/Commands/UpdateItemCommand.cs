@@ -3,9 +3,10 @@
 using MediatR;
 
 public record UpdateItemCommand(
+    Guid Id,
     string Name,
     string Description,
     decimal Price,
-    int Type,
-    int Brand,
+    string Type,
+    string Brand,
     int AvailableStock) : IRequest<bool>;

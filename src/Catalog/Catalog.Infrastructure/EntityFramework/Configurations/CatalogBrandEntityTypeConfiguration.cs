@@ -12,6 +12,5 @@ internal class CatalogBrandEntityTypeConfiguration : IEntityTypeConfiguration<Ca
         builder.HasKey(e => e.Id).HasName("pk_brand");
 
         builder.Property(e => e.Id).HasColumnName("id");
-        builder.Property(e => e.Brand).HasColumnName("brand");
     }
 }

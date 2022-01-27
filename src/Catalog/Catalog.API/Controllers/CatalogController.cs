@@ -43,7 +43,7 @@ public class CatalogController : ControllerBase
     public async Task<IActionResult> CreateAsync([FromBody] Models.CatalogItem item)
     {
         logger.LogInformation("Creating catalog item {@CatalogItem}", item);
-        await catalogRepository.CreateAsync(CatalogMapper.Map(Guid.NewGuid(), item));
+        await catalogRepository.AddAsync(CatalogMapper.Map(Guid.NewGuid(), item));
         return Ok();
     }
 
