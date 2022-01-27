@@ -1,7 +1,8 @@
-﻿namespace Catalog.API.IntegrationHandlers;
+﻿namespace Catalog.Application.IntegrationEventHandlers;
 
 using Catalog.Domain.Aggregates;
 using EventBus.EventBus.Abstractions;
+using Microsoft.Extensions.Logging;
 using Ordering.Contracts.IntegrationEvents;
 using Serilog.Context;
 using System.Threading.Tasks;
@@ -9,16 +10,13 @@ using System.Threading.Tasks;
 public class OrderStatusChangedToPaidIntegrationEventHandler : IIntegrationEventHandler<OrderStatusChangedToPaidIntegrationEvent>
 {
     readonly ICatalogRepository repository;
-    readonly IEventBus eventBus;
     readonly ILogger<OrderStatusChangedToPaidIntegrationEventHandler> logger;
 
     public OrderStatusChangedToPaidIntegrationEventHandler(
         ICatalogRepository repository,
-        IEventBus eventBus,
         ILogger<OrderStatusChangedToPaidIntegrationEventHandler> logger)
     {
         this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
-        this.eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
     public async Task Handle(OrderStatusChangedToPaidIntegrationEvent @event)

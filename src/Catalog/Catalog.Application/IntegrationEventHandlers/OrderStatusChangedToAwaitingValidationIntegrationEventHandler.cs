@@ -1,9 +1,10 @@
-﻿namespace Catalog.API.IntegrationHandlers;
+﻿namespace Catalog.Application.IntegrationEventHandlers;
 
 using Catalog.Contracts.IntegrationEvents;
 using Catalog.Domain.Aggregates;
 using EventBus.EventBus.Abstractions;
 using EventBus.EventBus.Events;
+using Microsoft.Extensions.Logging;
 using Ordering.Contracts.IntegrationEvents;
 using Serilog.Context;
 using System.Threading.Tasks;
