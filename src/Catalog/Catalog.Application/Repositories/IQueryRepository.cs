@@ -4,5 +4,5 @@ using Catalog.Contracts.Queries;
 
 public interface IQueryRepository
 {
-    Task<IEnumerable<Item>> GetItemsAsync();
+    IEnumerable<Item> GetItems();
 }

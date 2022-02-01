@@ -60,13 +60,13 @@ public class CatalogRepository : ICatalogRepository
         await context.Types.AddAsync(CatalogMapper.Map(type));
     }
 
-    public Task<CatalogBrand> GetBrandAsync(int id)
+    public async Task<CatalogBrand> GetBrandAsync(string id)
     {
-        throw new NotImplementedException();
+        return CatalogMapper.MapBrand((await context.Brands.FindAsync(id)).Id);
     }
 
-    public Task<CatalogType> GetTypeAsync(int id)
+    public async Task<CatalogType> GetTypeAsync(string id)
     {
-        throw new NotImplementedException();
+        return CatalogMapper.MapType((await context.Types.FindAsync(id)).Id);
     }
 }

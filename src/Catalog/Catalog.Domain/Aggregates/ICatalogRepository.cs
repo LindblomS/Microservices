@@ -12,6 +12,6 @@ public interface ICatalogRepository : IRepository<CatalogItem>
     Task DeleteAsync(Guid id);
     Task UpdateAsync(CatalogItem item);
     Task<CatalogItem> GetAsync(Guid id);
-    Task<CatalogBrand> GetBrandAsync(int id);
-    Task<CatalogType> GetTypeAsync(int id);
+    Task<CatalogBrand> GetBrandAsync(string id);
+    Task<CatalogType> GetTypeAsync(string id);
 }

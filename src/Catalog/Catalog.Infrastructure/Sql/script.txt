@@ -1,12 +1,10 @@
 ﻿create table [catalog].[type](
-    [id] int not null,
-    [type] nvarchar(250) not null,
+    [id] nvarchar(250) not null,
     CONSTRAINT [pk_type] PRIMARY key CLUSTERED ([id] asc)
 )
 
 create table [catalog].[brand](
-    [id] int not null,
-    [brand] nvarchar(250) not null,
+    [id] nvarchar(250) not null,
     CONSTRAINT [pk_brand] PRIMARY key CLUSTERED ([id] asc)
 )
 
@@ -16,8 +14,8 @@ CREATE TABLE [catalog].[item]
     [name] nvarchar(250) NOT NULL,
     [description] nvarchar(250) NOT NULL,
     [price] decimal(18,2) NOT NULL,
-    [type_id] int not null,
-    [brand_id] int not null,
+    [type_id] nvarchar(250) not null,
+    [brand_id] nvarchar(250) not null,
     [available_stock] int not null,
     CONSTRAINT [pk_item] PRIMARY key CLUSTERED ([id] asc),
     CONSTRAINT [fk_type_item] FOREIGN key ([type_id]) REFERENCES [catalog].[type] ([id]),

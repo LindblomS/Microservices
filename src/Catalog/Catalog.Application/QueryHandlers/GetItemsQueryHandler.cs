@@ -18,6 +18,6 @@ public class GetItemsQueryHandler : IRequestHandler<GetItemsQuery, IEnumerable<I
     }
     public Task<IEnumerable<Item>> Handle(GetItemsQuery request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(repository.GetItems());
     }
 }

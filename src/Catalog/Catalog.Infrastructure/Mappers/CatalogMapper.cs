@@ -17,12 +17,12 @@ internal static class CatalogMapper
             entity.AvailableStock);
     }
 
-    static CatalogBrand MapBrand(string id)
+    public static CatalogBrand MapBrand(string id)
     {
         return new(id);
     }
 
-    static CatalogType MapType(string id)
+    public static CatalogType MapType(string id)
     {
         return new(id);
     }

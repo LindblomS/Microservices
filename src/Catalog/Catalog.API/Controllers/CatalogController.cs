@@ -1,31 +1,18 @@
 ﻿namespace Catalog.API.Controllers;
 
-using Catalog.API.Mappers;
-using Catalog.API.Repositories;
 using Catalog.Contracts.IntegrationEvents;
-using Catalog.Domain.Aggregates;
-using EventBus.EventBus.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
 [ApiController]
 public class CatalogController : ControllerBase
 {
-    readonly ICatalogRepository catalogRepository;
-    readonly ICatalogQueryRepository catalogQueryRepository;
     readonly ILogger<CatalogController> logger;
-    readonly IEventBus eventBus;
 
     public CatalogController(
-        ICatalogRepository catalogRepository,
-        ICatalogQueryRepository catalogQueryRepository,
-        ILogger<CatalogController> logger,
-        IEventBus eventBus)
+        ILogger<CatalogController> logger)
     {
-        this.catalogRepository = catalogRepository ?? throw new ArgumentNullException(nameof(catalogRepository));
-        this.catalogQueryRepository = catalogQueryRepository ?? throw new ArgumentNullException(nameof(catalogQueryRepository));
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this.eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
     }
 
     [Route("")]
