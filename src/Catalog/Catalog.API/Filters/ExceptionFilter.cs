@@ -1,6 +1,7 @@
 ﻿namespace Catalog.API.Filters;
 
 using Catalog.API.ActionResults;
+using Catalog.Application.Exceptions;
 using Catalog.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -25,20 +26,22 @@ public class ExceptionFilter : IExceptionFilter
 
         if (context.Exception.GetType() == typeof(CatalogDomainException))
         {
-            var details = new ValidationProblemDetails
-            {
-                Instance = context.HttpContext.Request.Path,
-                Status = StatusCodes.Status400BadRequest,
-                Detail = "Please refer to the errors property for additional details"
-            };
-
-            details.Errors.Add("Validations", new string[] { context.Exception.Message });
-            context.Result = new BadRequestObjectResult(details);
-            context.HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-            context.ExceptionHandled = true;
+            HandleCatalogDomainException(context, (CatalogDomainException)context.Exception);
             return;
         }
 
+        if (context.Exception.GetType() == typeof(CommandValidationException))
+        {
+            HandleCommandValidationException(context, (CommandValidationException)context.Exception);
+            return;
+        }
+
+        HandleInternalServerError(context);
+        
+    }
+
+    void HandleInternalServerError(ExceptionContext context)
+    {
         var response = new JsonErrorResponse
         {
             Messages = new[] { "Internal server error" },
@@ -47,6 +50,36 @@ public class ExceptionFilter : IExceptionFilter
 
         context.Result = new InternalServerErrorObjectResult(response);
         context.HttpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+    }
+
+    void HandleCatalogDomainException(ExceptionContext context, CatalogDomainException exception)
+    {
+        var details = new ValidationProblemDetails
+        {
+            Instance = context.HttpContext.Request.Path,
+            Status = StatusCodes.Status400BadRequest,
+            Detail = "Domain error. Please refer to the errors property for additional details"
+        };
+
+        details.Errors.Add("Validations", new string[] { context.Exception.Message });
+        context.Result = new BadRequestObjectResult(details);
+        context.HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+        context.ExceptionHandled = true;
+    }
+
+    void HandleCommandValidationException(ExceptionContext context, CommandValidationException exception)
+    {
+        var details = new ValidationProblemDetails
+        {
+            Instance = context.HttpContext.Request.Path,
+            Status = StatusCodes.Status400BadRequest,
+            Detail = "Validation error. Please refer to the errors property for additional details"
+        };
+
+        details.Errors.Add("Validations", exception.ValidationErrors.ToArray());
+        context.Result = new BadRequestObjectResult(details);
+        context.HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+        context.ExceptionHandled = true;
     }
 
     class JsonErrorResponse

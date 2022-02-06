@@ -7,7 +7,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-public class DeleteCatalogItemCommandHandler : IRequestHandler<DeleteCatalogItemCommand, bool>
+public class DeleteCatalogItemCommandHandler : IRequestHandler<DeleteItemCommand, bool>
 {
     readonly ICatalogRepository repository;
 
@@ -15,7 +15,7 @@ public class DeleteCatalogItemCommandHandler : IRequestHandler<DeleteCatalogItem
     {
         this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
-    public async Task<bool> Handle(DeleteCatalogItemCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(DeleteItemCommand request, CancellationToken cancellationToken)
     {
         await repository.DeleteAsync(request.id);
         return true;

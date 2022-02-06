@@ -3,7 +3,7 @@
 using MediatR;
 using System.Collections.Generic;
 
-public record GetItemsQuery(int Id) : IRequest<IEnumerable<Item>>;
+public record GetItemsQuery() : IRequest<IEnumerable<Item>>;
 
 public record Item(
     string Id,

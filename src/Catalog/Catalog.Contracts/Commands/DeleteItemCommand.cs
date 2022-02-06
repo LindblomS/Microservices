@@ -3,4 +3,4 @@
 using MediatR;
 using System;
 
-public record DeleteCatalogItemCommand(Guid id) : IRequest<bool>;
+public record DeleteItemCommand(Guid id) : IRequest<bool>;

@@ -1,36 +1,56 @@
 ﻿namespace Catalog.API.Controllers;
 
-using Catalog.Contracts.IntegrationEvents;
+using Catalog.Contracts.Commands;
+using Catalog.Contracts.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
 [ApiController]
 public class CatalogController : ControllerBase
 {
-    readonly ILogger<CatalogController> logger;
+    readonly IMediator mediator;
 
-    public CatalogController(
-        ILogger<CatalogController> logger)
+    public CatalogController(IMediator mediator)
     {
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
     [Route("")]
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<Models.CatalogItem>), StatusCodes.Status200OK)]
-    public ActionResult<IEnumerable<Models.CatalogItem>> GetItems()
+    [ProducesResponseType(typeof(IEnumerable<Item>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<Item>>> GetItems()
     {
-        return Ok(catalogQueryRepository.GetItems());
+        return Ok(await mediator.Send(new GetItemsQuery()));
     }
 
     [Route("")]
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateAsync([FromBody] Models.CatalogItem item)
+    public async Task<IActionResult> CreateAsync([FromBody] CreateItemCommand command)
     {
-        logger.LogInformation("Creating catalog item {@CatalogItem}", item);
-        await catalogRepository.AddAsync(CatalogMapper.Map(Guid.NewGuid(), item));
+        _ = await mediator.Send(command);
+        return Ok();
+    }
+
+    [Route("")]
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateAsync([FromBody] CreateBrandCommand command)
+    {
+        _ = await mediator.Send(command);
+        return Ok();
+    }
+
+    [Route("")]
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateAsync([FromBody] CreateTypeCommand command)
+    {
+        _ = await mediator.Send(command);
         return Ok();
     }
 
@@ -40,11 +60,10 @@ public class CatalogController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteAsync(string id)
     {
-        if (!Guid.TryParse(id, out var catalogId))
-            return BadRequest($"Invalid id. Id must be a valid GUID. Id was {id}");
+        if (!Guid.TryParse(id, out Guid guid))
+            return BadRequest("Invalid id. Id must be a valid GUID");
 
-        logger.LogInformation("Deleting catalog item {CatalogId}", catalogId);
-        await catalogRepository.DeleteAsync(catalogId);
+        _ = await mediator.Send(new DeleteItemCommand(guid));
         return Ok();
     }
 
@@ -52,38 +71,12 @@ public class CatalogController : ControllerBase
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateAsync(string id, [FromBody] Models.CatalogItem item)
+    public async Task<IActionResult> UpdateAsync(string id, [FromBody] UpdateItemCommand command)
     {
-        if (!Guid.TryParse(id, out var catalogId))
-            return BadRequest($"Invalid id. Id must be a valid GUID. Id was {id}");
+        if (!Guid.TryParse(id, out Guid guid))
+            return BadRequest("Invalid id. Id must be a valid GUID");
 
-        var original = await catalogRepository.GetAsync(catalogId);
-
-        if (original is null)
-            return BadRequest($"Catalog item with id {catalogId} does not exist");
-
-        logger.LogInformation("Updating catalog item {CatalogId} - {@CatalogItem}", catalogId, item);
-
-        var oldPrice = original.Price;
-
-        var updated = CatalogMapper.Map(catalogId, item);
-        await catalogRepository.UpdateAsync(updated);
-
-        if (oldPrice != updated.Price)
-        {
-            var integrationEvent = new ProductPriceChangedIntegrationEvent(catalogId, updated.Price);
-
-            try
-            {
-                logger.LogInformation("Publishing integration event: {IntegrationId} from Catalog", integrationEvent.Id);
-                eventBus.Publish(integrationEvent);
-            }
-            catch (Exception exception)
-            {
-                logger.LogError(exception, "Error publishing integration event: {IntegrationEventId} from Catalog", integrationEvent.Id);
-            }
-        }
-
+        _ = await mediator.Send(new InternalUpdateItemCommand(guid, command));
         return Ok();
     }
 }

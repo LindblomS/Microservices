@@ -8,7 +8,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand, bool>
+public class UpdateItemCommandHandler : IRequestHandler<InternalUpdateItemCommand, bool>
 {
     readonly ICatalogRepository repository;
     readonly DomainEventPublisher domainEventPublisher;
@@ -18,7 +18,7 @@ public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand, bool>
         this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         this.domainEventPublisher = domainEventPublisher ?? throw new ArgumentNullException(nameof(domainEventPublisher));
     }
-    public async Task<bool> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(InternalUpdateItemCommand request, CancellationToken cancellationToken)
     {
         var item = await repository.GetAsync(request.Id);
         item.ChangePrice(request.Price);
