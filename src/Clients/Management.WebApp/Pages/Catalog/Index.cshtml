@@ -1,0 +1,20 @@
+﻿@page
+@model Management.WebApp.Pages.Catalog.IndexModel
+@{
+    <h1>Catalog</h1>
+    <a class="nav-link text-dark" asp-area="" asp-page="Create">Create</a>
+    <ul>
+        @foreach (var item in Model.Items)
+        {
+            <li>
+                <p>Id: @item.Id</p>
+                <p>Name: @item.Name</p>
+                <p>Description: @item.Description</p>
+                <p>Price: @item.Price</p>
+                <p>Type: @item.Type</p>
+                <p>Brand: @item.Brand</p>
+                <p>AvailableStock: @item.AvailableStock</p>
+            </li>
+        }
+    </ul>
+}
