@@ -5,7 +5,7 @@ using Catalog.Contracts.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-[Route("api/[controller]")]
+[Route("api/[controller]")] 
 [ApiController]
 public class CatalogController : ControllerBase
 {
@@ -16,7 +16,6 @@ public class CatalogController : ControllerBase
         this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
-    [Route("")]
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<Item>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<Item>>> GetItems()
@@ -24,31 +23,10 @@ public class CatalogController : ControllerBase
         return Ok(await mediator.Send(new GetItemsQuery()));
     }
 
-    [Route("")]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync([FromBody] CreateItemCommand command)
-    {
-        _ = await mediator.Send(command);
-        return Ok();
-    }
-
-    [Route("")]
-    [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateAsync([FromBody] CreateBrandCommand command)
-    {
-        _ = await mediator.Send(command);
-        return Ok();
-    }
-
-    [Route("")]
-    [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateAsync([FromBody] CreateTypeCommand command)
     {
         _ = await mediator.Send(command);
         return Ok();

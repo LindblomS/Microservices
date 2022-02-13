@@ -45,7 +45,7 @@ public class ExceptionFilter : IExceptionFilter
         var response = new JsonErrorResponse
         {
             Messages = new[] { "Internal server error" },
-            DeveloperMessage = environment.IsDevelopment() ? context.Exception : ""
+            DeveloperMessage = environment.IsDevelopment() ? context.Exception.ToString() : ""
         };
 
         context.Result = new InternalServerErrorObjectResult(response);
@@ -86,6 +86,6 @@ public class ExceptionFilter : IExceptionFilter
     {
         public string[] Messages { get; set; }
 
-        public object DeveloperMessage { get; set; }
+        public string DeveloperMessage { get; set; }
     }
 }

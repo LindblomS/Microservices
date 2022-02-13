@@ -20,11 +20,11 @@ public class ValidationService : IValidationService
 
     public bool ItemExists(Guid id)
     {
-        return context.Items.Find(id) is not null;
+        return context.Items.Find(id.ToString()) is not null;
     }
 
     public bool TypeExists(string type)
     {
-        return context.Brands.Find(type) is not null;
+        return context.Types.Find(type) is not null;
     }
 }

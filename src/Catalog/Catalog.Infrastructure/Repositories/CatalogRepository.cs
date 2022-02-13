@@ -23,7 +23,7 @@ public class CatalogRepository : ICatalogRepository
 
     public async Task DeleteAsync(Guid id)
     {
-        var item = await context.Items.FindAsync(id);
+        var item = await context.Items.FindAsync(id.ToString());
         if (item is null)
             return;
 
@@ -53,11 +53,13 @@ public class CatalogRepository : ICatalogRepository
     public async Task AddAsync(CatalogBrand brand)
     {
         await context.Brands.AddAsync(CatalogMapper.Map(brand));
+        await context.SaveChangesAsync();
     }
 
     public async Task AddAsync(CatalogType type)
     {
         await context.Types.AddAsync(CatalogMapper.Map(type));
+        await context.SaveChangesAsync();
     }
 
     public async Task<CatalogBrand> GetBrandAsync(string id)

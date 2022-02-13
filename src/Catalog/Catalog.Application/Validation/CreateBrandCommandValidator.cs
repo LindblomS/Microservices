@@ -11,7 +11,7 @@ public class CreateBrandCommandValidator : AbstractValidator<CreateBrandCommand>
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .WithMessage("Brand cannot be empty and must not exceed 250 characters")
-            .Length(250)
+            .MaximumLength(250)
             .WithMessage(c => $"Brand cannot not exceed 250 characters. Brand was {c.Brand.Length} characters");
     }
 

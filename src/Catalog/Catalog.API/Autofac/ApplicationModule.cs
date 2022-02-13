@@ -1,22 +1,23 @@
-﻿namespace Ordering.API.AutoFac;
+﻿namespace Catalog.API.Autofac;
 
-using Autofac;
+using Catalog.Application.Behaviours;
+using Catalog.Application.CommandHandlers;
+using Catalog.Application.DomainEventHandlers.CatalogItemPriceChanged;
+using Catalog.Application.IntegrationEventHandlers;
+using Catalog.Application.Repositories;
+using Catalog.Application.Services;
+using Catalog.Application.Validation;
+using Catalog.Domain.Aggregates;
+using Catalog.Infrastructure.Repositories;
+using Catalog.Infrastructure.Services;
 using EventBus.EventBus.Abstractions;
 using FluentValidation;
+using global::Autofac;
 using MediatR;
-using Ordering.Application.Behaviours;
-using Ordering.Application.Commands;
-using Ordering.Application.DomainEventHandlers.OrderStarted;
-using Ordering.Application.IntegrationEventHandlers;
-using Ordering.Application.Services;
-using Ordering.Application.Validation;
-using Ordering.Domain.AggregateModels.Buyer;
-using Ordering.Domain.AggregateModels.Order;
-using Ordering.Infrastructure.Repositories;
-using Ordering.Infrastructure.Services;
 using System.Reflection;
+using Module = global::Autofac.Module;
 
-public class ApplicationModule : Autofac.Module
+public class ApplicationModule : Module
 {
     protected override void Load(ContainerBuilder builder)
     {
@@ -32,14 +33,12 @@ public class ApplicationModule : Autofac.Module
 
     void RegisterRepositories(ContainerBuilder builder)
     {
-        builder
-            .RegisterType<OrderRepository>()
-            .As<IOrderRepository>()
+        builder.RegisterType<CatalogRepository>()
+            .As<ICatalogRepository>()
             .InstancePerLifetimeScope();
 
-        builder
-            .RegisterType<BuyerRepository>()
-            .As<IBuyerRepository>()
+        builder.RegisterType<QueryRepository>()
+            .As<IQueryRepository>()
             .InstancePerLifetimeScope();
     }
 
@@ -65,43 +64,40 @@ public class ApplicationModule : Autofac.Module
     void RegisterCommandHandlers(ContainerBuilder builder)
     {
         builder
-            .RegisterAssemblyTypes(typeof(CreateOrderCommandHandler).GetTypeInfo().Assembly)
+            .RegisterAssemblyTypes(typeof(CreateItemCommandHandler).GetTypeInfo().Assembly)
             .AsClosedTypesOf(typeof(IRequestHandler<,>));
     }
 
     void RegisterDomainEventHandlers(ContainerBuilder builder)
     {
         builder
-            .RegisterAssemblyTypes(typeof(AddOrValidateBuyerDomainEventHandler).GetTypeInfo().Assembly)
+            .RegisterAssemblyTypes(typeof(PublishIntegrationEventDomainEventHandler).GetTypeInfo().Assembly)
             .AsClosedTypesOf(typeof(INotificationHandler<>));
     }
 
     void RegisterIntegrationEventHandlers(ContainerBuilder builder)
     {
         builder
-            .RegisterAssemblyTypes(typeof(OrderPaymentFailedIntegrationEventHandler).GetTypeInfo().Assembly)
+            .RegisterAssemblyTypes(typeof(OrderStatusChangedToAwaitingValidationIntegrationEventHandler).GetTypeInfo().Assembly)
             .AsClosedTypesOf(typeof(IIntegrationEventHandler<>));
     }
 
     void RegisterValidation(ContainerBuilder builder)
     {
         builder
-            .RegisterAssemblyTypes(typeof(CreateOrderCommandValidator).GetTypeInfo().Assembly)
+            .RegisterAssemblyTypes(typeof(CreateItemCommandValidator).GetTypeInfo().Assembly)
             .AsClosedTypesOf(typeof(IValidator<>));
     }
 
     void RegisterServices(ContainerBuilder builder)
     {
         builder.RegisterType<DomainEventPublisher>();
-        builder.RegisterType<RequestManager>().As<IRequestManager>();
-        builder.RegisterType<IntegrationEventService>().As<IIntegrationEventService>().InstancePerLifetimeScope();
+        builder.RegisterType<ValidationService>().As<IValidationService>();
     }
 
     void RegisterBehaviours(ContainerBuilder builder)
     {
-        builder.RegisterGeneric(typeof(ExceptionBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
         builder.RegisterGeneric(typeof(LoggingBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
         builder.RegisterGeneric(typeof(ValidationBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
-        builder.RegisterGeneric(typeof(UnitOfWorkBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
     }
 }

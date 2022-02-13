@@ -11,7 +11,7 @@ public class CreateTypeCommandValidator : AbstractValidator<CreateTypeCommand>
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .WithMessage("Type cannot be empty and must not exceed 250 characters")
-            .Length(250)
+            .MaximumLength(250)
             .WithMessage(c => $"Type cannot not exceed 250 characters, Type was {c.Type.Length} characters");
 
     }

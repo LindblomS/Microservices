@@ -1,16 +1,13 @@
 ﻿namespace Catalog.API;
 
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using Catalog.API.Filters;
-using Catalog.API.IntegrationHandlers;
-using Catalog.API.Repositories;
-using Catalog.Domain.Aggregates;
 using Catalog.Infrastructure.EntityFramework;
-using Catalog.Infrastructure.Repositories;
 using EventBus.EventBus;
 using EventBus.EventBus.Abstractions;
 using EventBus.EventBusRabbitMQ;
+using global::Autofac;
+using global::Autofac.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Ordering.Contracts.IntegrationEvents;
 using RabbitMQ.Client;
@@ -33,15 +30,12 @@ public class Startup
         });
 
         services.AddEventBus(Configuration);
-        services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToPaidIntegrationEvent>, OrderStatusChangedToPaidIntegrationEventHandler>();
-        services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToAwaitingValidationIntegrationEvent>, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
-        services.AddTransient<ICatalogRepository, CatalogRepository>();
-        services.AddTransient<ICatalogQueryRepository, CatalogQueryRepository>();
         services.AddCustomDbContext(Configuration);
 
         var container = new ContainerBuilder();
-        container.Populate(services);
 
+        container.Populate(services);
+        container.RegisterModule(new ApplicationModule());
         return new AutofacServiceProvider(container.Build());
     }
 

@@ -18,12 +18,12 @@ public class UpdateItemCommandValidator : AbstractValidator<InternalUpdateItemCo
         RuleFor(c => c.Name)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .Length(250);
+            .MaximumLength(250);
 
         RuleFor(c => c.Description)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .Length(250);
+            .MaximumLength(250);
 
         RuleFor(c => c.Brand)
             .Cascade(CascadeMode.Stop)
