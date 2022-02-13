@@ -18,8 +18,5 @@ internal class CatalogItemEntityTypeConfiguration : IEntityTypeConfiguration<Cat
         builder.Property(e => e.CatalogTypeId).HasColumnName("type_id");
         builder.Property(e => e.CatalogBrandId).HasColumnName("brand_id");
         builder.Property(e => e.AvailableStock).HasColumnName("available_stock");
-
-        builder.HasOne(e => e.CatalogType).WithMany();
-        builder.HasOne(e => e.CatalogBrand).WithMany();
     }
 }

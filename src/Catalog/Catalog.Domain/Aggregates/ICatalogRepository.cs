@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 public interface ICatalogRepository : IRepository<CatalogItem>
 {
-    Task CreateAsync(CatalogItem catalogItem);
+    Task AddAsync(CatalogItem item);
+    Task AddAsync(CatalogBrand brand);
+    Task AddAsync(CatalogType type);
     Task DeleteAsync(Guid id);
-    Task UpdateAsync(CatalogItem catalogItem);
+    Task UpdateAsync(CatalogItem item);
     Task<CatalogItem> GetAsync(Guid id);
+    Task<CatalogBrand> GetBrandAsync(string id);
+    Task<CatalogType> GetTypeAsync(string id);
 }

@@ -12,7 +12,6 @@ using Ordering.Application.Services;
 using Ordering.Application.Validation;
 using Ordering.Domain.AggregateModels.Buyer;
 using Ordering.Domain.AggregateModels.Order;
-using Ordering.Infrastructure.EntityFramework;
 using Ordering.Infrastructure.Repositories;
 using Ordering.Infrastructure.Services;
 using System.Reflection;

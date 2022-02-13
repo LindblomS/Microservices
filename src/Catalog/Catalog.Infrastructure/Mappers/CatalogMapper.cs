@@ -12,19 +12,19 @@ internal static class CatalogMapper
             entity.Name,
             entity.Description,
             entity.Price,
-            Map(entity.CatalogType),
-            Map(entity.CatalogBrand),
+            MapType(entity.CatalogTypeId),
+            MapBrand(entity.CatalogBrandId),
             entity.AvailableStock);
     }
 
-    static CatalogBrand Map(CatalogBrandEntity entity)
+    public static CatalogBrand MapBrand(string id)
     {
-        return new(entity.Id, entity.Brand);
+        return new(id);
     }
 
-    static CatalogType Map(CatalogTypeEntity entity)
+    public static CatalogType MapType(string id)
     {
-        return new(entity.Id, entity.Type);
+        return new(id);
     }
 
     public static CatalogItemEntity Map(CatalogItem item)
@@ -36,8 +36,8 @@ internal static class CatalogMapper
             Description = item.Description,
             Price = item.Price,
             AvailableStock = item.AvailableStock,
-            CatalogTypeId = item.Type.Id,
-            CatalogBrandId = item.Brand.Id
+            CatalogTypeId = item.Type.Type,
+            CatalogBrandId = item.Brand.Brand
         };
     }
 
@@ -45,8 +45,7 @@ internal static class CatalogMapper
     {
         return new CatalogTypeEntity
         {
-            Id = type.Id,
-            Type = type.Type,
+            Id = type.Type,
         };
     }
 
@@ -54,8 +53,7 @@ internal static class CatalogMapper
     {
         return new CatalogBrandEntity
         {
-            Id = brand.Id,
-            Brand = brand.Brand
+            Id = brand.Brand,
         };
     }
 

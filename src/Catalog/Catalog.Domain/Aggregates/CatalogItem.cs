@@ -1,10 +1,11 @@
 ﻿namespace Catalog.Domain.Aggregates;
 
+using Catalog.Domain.Events;
 using Catalog.Domain.Exceptions;
 using Catalog.Domain.SeedWork;
 using System;
 
-public class CatalogItem : IAggregateRoot
+public class CatalogItem : Entity, IAggregateRoot
 {
     readonly Guid id;
     readonly string name;
@@ -78,5 +79,14 @@ public class CatalogItem : IAggregateRoot
             throw new CatalogDomainException($"Cannot add stock. Units must be greater than 0. Units was {units}");
 
         availableStock += units;
+    }
+
+    public void ChangePrice(decimal newPrice)
+    {
+        if (price == newPrice)
+            return;
+
+        price = newPrice;
+        AddDomainEvent(new CatalogItemPriceChangedDomainEvent(id, price));
     }
 }

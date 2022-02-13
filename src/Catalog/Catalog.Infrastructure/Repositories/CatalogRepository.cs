@@ -15,25 +15,15 @@ public class CatalogRepository : ICatalogRepository
         this.context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public async Task CreateAsync(CatalogItem catalogItem)
+    public async Task AddAsync(CatalogItem catalogItem)
     {
-        var type = await context.Types.FindAsync(catalogItem.Type.Id);
-
-        if (type is null)
-            await CreateCatalogType(catalogItem.Type);
-
-        var brand = await context.Brands.FindAsync(catalogItem.Brand.Id);
-
-        if (brand is null)
-            await CreateCatalogBrand(catalogItem.Brand);
-
         await context.Items.AddAsync(CatalogMapper.Map(catalogItem));
         await context.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(Guid id)
     {
-        var item = await context.Items.FindAsync(id);
+        var item = await context.Items.FindAsync(id.ToString());
         if (item is null)
             return;
 
@@ -43,16 +33,6 @@ public class CatalogRepository : ICatalogRepository
 
     public async Task UpdateAsync(CatalogItem catalogItem)
     {
-        var type = await context.Types.FindAsync(catalogItem.Type.Id);
-
-        if (type is null)
-            await CreateCatalogType(catalogItem.Type);
-
-        var brand = await context.Brands.FindAsync(catalogItem.Brand.Id);
-
-        if (brand is null)
-            await CreateCatalogBrand(catalogItem.Brand);
-
         var updated = CatalogMapper.Map(catalogItem);
         var original = await context.Items.FindAsync(updated.Id);
 
@@ -67,20 +47,28 @@ public class CatalogRepository : ICatalogRepository
         if (item is null)
             return null;
 
-        item.CatalogBrand = await context.Brands.FindAsync(item.CatalogBrandId);
-        item.CatalogType = await context.Types.FindAsync(item.CatalogTypeId);
-
         return CatalogMapper.Map(item);
     }
 
-    async Task CreateCatalogType(CatalogType type)
-    {
-        await context.Types.AddAsync(CatalogMapper.Map(type));
-    }
-
-    async Task CreateCatalogBrand(CatalogBrand brand)
+    public async Task AddAsync(CatalogBrand brand)
     {
         await context.Brands.AddAsync(CatalogMapper.Map(brand));
+        await context.SaveChangesAsync();
     }
 
+    public async Task AddAsync(CatalogType type)
+    {
+        await context.Types.AddAsync(CatalogMapper.Map(type));
+        await context.SaveChangesAsync();
+    }
+
+    public async Task<CatalogBrand> GetBrandAsync(string id)
+    {
+        return CatalogMapper.MapBrand((await context.Brands.FindAsync(id)).Id);
+    }
+
+    public async Task<CatalogType> GetTypeAsync(string id)
+    {
+        return CatalogMapper.MapType((await context.Types.FindAsync(id)).Id);
+    }
 }
