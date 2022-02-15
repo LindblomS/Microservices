@@ -6,7 +6,7 @@
     <ul>
         @foreach (var item in Model.Items)
         {
-            <li>
+            <li class="list-group-item">
                 <p>Id: @item.Id</p>
                 <p>Name: @item.Name</p>
                 <p>Description: @item.Description</p>
@@ -14,6 +14,7 @@
                 <p>Type: @item.Type</p>
                 <p>Brand: @item.Brand</p>
                 <p>AvailableStock: @item.AvailableStock</p>
+                <a class="nav-link text-dark" asp-page="Update" asp-route-id="@item.Id">Update</a>
             </li>
         }
     </ul>

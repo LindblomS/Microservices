@@ -14,6 +14,7 @@ public class QueryRepository : IQueryRepository
     {
         this.context = context ?? throw new ArgumentNullException(nameof(context));
     }
+
     public IEnumerable<Item> GetItems()
     {
         var entities = context.Items.ToList();
@@ -31,5 +32,15 @@ public class QueryRepository : IQueryRepository
                 item.AvailableStock));
 
         return items;
+    }
+
+    public IEnumerable<string> GetTypes()
+    {
+        return context.Types.Select(x => x.Id);
+    }
+
+    public IEnumerable<string> GetBrands()
+    {
+        return context.Brands.Select(x => x.Id);
     }
 }

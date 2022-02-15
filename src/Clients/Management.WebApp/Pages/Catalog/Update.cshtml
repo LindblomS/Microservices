@@ -1,0 +1,50 @@
+﻿@page
+@model Management.WebApp.Pages.Catalog.UpdateModel
+@{
+    <h1>Update</h1> 
+    <h2>Id: @Model.Item.Id</h2>
+    <a class="nav-link text-dark" asp-page="Index">Cancel</a>
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Item.Name" class="control-label"></label>
+            <input asp-for="Item.Name" />
+            <span asp-validation-for="Item.Name"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Item.Description" class="control-label"></label>
+            <input asp-for="Item.Description" />
+            <span asp-validation-for="Item.Description"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="Item.Price" class="control-label"></label>
+            <input asp-for="Item.Price" />
+            <span asp-validation-for="Item.Price"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="Item.Type" class="control-label"></label>
+            <select asp-for="Item.Type" asp-items="@Model.Types"></select>
+            <span asp-validation-for="Item.Type"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="Item.Brand" class="control-label"></label>
+            <select asp-for="Item.Brand" asp-items="@Model.Brands"></select>
+            <span asp-validation-for="Item.Brand"></span>
+        </div>
+         
+        <div class="form-group">
+            <label asp-for="Item.AvailableStock" class="control-label"></label>
+            <input asp-for="Item.AvailableStock" />
+            <span asp-validation-for="Item.AvailableStock"></span>
+        </div>
+
+        <div>
+            <input type="submit" />
+        </div>
+
+    </form>
+}

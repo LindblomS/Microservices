@@ -1,27 +1,83 @@
 ﻿namespace Management.WebApp.Services;
 
+using Catalog.Contracts.Commands;
 using Catalog.Contracts.Queries;
 using Management.WebApp.Models;
+using Management.WebApp.Options;
+using Microsoft.Extensions.Options;
+using System.Text;
+using System.Text.Json;
 
 public class CatalogService : ICatalogService
 {
-    public Task CreateAsync(CreateCatalogItem item)
+    readonly IHttpClientFactory factory;
+    readonly string uri;
+
+    public CatalogService(IHttpClientFactory factory, IOptions<ApiOptions> options)
     {
-        throw new NotImplementedException();
+        this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
+        var apiOptions = options?.Value ?? throw new ArgumentNullException(nameof(options));
+        uri = apiOptions.BaseAddress + "/" + apiOptions.CatalogAddress;
     }
 
-    public Task DeleteAsync(string id)
+    public async Task CreateAsync(CreateCatalogItem item)
     {
-        throw new NotImplementedException();
+        var request = new CreateItemCommand(
+            item.Name,
+            item.Description,
+            item.Price,
+            item.Type,
+            item.Brand,
+            item.AvailableStock);
+
+        using var client = factory.CreateClient();
+        var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+        var response = await client.PostAsync(uri, content);
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task DeleteAsync(string id)
+    {
+        using var client = factory.CreateClient();
+        var response = await client.DeleteAsync(uri + "/" + id);
+        response.EnsureSuccessStatusCode();
     }
 
     public async Task<IEnumerable<Item>> GetAsync()
     {
-        return await Task.FromResult(new[] { new Item("asdf", "asdf", "asdf",10, "type", "brand", 0) });
+        using var client = factory.CreateClient();
+        var response = await client.GetAsync(uri);
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (string.IsNullOrEmpty(content))
+            return new List<Item>();
+
+        return JsonSerializer.Deserialize<IEnumerable<Item>>(content);
     }
 
-    public Task UpdateAsync(UpdateCatalogItem item)
+    public async Task<Item> GetAsync(string id)
     {
-        throw new NotImplementedException();
+        using var client = factory.CreateClient();
+        var response = await client.GetAsync(uri + "/" + id);
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        return JsonSerializer.Deserialize<Item>(content);
+    }
+
+    public async Task UpdateAsync(UpdateCatalogItem item)
+    {
+        var request = new UpdateItemCommand(
+            item.Name,
+            item.Description,
+            item.Price,
+            item.Type,
+            item.Brand,
+            item.AvailableStock);
+
+        using var client = factory.CreateClient();
+        var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+        var response = await client.PutAsync(uri + "/" + item.Id, content);
+        response.EnsureSuccessStatusCode();
     }
 }

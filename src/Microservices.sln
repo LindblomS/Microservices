@@ -65,7 +65,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Application", "Cata
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{26D3FF76-5988-447F-89F9-C6C003A622ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Management.WebApp", "Clients\Management.WebApp\Management.WebApp.csproj", "{11638AEF-A542-4E6F-8684-3C619FE690CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Management.WebApp", "Clients\Management.WebApp\Management.WebApp.csproj", "{11638AEF-A542-4E6F-8684-3C619FE690CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

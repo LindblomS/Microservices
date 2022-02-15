@@ -1,14 +1,39 @@
 ﻿namespace Management.WebApp.Services;
 
+using Management.WebApp.Options;
+using Microsoft.Extensions.Options;
+using System.Text;
+using System.Text.Json;
+
 public class TypeService : ITypeService
 {
-    public Task CreateAsync(string type)
+    readonly IHttpClientFactory factory;
+    readonly string uri;
+
+    public TypeService(IHttpClientFactory factory, IOptions<ApiOptions> options)
     {
-        throw new NotImplementedException();
+        this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
+        var apiOptions = options?.Value ?? throw new ArgumentNullException(nameof(options));
+        uri = apiOptions.BaseAddress + "/" + apiOptions.TypeAddress;
+    }
+
+    public async Task CreateAsync(string type)
+    {
+        using var client = factory.CreateClient();
+        var content = new StringContent(JsonSerializer.Serialize(type), Encoding.UTF8, "application/json");
+        var response = await client.PostAsync(uri, content);
+        response.EnsureSuccessStatusCode();
     }
 
     public async Task<IEnumerable<string>> GetAsync()
     {
-        return await Task.FromResult(new[] { "asd", "asdf" });
+        using var client = factory.CreateClient();
+        var response = await client.GetAsync(uri);
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (string.IsNullOrEmpty(content))
+            return new List<string>();
+
+        return JsonSerializer.Deserialize<IEnumerable<string>>(content);
     }
 }

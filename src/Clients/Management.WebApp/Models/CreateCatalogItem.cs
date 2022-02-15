@@ -9,7 +9,7 @@ public class CreateCatalogItem
     [Required, MaxLength(250)]
     public string Description { get; set; }
     [Required, Range(1, double.MaxValue)]
-    public double Price { get; set; }
+    public decimal Price { get; set; }
     [Required, MaxLength(250)]
     public string Type { get; set; }
     [Required, MaxLength(250)]

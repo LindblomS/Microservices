@@ -17,7 +17,7 @@ namespace Management.WebApp.Pages.Catalog
         [BindProperty]
         public IEnumerable<Item> Items { get; private set; }
 
-        public async Task OnGet()
+        public async Task OnGetAsync()
         {
             Items = await service.GetAsync();
         }

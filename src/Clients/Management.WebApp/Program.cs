@@ -1,3 +1,4 @@
+using Management.WebApp.Options;
 using Management.WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddTransient<IBrandService, BrandService>();
 builder.Services.AddTransient<ITypeService, TypeService>();
 builder.Services.AddTransient<ICatalogService, CatalogService>();
+builder.Services.AddHttpClient();
+builder.Services.Configure<ApiOptions>(builder.Configuration.GetSection(nameof(ApiOptions)));
 
 var app = builder.Build();
 
