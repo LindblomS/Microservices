@@ -17,7 +17,7 @@ public class CatalogService : ICatalogService
     {
         this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
         var apiOptions = options?.Value ?? throw new ArgumentNullException(nameof(options));
-        uri = apiOptions.BaseAddress + "/" + apiOptions.CatalogAddress;
+        uri = apiOptions.BaseAddress + apiOptions.CatalogAddress;
     }
 
     public async Task CreateAsync(CreateCatalogItem item)
@@ -53,7 +53,7 @@ public class CatalogService : ICatalogService
         if (string.IsNullOrEmpty(content))
             return new List<Item>();
 
-        return JsonSerializer.Deserialize<IEnumerable<Item>>(content);
+        return JsonSerializer.Deserialize<List<Item>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true});
     }
 
     public async Task<Item> GetAsync(string id)
@@ -62,7 +62,7 @@ public class CatalogService : ICatalogService
         var response = await client.GetAsync(uri + "/" + id);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<Item>(content);
+        return JsonSerializer.Deserialize<Item>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
     }
 
     public async Task UpdateAsync(UpdateCatalogItem item)

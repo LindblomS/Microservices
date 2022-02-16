@@ -1,5 +1,6 @@
 ﻿namespace Management.WebApp.Services;
 
+using Catalog.Contracts.Commands;
 using Management.WebApp.Options;
 using Microsoft.Extensions.Options;
 using System.Text;
@@ -14,13 +15,13 @@ public class TypeService : ITypeService
     {
         this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
         var apiOptions = options?.Value ?? throw new ArgumentNullException(nameof(options));
-        uri = apiOptions.BaseAddress + "/" + apiOptions.TypeAddress;
+        uri = apiOptions.BaseAddress + apiOptions.TypeAddress;
     }
 
     public async Task CreateAsync(string type)
     {
         using var client = factory.CreateClient();
-        var content = new StringContent(JsonSerializer.Serialize(type), Encoding.UTF8, "application/json");
+        var content = new StringContent(JsonSerializer.Serialize(new CreateTypeCommand(type)), Encoding.UTF8, "application/json");
         var response = await client.PostAsync(uri, content);
         response.EnsureSuccessStatusCode();
     }
@@ -34,6 +35,6 @@ public class TypeService : ITypeService
         if (string.IsNullOrEmpty(content))
             return new List<string>();
 
-        return JsonSerializer.Deserialize<IEnumerable<string>>(content);
+        return JsonSerializer.Deserialize<IEnumerable<string>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
     }
 }
