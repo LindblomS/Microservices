@@ -1,0 +1,12 @@
+﻿@page
+@model Management.WebApp.Pages.Brand.IndexModel
+@{
+    <h1>Brands</h1>
+    <a class="nav-link text-dark" asp-area="" asp-page="Create">Create</a>
+    <ul>
+        @foreach (var brand in Model.Brands)
+        {
+            <li>@brand</li>
+        }
+    </ul>
+}

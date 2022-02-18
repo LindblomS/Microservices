@@ -1,0 +1,16 @@
+﻿@page
+@model Management.WebApp.Pages.Brand.CreateModel
+@{
+    <h1>Create</h1> 
+    <form method="post">
+        <div>
+            Brand
+            <input asp-for="Brand" />
+            <span asp-validation-for="Brand"></span>
+        </div>
+
+        <div>
+            <input type="submit" />
+        </div>
+    </form>
+}

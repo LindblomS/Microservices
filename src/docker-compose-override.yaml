@@ -20,7 +20,7 @@ services:
       
   ordering-worker:
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_ENVIRONMENT: Relase
       ASPNETCORE_URLS: http://0.0.0.0:80
       ConnectionString: ${SQLCONNECTIONSTRING}   
       EventBus__SubscriptionClientName: Ordering.Worker
@@ -29,7 +29,7 @@ services:
     
   catalog-api:
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_ENVIRONMENT: Relase
       ASPNETCORE_URLS: http://0.0.0.0:80
       ConnectionString: ${SQLCONNECTIONSTRING}     
       EventBus__SubscriptionClientName: Catalog.API
@@ -37,22 +37,33 @@ services:
       
   payment-api:
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_ENVIRONMENT: Relase
       ASPNETCORE_URLS: http://0.0.0.0:80
       EventBus__SubscriptionClientName: Payment.API
       EventBus__Connection: rabbitmq
   
   basket-api:
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_ENVIRONMENT: Relase
       ASPNETCORE_URLS: http://0.0.0.0:80      
       EventBus__SubscriptionClientName: Basket.API
       EventBus__Connection: rabbitmq
       RedisConnectionString: redis
     
+  management-webapp:
+    environment:
+      ASPNETCORE_ENVIRONMENT: Relase
+      ASPNETCORE_URLS: http://0.0.0.0:80
+      ApiOptions__BaseAddress: "http://apigateway"
+      ApiOptions__BrandAddress: "/c/brand"
+      ApiOptions__TypeAddress: "/c/type"
+      ApiOptions__CatalogAddress: "/c/catalog"
+    ports:
+      - "5012:80"
+
   apigateway:
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_ENVIRONMENT: Relase
       ASPNETCORE_URLS: http://0.0.0.0:80
     ports:
       - "5010:80"

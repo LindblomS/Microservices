@@ -1,0 +1,16 @@
+﻿@page
+@model Management.WebApp.Pages.Type.CreateModel
+@{
+    <h1>Create</h1> 
+    <form method="post">
+        <div>
+            Type
+            <input asp-for="Type" />
+            <span asp-validation-for="Type"></span>
+        </div>
+
+        <div>
+            <input type="submit" />
+        </div>
+    </form>
+}

@@ -2,6 +2,7 @@
 WORKDIR /app
 
 COPY Catalog/Catalog.API/ Catalog/Catalog.API/
+COPY Catalog/Catalog.Application/ Catalog/Catalog.Application/
 COPY Catalog/Catalog.Domain/ Catalog/Catalog.Domain/
 COPY Catalog/Catalog.Contracts/ Catalog/Catalog.Contracts/
 COPY Catalog/Catalog.Infrastructure/ Catalog/Catalog.Infrastructure/

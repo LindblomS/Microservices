@@ -5,6 +5,7 @@ using Catalog.Contracts.Queries;
 using Catalog.Infrastructure.EntityFramework;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public class QueryRepository : IQueryRepository
 {
@@ -14,6 +15,7 @@ public class QueryRepository : IQueryRepository
     {
         this.context = context ?? throw new ArgumentNullException(nameof(context));
     }
+
     public IEnumerable<Item> GetItems()
     {
         var entities = context.Items.ToList();
@@ -31,5 +33,32 @@ public class QueryRepository : IQueryRepository
                 item.AvailableStock));
 
         return items;
+    }
+
+    public IEnumerable<string> GetTypes()
+    {
+        return context.Types.Select(x => x.Id);
+    }
+
+    public IEnumerable<string> GetBrands()
+    {
+        return context.Brands.Select(x => x.Id);
+    }
+
+    public async Task<Item> GetItemAsync(Guid id)
+    {
+        var item = await context.Items.FindAsync(id.ToString());
+
+        if (item is null)
+            return null;
+
+        return new Item(
+                item.Id,
+                item.Name,
+                item.Description,
+                item.Price,
+                item.CatalogTypeId,
+                item.CatalogBrandId,
+                item.AvailableStock);
     }
 }

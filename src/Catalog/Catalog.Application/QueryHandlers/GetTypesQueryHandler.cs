@@ -8,16 +8,17 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-public class GetItemsQueryHandler : IRequestHandler<GetItemsQuery, IEnumerable<Item>>
+public class GetTypesQueryHandler : IRequestHandler<GetTypesQuery, IEnumerable<string>>
 {
     readonly IQueryRepository repository;
 
-    public GetItemsQueryHandler(IQueryRepository repository)
+    public GetTypesQueryHandler(IQueryRepository repository)
     {
         this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
-    public Task<IEnumerable<Item>> Handle(GetItemsQuery request, CancellationToken cancellationToken)
+
+    public Task<IEnumerable<string>> Handle(GetTypesQuery request, CancellationToken cancellationToken)
     {
-        return Task.FromResult(repository.GetItems());
+        return Task.FromResult(repository.GetTypes());
     }
 }

@@ -23,6 +23,23 @@ public class CatalogController : ControllerBase
         return Ok(await mediator.Send(new GetItemsQuery()));
     }
 
+    [HttpGet]
+    [Route("{id}")]
+    [ProducesResponseType(typeof(Item), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<Item>> GetItem(string id)
+    {
+        if (!Guid.TryParse(id, out Guid guid))
+            return BadRequest("Invalid id. Id must be a valid GUID");
+
+        var item = await mediator.Send(new GetItemQuery(guid));
+
+        if (item is null)
+            return BadRequest($"Item with id {guid} was not found");
+
+        return Ok(item);
+    }
+
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -1,0 +1,12 @@
+﻿@page
+@model Management.WebApp.Pages.Type.IndexModel
+@{
+    <h1>Types</h1>
+    <a class="nav-link text-dark" asp-area="" asp-page="Create">Create</a>
+    <ul>
+        @foreach (var type in Model.Types)
+        {
+            <li>@type</li>
+        }
+    </ul>
+}
