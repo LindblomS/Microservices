@@ -9,8 +9,8 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/c/{everything}",
-      "UpstreamHttpMethod": [ "Delete", "Put" ]
+      "UpstreamPathTemplate": "/c/catalog/{everything}",
+      "UpstreamHttpMethod": [ "Delete", "Put", "Get" ]
     },
     {
       "DownstreamPathTemplate": "/api/catalog/",
@@ -21,7 +21,31 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/c/",
+      "UpstreamPathTemplate": "/c/catalog/",
+      "UpstreamHttpMethod": [ "Get", "Post" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/brand/",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "catalog-api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/c/brand/",
+      "UpstreamHttpMethod": [ "Get", "Post" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/type/",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "catalog-api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/c/type/",
       "UpstreamHttpMethod": [ "Get", "Post" ]
     },
     {
@@ -49,6 +73,7 @@
       "UpstreamHttpMethod": [ "Post" ]
     }
   ],
+
   "GlobalConfiguration": {
     "BaseUrl": "http://0.0.0.0:5010"
   }

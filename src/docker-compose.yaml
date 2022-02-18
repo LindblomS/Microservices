@@ -67,6 +67,15 @@ services:
     depends_on:
       - rabbitmq
     restart: on-failure
+  
+  management-webapp:
+    image: management-webapp:latest
+    build:
+      context: .
+      dockerfile: Clients/Management.WebApp/Dockerfile
+    depends_on:
+      - apigateway
+    restart: on-failure
     
   apigateway:
     image: apigateway:latest
