@@ -1,7 +1,6 @@
 ﻿namespace Ordering.Application.Commands;
 
 using MediatR;
-using Ordering.Application.Exceptions;
 using Ordering.Application.Services;
 using Ordering.Domain.AggregateModels.Order;
 using System;
@@ -22,9 +21,6 @@ public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, boo
     public async Task<bool> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
     {
         var order = await orderRepository.GetAsync(request.OrderId);
-
-        if (order is null)
-            throw new OrderNotFoundException(request.OrderId);
 
         order.SetCancelledStatus();
 

@@ -24,11 +24,18 @@ public class OrderRepository : IOrderRepository
 
     public async Task<Order> GetAsync(Guid orderId)
     {
-        var entity = await context.Orders
-            .Include(e => e.OrderItems)
-            .Include(e => e.Buyer)
-            .Include(e => e.Card)
-            .SingleOrDefaultAsync(e => e.Id == orderId.ToString());
+        var entity = await context.Orders.FindAsync(orderId.ToString());
+        var orderItems = context.OrderItems.Where(x => x.OrderId == orderId.ToString());
+
+        entity.OrderItems = orderItems.ToList();
+
+        entity.Buyer = string.IsNullOrEmpty(entity.BuyerId) 
+            ? null 
+            : await context.Buyers.FindAsync(entity.BuyerId.ToString());
+
+        entity.Card = string.IsNullOrEmpty(entity.CardId)
+            ? null
+            : await context.Cards.FindAsync(entity.CardId.ToString());
 
         return OrderMapper.Map(entity);
     }

@@ -23,8 +23,9 @@ public abstract class BaseIntegrationHandler
             {
                 await action();
             }
-            catch
+            catch (Exception exception)
             {
+                logger.LogError(exception, "");
             }
         }
     }

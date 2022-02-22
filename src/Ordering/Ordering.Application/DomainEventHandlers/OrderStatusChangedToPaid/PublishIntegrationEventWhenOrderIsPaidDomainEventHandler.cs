@@ -31,9 +31,6 @@ public class PublishIntegrationEventWhenOrderIsPaidDomainEventHandler : INotific
     {
         var order = await orderRepository.GetAsync(notification.OrderId);
 
-        if (order is null)
-            throw new OrderNotFoundException(notification.OrderId);
-
         var integrationEvent = new OrderStatusChangedToPaidIntegrationEvent(order.OrderItems.Select(i => Map(i)));
         logger.LogInformation("Order {OrderId} is paid", order.Id);
         await integrationEventService.AddAndSaveEventAsync(integrationEvent);

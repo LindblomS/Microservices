@@ -3,7 +3,8 @@
 using Autofac;
 using EventBus.EventBus.Abstractions;
 using FluentValidation;
-using MediatR;
+using global::MediatR;
+using Ordering.API.MediatR.Behaviours;
 using Ordering.Application.Behaviours;
 using Ordering.Application.Commands;
 using Ordering.Application.DomainEventHandlers.OrderStarted;
@@ -88,6 +89,8 @@ public class ApplicationModule : Autofac.Module
         builder
             .RegisterAssemblyTypes(typeof(CreateOrderCommandValidator).GetTypeInfo().Assembly)
             .AsClosedTypesOf(typeof(IValidator<>));
+
+        builder.RegisterType<ValidationService>().As<IValidationService>().InstancePerLifetimeScope(); ;
     }
 
     void RegisterServices(ContainerBuilder builder)
@@ -99,9 +102,8 @@ public class ApplicationModule : Autofac.Module
 
     void RegisterBehaviours(ContainerBuilder builder)
     {
-        builder.RegisterGeneric(typeof(ExceptionBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
         builder.RegisterGeneric(typeof(LoggingBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
+        builder.RegisterGeneric(typeof(TransactionBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
         builder.RegisterGeneric(typeof(ValidationBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
-        builder.RegisterGeneric(typeof(UnitOfWorkBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
     }
 }

@@ -33,14 +33,7 @@ public class PublishIntegrationEventWhenOrderIsCancelledDomainEventHandler : INo
     public async Task Handle(OrderCancelledDomainEvent notification, CancellationToken cancellationToken)
     {
         var order = await orderRepository.GetAsync(notification.OrderId);
-
-        if (order is null)
-            throw new OrderNotFoundException(notification.OrderId);
-
         var buyer = await buyerRepository.GetAsync(order.BuyerId, order.Id);
-
-        if (buyer is null)
-            throw new BuyerNotFoundException(order.BuyerId);
 
         var integrationEvent = new OrderStatusChangedToCancelledIntegrationEvent(
             order.Id,

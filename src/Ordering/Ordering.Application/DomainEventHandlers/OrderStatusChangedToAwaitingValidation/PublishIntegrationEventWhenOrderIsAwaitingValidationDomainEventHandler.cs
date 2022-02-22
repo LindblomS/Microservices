@@ -31,9 +31,6 @@ public class PublishIntegrationEventWhenOrderIsAwaitingValidationDomainEventHand
     {
         var order = await orderRepository.GetAsync(notification.OrderId);
 
-        if (order is null)
-            throw new OrderNotFoundException(notification.OrderId);
-
         var integrationEvent = new OrderStatusChangedToAwaitingValidationIntegrationEvent(
             order.Id,
             order.OrderItems.Select(i => Map(i)));

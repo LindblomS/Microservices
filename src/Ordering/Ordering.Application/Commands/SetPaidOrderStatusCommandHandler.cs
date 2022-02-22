@@ -1,7 +1,6 @@
 ﻿namespace Ordering.Application.Commands;
 
 using MediatR;
-using Ordering.Application.Exceptions;
 using Ordering.Application.Services;
 using Ordering.Domain.AggregateModels.Order;
 using System.Threading;
@@ -21,9 +20,6 @@ public class SetPaidOrderStatusCommandHandler : IRequestHandler<SetPaidOrderStat
     public async Task<bool> Handle(SetPaidOrderStatusCommand request, CancellationToken cancellationToken)
     {
         var order = await orderRepository.GetAsync(request.OrderId);
-
-        if (order is null)
-            throw new OrderNotFoundException(request.OrderId);
 
         order.SetPaidStatus();
 

@@ -2,7 +2,6 @@
 
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Ordering.Application.Exceptions;
 using Ordering.Domain.AggregateModels.Order;
 using Ordering.Domain.Events;
 using System;
@@ -25,9 +24,6 @@ public class UpdateOrderWhenBuyerAndCardVerifiedDomainEventHandler : INotificati
     public async Task Handle(BuyerAndCardVerifiedDomainEvent notification, CancellationToken cancellationToken)
     {
         var order = await orderRepository.GetAsync(notification.OrderId);
-
-        if (order is null)
-            throw new OrderNotFoundException(notification.OrderId);
 
         order.SetBuyerId(notification.Buyer.Id);
         order.SetCardId(notification.Card.Id);
