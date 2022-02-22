@@ -2,14 +2,13 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Ordering.Application.Exceptions;
-using Ordering.Application.Services;
 using Ordering.Infrastructure.EntityFramework.Configurations;
 using Ordering.Infrastructure.Models;
 using System;
+using System.Data;
 using System.Threading.Tasks;
 
-public class OrderingContext : DbContext, IUnitOfWork
+public class OrderingContext : DbContext
 {
     internal const string defaultSchema = "ordering";
     bool disposed;
@@ -24,35 +23,59 @@ public class OrderingContext : DbContext, IUnitOfWork
     public DbSet<BuyerEntity> Buyers { get; private set; }
     public DbSet<CardEntity> Cards { get; private set; }
 
-    public Guid TransactionId { get; private set; }
-    public bool Active { get => currentTransaction is not null; }
+    public IDbContextTransaction GetCurrentTransaction() => currentTransaction;
+    public bool HasActiveTransaction { get => currentTransaction != null; }
 
-    public async Task BeginAsync()
+
+    public async Task<IDbContextTransaction> BeginTransactionAsync()
     {
-        if (Active)
-            throw new InvalidOperationException("Unit of work is active");
+        if (currentTransaction != null) return null;
 
-        currentTransaction = await Database.BeginTransactionAsync();
-        TransactionId = currentTransaction.TransactionId;
+        currentTransaction = await Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+
+        return currentTransaction;
     }
 
-    public async Task CommitAsync(IUnitOfWork unitOfWork)
+    public async Task CommitTransactionAsync(IDbContextTransaction transaction)
     {
-        if (unitOfWork?.TransactionId != TransactionId)
-            throw new InvalidOperationException("Unit of work is not current");
+        if (transaction == null) throw new ArgumentNullException(nameof(transaction));
+        if (transaction != currentTransaction) throw new InvalidOperationException($"Transaction {transaction.TransactionId} is not current");
 
         try
         {
-            await currentTransaction.CommitAsync();
-            TransactionId = Guid.Empty;
+            await SaveChangesAsync();
+            transaction.Commit();
         }
-        catch (Exception exception)
+        catch
         {
-            throw new UnitOfWorkException(TransactionId, "Something went wrong commiting unit of work", exception);
+            RollbackTransaction();
+            throw;
+        }
+        finally
+        {
+            if (currentTransaction != null)
+            {
+                currentTransaction.Dispose();
+                currentTransaction = null;
+            }
         }
     }
 
-    public IDbContextTransaction GetCurrentTransaction() => currentTransaction;
+    public void RollbackTransaction()
+    {
+        try
+        {
+            currentTransaction?.Rollback();
+        }
+        finally
+        {
+            if (currentTransaction != null)
+            {
+                currentTransaction.Dispose();
+                currentTransaction = null;
+            }
+        }
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

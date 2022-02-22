@@ -1,6 +1,7 @@
 ﻿namespace Ordering.Application.Commands;
 
 using MediatR;
+using System;
 
 public class CancelOrderCommand : IRequest<bool>
 {

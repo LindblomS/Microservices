@@ -48,7 +48,7 @@ internal static class OrderMapper
     static User Map(BuyerEntity entity)
     {
         if (entity is null)
-            return new(Guid.NewGuid(), "fake name");
+            return new User(Guid.NewGuid(), "fake");
 
         return new User(Map(entity.Id), entity.Name);
     }
@@ -56,7 +56,7 @@ internal static class OrderMapper
     static Card Map(CardEntity entity)
     {
         if (entity is null)
-            return new(1, "number", "security_number", "holder_name", DateTime.Now);
+            return new Card(1, "fake number", "fake security number", "fake holder name", DateTime.Now.AddDays(1));
 
         return new Card(
             entity.Type,

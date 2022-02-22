@@ -10,7 +10,6 @@ using System.Linq;
 public class BuyerRepository : IBuyerRepository
 {
     readonly OrderingContext context;
-    const string datetimeFormat = "yyyy-MM-dd";
 
     public BuyerRepository(OrderingContext context)
     {

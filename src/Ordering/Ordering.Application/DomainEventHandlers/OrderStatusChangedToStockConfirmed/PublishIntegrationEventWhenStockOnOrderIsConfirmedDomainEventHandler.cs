@@ -32,9 +32,6 @@ public class PublishIntegrationEventWhenStockOnOrderIsConfirmedDomainEventHandle
     {
         var order = await orderRepository.GetAsync(notification.OrderId);
 
-        if (order is null)
-            throw new OrderNotFoundException(notification.OrderId);
-
         var integrationEvent = new OrderStatusChangedToStockConfirmedIntegrationEvent(order.Id);
 
         logger.LogInformation("Stock on order {OrderId} has been confirmed", order.Id);

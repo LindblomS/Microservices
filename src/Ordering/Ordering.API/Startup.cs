@@ -16,14 +16,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Ordering.API.AutoFac;
-using Ordering.Application.Services;
 using Ordering.Contracts.IntegrationEvents;
 using Ordering.Infrastructure.EntityFramework;
 using Payment.Contracts.IntegrationEvents;
 using RabbitMQ.Client;
 using System;
 using System.Data.Common;
-using System.Reflection;
 
 public class Startup
 {
@@ -68,13 +66,11 @@ static class CustomExtensionsMethods
 {
     public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IUnitOfWork>(s => s.GetRequiredService<OrderingContext>());
-
         services.AddDbContext<OrderingContext>(options =>
         {
             options.UseSqlServer(configuration["ConnectionString"], sqlServerOptionsAction: sqlOptions =>
             {
-                //sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
             });
 
         }, ServiceLifetime.Scoped);
@@ -84,7 +80,7 @@ static class CustomExtensionsMethods
             options.UseSqlServer(configuration["ConnectionString"],
                                  sqlServerOptionsAction: sqlOptions =>
                                  {
-                                     //sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                                     sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                                  });
         }, ServiceLifetime.Scoped);
 
@@ -93,7 +89,7 @@ static class CustomExtensionsMethods
 
     public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(sp => (DbConnection c) => 
+        services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(sp => (DbConnection c) =>
         {
             var eventTypes = typeof(OrderStartedIntegrationEvent).Assembly
                 .GetTypes()
