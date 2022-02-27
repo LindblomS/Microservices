@@ -58,6 +58,7 @@ services:
       ApiOptions__BrandAddress: "/c/brand"
       ApiOptions__TypeAddress: "/c/type"
       ApiOptions__CatalogAddress: "/c/catalog"
+      ApiOptions__OrderingAddress: "/o"
     ports:
       - "5012:80"
 

@@ -1,5 +1,6 @@
 ﻿namespace Ordering.Infrastructure.Mappers;
 
+using Ordering.Contracts.Requests;
 using Ordering.Domain.AggregateModels.Order;
 using Ordering.Infrastructure.Models;
 using System;

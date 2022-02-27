@@ -8,6 +8,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddTransient<IBrandService, BrandService>();
 builder.Services.AddTransient<ITypeService, TypeService>();
 builder.Services.AddTransient<ICatalogService, CatalogService>();
+builder.Services.AddTransient<OrderingService>();
 builder.Services.AddHttpClient();
 builder.Services.Configure<ApiOptions>(builder.Configuration.GetSection(nameof(ApiOptions)));
 

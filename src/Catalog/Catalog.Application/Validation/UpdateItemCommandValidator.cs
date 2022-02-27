@@ -11,7 +11,7 @@ public class UpdateItemCommandValidator : AbstractValidator<InternalUpdateItemCo
         RuleFor(c => c.Id)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .WithMessage("Invalid id. Id must be a valid GUID")
+            .WithMessage("Id is missing")
             .Must(id => service.ItemExists(id))
             .WithMessage(c => $"Item with id {c.Id} does not exists");
 

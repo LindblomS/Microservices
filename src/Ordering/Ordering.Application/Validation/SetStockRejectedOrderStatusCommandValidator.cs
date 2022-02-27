@@ -12,5 +12,3 @@ public class SetStockRejectedOrderStatusCommandValidator : AbstractValidator<Set
         RuleForEach(c => c.StockItems).NotEmpty();
     }
 }
-
-

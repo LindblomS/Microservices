@@ -20,6 +20,7 @@ using Ordering.Contracts.IntegrationEvents;
 using Ordering.Infrastructure.EntityFramework;
 using Payment.Contracts.IntegrationEvents;
 using RabbitMQ.Client;
+using Serilog;
 using System;
 using System.Data.Common;
 
@@ -36,6 +37,7 @@ public class Startup
     {
         services.AddCustomDbContext(Configuration);
         services.AddEventBus(Configuration);
+        services.AddControllers();
 
         var container = new ContainerBuilder();
 
@@ -46,6 +48,9 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+        app.UseSerilogRequestLogging();
+        app.UseRouting();
+        app.UseEndpoints(e => e.MapControllers());
         ConfigureEventBus(app);
     }
 

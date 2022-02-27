@@ -1,0 +1,14 @@
+﻿@page
+@model Management.WebApp.Pages.Ordering.IndexModel
+@{
+    <h1>Orders</h1>
+    <ul>
+        @foreach (var order in Model.Orders)
+        {
+            <li class="list-group-item">
+                <a class="nav-link text-dark" asp-page="Order" asp-route-id="@order.Id">@order.Id</a>
+                <p>@order.Status</p>
+            </li>
+        }
+    </ul>
+}

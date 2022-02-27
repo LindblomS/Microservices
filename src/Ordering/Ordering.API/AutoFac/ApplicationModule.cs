@@ -9,6 +9,7 @@ using Ordering.Application.Behaviours;
 using Ordering.Application.Commands;
 using Ordering.Application.DomainEventHandlers.OrderStarted;
 using Ordering.Application.IntegrationEventHandlers;
+using Ordering.Application.Repositories;
 using Ordering.Application.Services;
 using Ordering.Application.Validation;
 using Ordering.Domain.AggregateModels.Buyer;
@@ -41,6 +42,11 @@ public class ApplicationModule : Autofac.Module
         builder
             .RegisterType<BuyerRepository>()
             .As<IBuyerRepository>()
+            .InstancePerLifetimeScope();
+
+        builder
+            .RegisterType<QueryRepository>()
+            .As<IQueryRepository>()
             .InstancePerLifetimeScope();
     }
 

@@ -71,6 +71,30 @@
       ],
       "UpstreamPathTemplate": "/b/checkout/",
       "UpstreamHttpMethod": [ "Post" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/ordering/",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "ordering-api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/o/",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/ordering/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "ordering-api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/o/{everything}",
+      "UpstreamHttpMethod": [ "Get" ]
     }
   ],
 
