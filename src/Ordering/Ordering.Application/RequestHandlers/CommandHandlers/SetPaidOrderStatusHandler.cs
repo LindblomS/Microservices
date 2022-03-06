@@ -1,23 +1,24 @@
-﻿namespace Ordering.Application.Commands;
+﻿namespace Ordering.Application.RequestHandlers.CommandHandlers;
 
 using MediatR;
 using Ordering.Application.Services;
 using Ordering.Domain.AggregateModels.Order;
 using System.Threading;
 using System.Threading.Tasks;
+using Ordering.Application.Commands;
 
-public class SetPaidOrderStatusCommandHandler : IRequestHandler<SetPaidOrderStatusCommand, bool>
+public class SetPaidOrderStatusHandler : IRequestHandler<SetPaidOrderStatus, bool>
 {
     readonly IOrderRepository orderRepository;
     readonly DomainEventPublisher domainEventPublisher;
 
-    public SetPaidOrderStatusCommandHandler(IOrderRepository orderRepository, DomainEventPublisher domainEventPublisher)
+    public SetPaidOrderStatusHandler(IOrderRepository orderRepository, DomainEventPublisher domainEventPublisher)
     {
         this.orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
         this.domainEventPublisher = domainEventPublisher ?? throw new ArgumentNullException(nameof(domainEventPublisher));
     }
 
-    public async Task<bool> Handle(SetPaidOrderStatusCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(SetPaidOrderStatus request, CancellationToken cancellationToken)
     {
         var order = await orderRepository.GetAsync(request.OrderId);
 
@@ -30,7 +31,7 @@ public class SetPaidOrderStatusCommandHandler : IRequestHandler<SetPaidOrderStat
     }
 }
 
-public class SetPaidOrderStatusIdentifiedCommandHandler : IdentifiedCommandHandler<SetPaidOrderStatusCommand, bool>
+public class SetPaidOrderStatusIdentifiedCommandHandler : IdentifiedCommandHandler<SetPaidOrderStatus, bool>
 {
     public SetPaidOrderStatusIdentifiedCommandHandler(
         IRequestManager requestManager,

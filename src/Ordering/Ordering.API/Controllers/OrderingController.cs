@@ -31,6 +31,7 @@ public class OrderingController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<GetOrders.Order>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<GetOrders.Order>>> Get()
     {
-        return Ok(await mediator.Send(new GetOrders()));
+        var result = await mediator.Send(new GetOrders());
+        return Ok(result);
     }
 }

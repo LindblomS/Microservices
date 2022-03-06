@@ -20,6 +20,6 @@ public class OrderPaymentFailedIntegrationEventHandler : BaseIntegrationHandler,
 
     public async Task Handle(OrderPaymentFailedIntegrationEvent @event)
     {
-        await Handle(async () => await mediator.Send(new CancelOrderCommand(@event.OrderId)), @event);
+        await Handle(async () => await mediator.Send(new CancelOrder(@event.OrderId)), @event);
     }
 }

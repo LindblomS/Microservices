@@ -3,7 +3,7 @@
 using FluentValidation;
 using Ordering.Application.Commands;
 
-public class SetStockConfirmedOrderStatusCommandValidator : AbstractValidator<SetStockConfirmedOrderStatusCommand>
+public class SetStockConfirmedOrderStatusCommandValidator : AbstractValidator<SetStockConfirmedOrderStatus>
 {
     public SetStockConfirmedOrderStatusCommandValidator()
     {

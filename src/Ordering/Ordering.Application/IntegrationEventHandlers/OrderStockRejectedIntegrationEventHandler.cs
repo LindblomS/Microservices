@@ -27,7 +27,7 @@ public class OrderStockRejectedIntegrationEventHandler : BaseIntegrationHandler,
                 .Where(x => !x.HasStock)
                 .Select(x => x.ProductId);
 
-            _ = await mediator.Send(new SetStockRejectedOrderStatusCommand(@event.OrderId, rejectedItems));
+            _ = await mediator.Send(new SetStockRejectedOrderStatus(@event.OrderId, rejectedItems));
         }, @event);
     }
 }

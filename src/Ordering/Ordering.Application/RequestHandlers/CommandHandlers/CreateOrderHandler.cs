@@ -1,27 +1,28 @@
-﻿namespace Ordering.Application.Commands;
+﻿namespace Ordering.Application.RequestHandlers.CommandHandlers;
 
 using MediatR;
 using Ordering.Application.Services;
+using Ordering.Application.Commands;
 using Ordering.Contracts.IntegrationEvents;
 using Ordering.Domain.AggregateModels.Order;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, bool>
+public class CreateOrderHandler : IRequestHandler<CreateOrder, bool>
 {
     readonly IOrderRepository orderRepository;
     readonly IIntegrationEventService integrationEventService;
     readonly DomainEventPublisher domainEventPublisher;
 
-    public CreateOrderCommandHandler(IOrderRepository orderRepository, IIntegrationEventService integrationEventService, DomainEventPublisher domainEventPublisher)
+    public CreateOrderHandler(IOrderRepository orderRepository, IIntegrationEventService integrationEventService, DomainEventPublisher domainEventPublisher)
     {
         this.orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
         this.integrationEventService = integrationEventService ?? throw new ArgumentNullException(nameof(integrationEventService));
         this.domainEventPublisher = domainEventPublisher ?? throw new ArgumentNullException(nameof(domainEventPublisher));
     }
 
-    public async Task<bool> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(CreateOrder request, CancellationToken cancellationToken)
     {
         var user = CreateUser(request.UserId, request.Username);
         var card = CreateCard(request.Card);
@@ -46,23 +47,23 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, boo
         return new(userId, username);
     }
 
-    Card CreateCard(CreateOrderCommand.CardDto card)
+    Card CreateCard(CreateOrder.CardDto card)
     {
         return new(card.TypeId, card.Number, card.SecurityNumber, card.HolderName, card.ExpirationDate);
     }
 
-    Address CreateAddress(CreateOrderCommand.AddressDto address)
+    Address CreateAddress(CreateOrder.AddressDto address)
     {
         return new(address.Street, address.City, address.State, address.Country, address.ZipCode);
     }
 
-    OrderItem CreateOrderItem(CreateOrderCommand.OrderItem item)
+    OrderItem CreateOrderItem(CreateOrder.OrderItem item)
     {
         return new(item.ProductId, new(item.ProductName), new(item.UnitPrice), new(item.Units));
     }
 }
 
-public class CreateOrderIdentifiedCommandHandler : IdentifiedCommandHandler<CreateOrderCommand, bool>
+public class CreateOrderIdentifiedCommandHandler : IdentifiedCommandHandler<CreateOrder, bool>
 {
     public CreateOrderIdentifiedCommandHandler(IRequestManager requestManager, IMediator mediator)
         : base(requestManager, mediator)

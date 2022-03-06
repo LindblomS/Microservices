@@ -3,18 +3,14 @@
 using MediatR;
 using System;
 
-public abstract class IdentifiedCommand
-{
-    public Guid Id { get; set; }
-}
+public abstract record IdentifiedCommand(Guid Id);
 
-public class IdentifiedCommand<TCommand, TResponse> : IdentifiedCommand, IRequest<TResponse>
-    where TCommand : IRequest<TResponse>
+public record IdentifiedCommand<TCommand, TResponse> : IdentifiedCommand, IRequest<TResponse>
+    where TCommand : Command<TResponse>
 {
-    public IdentifiedCommand(TCommand command, Guid id)
+    public IdentifiedCommand(TCommand command, Guid id) : base(id)
     {
         Command = command;
-        Id = id;
     }
 
     public TCommand Command { get; private set; }

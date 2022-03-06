@@ -52,7 +52,7 @@ services:
     
   management-webapp:
     environment:
-      ASPNETCORE_ENVIRONMENT: Relase
+      ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://0.0.0.0:80
       ApiOptions__BaseAddress: "http://apigateway"
       ApiOptions__BrandAddress: "/c/brand"

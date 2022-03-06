@@ -1,0 +1,116 @@
+create table [dbo].[integration_event](
+    [id] char(36) not null,
+    [transaction_id] char(36) not null,
+    [content] nvarchar(max) not null,
+    [created] DATETIME2 not null,
+    [state] int not null,
+    [times_sent] int not null,
+    [event_type_name] nvarchar(250) not null,
+    CONSTRAINT [pk_integration_event] PRIMARY key ([id] asc)
+)
+
+
+create schema [catalog]
+
+create table [catalog].[type](
+    [id] nvarchar(250) not null,
+    CONSTRAINT [pk_type] PRIMARY key CLUSTERED ([id] asc)
+)
+
+create table [catalog].[brand](
+    [id] nvarchar(250) not null,
+    CONSTRAINT [pk_brand] PRIMARY key CLUSTERED ([id] asc)
+)
+
+CREATE TABLE [catalog].[item]
+(
+    [id] char(36) not null, 
+    [name] nvarchar(250) NOT NULL,
+    [description] nvarchar(250) NOT NULL,
+    [price] decimal(18,2) NOT NULL,
+    [type_id] nvarchar(250) not null,
+    [brand_id] nvarchar(250) not null,
+    [available_stock] int not null,
+    CONSTRAINT [pk_item] PRIMARY key CLUSTERED ([id] asc),
+    CONSTRAINT [fk_type_item] FOREIGN key ([type_id]) REFERENCES [catalog].[type] ([id]),
+    CONSTRAINT [fk_type_brand] FOREIGN key ([brand_id]) REFERENCES [catalog].[brand] ([id])
+)
+
+create SCHEMA [ordering]
+
+create table [ordering].[buyer](
+    [id] char(36) not null,
+    [name] nvarchar(250) not null,
+    CONSTRAINT [pk_buyer] PRIMARY key CLUSTERED ([id] asc)
+)
+
+create table [ordering].[card_type](
+    [id] int not null,
+    [name] nvarchar(250) not null,
+    CONSTRAINT [pk_card_type] PRIMARY KEY CLUSTERED ([id] asc)
+)
+
+create table [ordering].[order_status](
+    [id] int not null,
+    [name] nvarchar(250) not null,
+    CONSTRAINT [pk_order_status] PRIMARY KEY CLUSTERED ([id] asc)
+)
+
+create table [ordering].[card](
+    [id] char(36) not null,
+    [buyer_id] char(36) not null,
+    [type_id] int not null,
+    [number] nvarchar(250) not null,
+    [security_number] nvarchar(250) not null,
+    [holder_name] nvarchar(250) not null,
+    [expiration] DATETIME2 not null,
+    CONSTRAINT [pk_card] PRIMARY key CLUSTERED ([id] asc),
+    CONSTRAINT [fk_buyer_card] FOREIGN key ([buyer_id]) REFERENCES [ordering].[buyer] (id),
+    CONSTRAINT [fk_card_type_card] FOREIGN KEY ([type_id]) REFERENCES [ordering].[card_type] (id)
+)
+
+create table [ordering].[order](
+    [id] char(36) not null,
+    [buyer_id] char(36) null,
+    [card_id] char(36) null,
+    [order_status_id] int not null,
+    [description] nvarchar(250) null,
+    [created] DATETIME2 not null,
+    [street] nvarchar(250) not null,
+    [city] nvarchar(250) not null,
+    [state] nvarchar(250) not null,
+    [country] nvarchar(250) not null,
+    [zip_code] nvarchar(250) not null,
+    CONSTRAINT [pk_order] PRIMARY key CLUSTERED ([id] asc),
+    CONSTRAINT [fk_buyer_order] FOREIGN key ([buyer_id]) REFERENCES [ordering].[buyer] ([id]),
+    CONSTRAINT [fk_card_order] FOREIGN key ([card_id]) REFERENCES [ordering].[card] ([id]),
+    CONSTRAINT [fk_order_status_order] FOREIGN key ([order_status_id]) REFERENCES [ordering].[order_status] ([id])
+)
+
+create table [ordering].[order_item](
+    [id] char(36) not null,
+    [order_id] char(36) not null,
+    [product_name] nvarchar(250) not null,
+    [unit_price] decimal(18,2) not null,
+    [units] int not null,
+    CONSTRAINT [pk_order_item] PRIMARY key CLUSTERED ([id], [order_id] asc),
+    CONSTRAINT [fk_order_order_item] FOREIGN key ([order_id]) REFERENCES [ordering].[order] ([id])
+)
+
+create table [ordering].[client_request](
+    [id] char(36) not null,
+    [name] nvarchar(250) not null,
+    [time] DATETIME2 not null,
+    CONSTRAINT [pk_client_request] PRIMARY key CLUSTERED ([id] asc)
+)
+
+insert into [ordering].[order_status]([id], [name]) values (1, 'Submitted')
+insert into [ordering].[order_status]([id], [name]) values (2, 'AwaitingValidation')
+insert into [ordering].[order_status]([id], [name]) values (3, 'StockConfirmed')
+insert into [ordering].[order_status]([id], [name]) values (4, 'Paid')
+insert into [ordering].[order_status]([id], [name]) values (5, 'Shipped')
+insert into [ordering].[order_status]([id], [name]) values (6, 'Cancelled')
+
+insert into [ordering].[card_type] (id, name) values (1, 'Amex')
+insert into [ordering].[card_type] (id, name) values (2, 'Visa')
+insert into [ordering].[card_type] (id, name) values (3, 'MasterCard')

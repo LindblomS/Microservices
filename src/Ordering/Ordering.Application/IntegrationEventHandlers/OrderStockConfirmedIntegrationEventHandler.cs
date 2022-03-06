@@ -20,6 +20,6 @@ public class OrderStockConfirmedIntegrationEventHandler : BaseIntegrationHandler
 
     public async Task Handle(OrderStockConfirmedIntegrationEvent @event)
     {
-        await Handle(async () => await mediator.Send(new SetStockConfirmedOrderStatusCommand(@event.OrderId)), @event);
+        await Handle(async () => await mediator.Send(new SetStockConfirmedOrderStatus(@event.OrderId)), @event);
     }
 }

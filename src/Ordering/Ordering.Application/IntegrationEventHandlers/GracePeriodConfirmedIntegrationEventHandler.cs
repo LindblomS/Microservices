@@ -22,6 +22,6 @@ public class GracePeriodConfirmedIntegrationEventHandler : BaseIntegrationHandle
 
     public async Task Handle(GracePeriodConfirmedIntegrationEvent @event)
     {
-        await Handle(async () => await mediator.Send(new SetAwaitingValidationOrderStatusCommand(@event.OrderId)), @event);
+        await Handle(async () => await mediator.Send(new SetAwaitingValidationOrderStatus(@event.OrderId)), @event);
     }
 }

@@ -30,21 +30,21 @@ public class UserCheckoutAcceptedIntegrationEventHandler : BaseIntegrationHandle
                 return;
             }
 
-            var command = new CreateOrderCommand(
+            var command = new CreateOrder(
                 @event.UserId,
                 @event.Username,
                 Map(@event.Address),
                 Map(@event.Card),
                 @event.BasketItems.Select(x => Map(x)));
 
-            var identifiedCommand = new IdentifiedCommand<CreateOrderCommand, bool>(command, @event.RequestId);
+            var identifiedCommand = new IdentifiedCommand<CreateOrder, bool>(command, @event.RequestId);
 
             _ = await mediator.Send(identifiedCommand);
         }, @event);
 
     }
 
-    static CreateOrderCommand.AddressDto Map(UserCheckoutAcceptedIntegrationEvent.AddressDto address)
+    static CreateOrder.AddressDto Map(UserCheckoutAcceptedIntegrationEvent.AddressDto address)
     {
         return new(
             address.City,
@@ -54,7 +54,7 @@ public class UserCheckoutAcceptedIntegrationEventHandler : BaseIntegrationHandle
             address.State);
     }
 
-    static CreateOrderCommand.CardDto Map(UserCheckoutAcceptedIntegrationEvent.CardDto card)
+    static CreateOrder.CardDto Map(UserCheckoutAcceptedIntegrationEvent.CardDto card)
     {
         return new(
             card.TypeId,
@@ -64,7 +64,7 @@ public class UserCheckoutAcceptedIntegrationEventHandler : BaseIntegrationHandle
             card.Expiration);
     }
 
-    static CreateOrderCommand.OrderItem Map(UserCheckoutAcceptedIntegrationEvent.BasketItem item)
+    static CreateOrder.OrderItem Map(UserCheckoutAcceptedIntegrationEvent.BasketItem item)
     {
         return new(
             item.ProductId,

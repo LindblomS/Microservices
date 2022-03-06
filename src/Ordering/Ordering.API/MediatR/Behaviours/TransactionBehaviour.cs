@@ -7,8 +7,9 @@ using Serilog.Context;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Ordering.Application.Commands;
 
-public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
+public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : Command<TResponse>
 {
     readonly OrderingContext context;
     readonly IIntegrationEventService integrationEventService;
@@ -44,7 +45,7 @@ public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
                 using (LogContext.PushProperty("TransactionContext", transaction.TransactionId))
                 {
                     logger.LogInformation("Begin transaction {TransactionId} for {CommandName}", transaction.TransactionId, typeName);
-                    var response = await next();
+                    response = await next();
                     logger.LogInformation("Commit transaction {TransactionId} for {CommandName}", transaction.TransactionId, typeName);
                     await context.CommitTransactionAsync(transaction);
                     transactionId = transaction.TransactionId;

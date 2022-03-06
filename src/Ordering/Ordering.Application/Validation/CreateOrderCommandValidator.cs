@@ -3,7 +3,7 @@
 using FluentValidation;
 using Ordering.Application.Commands;
 
-public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
+public class CreateOrderCommandValidator : AbstractValidator<CreateOrder>
 {
     public CreateOrderCommandValidator()
     {
@@ -21,7 +21,7 @@ public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
             .SetValidator(orderItemValidator);
     }
 
-    class OrderItemValidator : AbstractValidator<CreateOrderCommand.OrderItem>
+    class OrderItemValidator : AbstractValidator<CreateOrder.OrderItem>
     {
         public OrderItemValidator()
         {
@@ -32,7 +32,7 @@ public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
         }
     }
 
-    class AddressValidator : AbstractValidator<CreateOrderCommand.AddressDto>
+    class AddressValidator : AbstractValidator<CreateOrder.AddressDto>
     {
         public AddressValidator()
         {

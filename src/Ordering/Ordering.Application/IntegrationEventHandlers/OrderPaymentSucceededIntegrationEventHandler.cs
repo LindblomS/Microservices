@@ -20,6 +20,6 @@ public class OrderPaymentSucceededIntegrationEventHandler : BaseIntegrationHandl
 
     public async Task Handle(OrderPaymentSucceededIntegrationEvent @event)
     {
-        await Handle(async () => await mediator.Send(new SetPaidOrderStatusCommand(@event.OrderId)), @event);
+        await Handle(async () => await mediator.Send(new SetPaidOrderStatus(@event.OrderId)), @event);
     }
 }

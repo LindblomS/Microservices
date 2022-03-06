@@ -3,7 +3,7 @@
 using FluentValidation;
 using Ordering.Application.Commands;
 
-public class SetAwaitingValidationOrderStatusCommandValidator : AbstractValidator<SetAwaitingValidationOrderStatusCommand>
+public class SetAwaitingValidationOrderStatusCommandValidator : AbstractValidator<SetAwaitingValidationOrderStatus>
 {
     public SetAwaitingValidationOrderStatusCommandValidator()
     {

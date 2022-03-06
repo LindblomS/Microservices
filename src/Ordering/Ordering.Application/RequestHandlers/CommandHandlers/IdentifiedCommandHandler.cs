@@ -1,10 +1,11 @@
-﻿namespace Ordering.Application.Commands;
+﻿namespace Ordering.Application.RequestHandlers.CommandHandlers;
 
 using MediatR;
 using Ordering.Application.Services;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Ordering.Application.Commands;
 
 public class IdentifiedCommandHandler<TCommand, TResponse> : IRequestHandler<IdentifiedCommand<TCommand, TResponse>, TResponse>
     where TCommand : IRequest<TResponse>

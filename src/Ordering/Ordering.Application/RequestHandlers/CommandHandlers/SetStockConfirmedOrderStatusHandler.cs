@@ -1,28 +1,28 @@
-﻿namespace Ordering.Application.Commands;
+﻿namespace Ordering.Application.RequestHandlers.CommandHandlers;
 
 using MediatR;
 using Ordering.Application.Services;
 using Ordering.Domain.AggregateModels.Order;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Ordering.Application.Commands;
 
-public class SetAwaitingValidationOrderStatusCommandHandler : IRequestHandler<SetAwaitingValidationOrderStatusCommand, bool>
+public class SetStockConfirmedOrderStatusHandler : IRequestHandler<SetStockConfirmedOrderStatus, bool>
 {
     readonly IOrderRepository orderRepository;
     readonly DomainEventPublisher domainEventPublisher;
 
-    public SetAwaitingValidationOrderStatusCommandHandler(IOrderRepository orderRepository, DomainEventPublisher domainEventPublisher)
+    public SetStockConfirmedOrderStatusHandler(IOrderRepository orderRepository, DomainEventPublisher domainEventPublisher)
     {
         this.orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
         this.domainEventPublisher = domainEventPublisher ?? throw new ArgumentNullException(nameof(domainEventPublisher));
     }
 
-    public async Task<bool> Handle(SetAwaitingValidationOrderStatusCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(SetStockConfirmedOrderStatus request, CancellationToken cancellationToken)
     {
         var order = await orderRepository.GetAsync(request.OrderId);
 
-        order.SetAwaitingValidationStatus();
+        order.SetStockConfirmedStatus();
 
         await orderRepository.UpdateAsync(order);
         await domainEventPublisher.PublishAsync(order);
@@ -30,10 +30,9 @@ public class SetAwaitingValidationOrderStatusCommandHandler : IRequestHandler<Se
         return true;
     }
 }
-
-public class SetAwaitingValidationOrderStatusIdentifiedCommandHandler : IdentifiedCommandHandler<SetAwaitingValidationOrderStatusCommand, bool>
+public class SetStockConfirmedOrderStatusIdentifiedCommandHandler : IdentifiedCommandHandler<SetStockConfirmedOrderStatus, bool>
 {
-    public SetAwaitingValidationOrderStatusIdentifiedCommandHandler(
+    public SetStockConfirmedOrderStatusIdentifiedCommandHandler(
         IRequestManager requestManager,
         IMediator mediator)
         : base(requestManager, mediator)

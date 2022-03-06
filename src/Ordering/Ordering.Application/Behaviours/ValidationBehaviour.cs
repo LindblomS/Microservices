@@ -23,7 +23,7 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
     public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
     {
         var typeName = request.GetType().Name;
-        logger.LogInformation("Validating command {CommandType}", typeName);
+        logger.LogInformation("Validating request {RequestType}", typeName);
 
         var errors = validators
             .Select(v => v.Validate(request))
@@ -32,12 +32,12 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
 
         if (errors.Any())
         {
-            logger.LogWarning("Validation errors - {CommandType} - Command {@Command} - Errors: {@ValidatonErrors}",
+            logger.LogWarning("Validation errors - {RequestType} - Request {@Request} - Errors: {@ValidatonErrors}",
                 typeName,
                 request,
                 errors);
 
-            throw new CommandValidationException(errors.Select(e => e.ErrorMessage));
+            throw new RequestValidationException(errors.Select(e => e.ErrorMessage));
         }
 
         return await next();

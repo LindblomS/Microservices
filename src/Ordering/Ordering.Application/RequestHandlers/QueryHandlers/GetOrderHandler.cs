@@ -1,4 +1,4 @@
-﻿namespace Ordering.Application.QueryHandlers;
+﻿namespace Ordering.Application.RequestHandlers.QueryHandlers;
 
 using MediatR;
 using Ordering.Application.Repositories;
@@ -6,8 +6,7 @@ using Ordering.Contracts.Requests;
 using System.Threading;
 using System.Threading.Tasks;
 
-public class GetOrderHandler<TRequest, TResponse> : IRequestHandler<GetOrder, GetOrder.Order>
-    where TRequest : IRequest
+public class GetOrderHandler : IRequestHandler<GetOrder, GetOrder.Order>
 {
     readonly IQueryRepository repository;
 

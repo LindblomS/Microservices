@@ -17,10 +17,10 @@ public class LoggingBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest,
 
     public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
     {
-        var commandName = request.GetGenericTypeName();
-        logger.LogInformation("Handling command {CommandName} ({@Command})", commandName, request);
+        var requestName = request.GetGenericTypeName();
+        logger.LogInformation("Handling request {RequestName} ({@Request})", requestName, request);
         var response = await next();
-        logger.LogInformation("Command {CommandName} handled - response: {@Response}", commandName, response);
+        logger.LogInformation("Response {ResponseName} handled - response: {@Response}", requestName, response);
         return response;
     }
 }

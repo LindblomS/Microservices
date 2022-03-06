@@ -3,9 +3,9 @@
 using System;
 using System.Collections.Generic;
 
-public class CommandValidationException : Exception
+public class RequestValidationException : Exception
 {
-    public CommandValidationException(IEnumerable<string> validationErrors) : base()
+    public RequestValidationException(IEnumerable<string> validationErrors) : base()
     {
         ValidatonErrors = validationErrors;
     }

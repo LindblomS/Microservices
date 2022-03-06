@@ -4,7 +4,7 @@ using FluentValidation;
 using Ordering.Application.Commands;
 using Ordering.Application.Services;
 
-public class CancelOrderCommandValidator : AbstractValidator<CancelOrderCommand>
+public class CancelOrderCommandValidator : AbstractValidator<CancelOrder>
 {
     public CancelOrderCommandValidator(IValidationService service)
     {

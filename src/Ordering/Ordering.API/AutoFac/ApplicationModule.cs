@@ -6,10 +6,10 @@ using FluentValidation;
 using global::MediatR;
 using Ordering.API.MediatR.Behaviours;
 using Ordering.Application.Behaviours;
-using Ordering.Application.Commands;
 using Ordering.Application.DomainEventHandlers.OrderStarted;
 using Ordering.Application.IntegrationEventHandlers;
 using Ordering.Application.Repositories;
+using Ordering.Application.RequestHandlers.CommandHandlers;
 using Ordering.Application.Services;
 using Ordering.Application.Validation;
 using Ordering.Domain.AggregateModels.Buyer;
@@ -72,7 +72,7 @@ public class ApplicationModule : Autofac.Module
     void RegisterCommandHandlers(ContainerBuilder builder)
     {
         builder
-            .RegisterAssemblyTypes(typeof(CreateOrderCommandHandler).GetTypeInfo().Assembly)
+            .RegisterAssemblyTypes(typeof(CreateOrderHandler).GetTypeInfo().Assembly)
             .AsClosedTypesOf(typeof(IRequestHandler<,>));
     }
 

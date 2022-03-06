@@ -1,21 +1,22 @@
-﻿namespace Ordering.Application.Commands;
+﻿namespace Ordering.Application.RequestHandlers.CommandHandlers;
 
 using MediatR;
 using Ordering.Application.Services;
 using Ordering.Domain.AggregateModels.Order;
 using System.Threading;
 using System.Threading.Tasks;
+using Ordering.Application.Commands;
 
-public class SetStockRejectedOrderStatusCommandHandler : IRequestHandler<SetStockRejectedOrderStatusCommand, bool>
+public class SetStockRejectedOrderStatusHandler : IRequestHandler<SetStockRejectedOrderStatus, bool>
 {
     readonly IOrderRepository orderRepository;
 
-    public SetStockRejectedOrderStatusCommandHandler(IOrderRepository orderRepository)
+    public SetStockRejectedOrderStatusHandler(IOrderRepository orderRepository)
     {
         this.orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
     }
 
-    public async Task<bool> Handle(SetStockRejectedOrderStatusCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(SetStockRejectedOrderStatus request, CancellationToken cancellationToken)
     {
         var order = await orderRepository.GetAsync(request.OrderId);
         order.SetCancelledStatusWhenStockIsRejected(request.StockItems);
@@ -26,7 +27,7 @@ public class SetStockRejectedOrderStatusCommandHandler : IRequestHandler<SetStoc
     }
 }
 
-public class SetStockRejectedOrderStatusIdentifiedCommandHandler : IdentifiedCommandHandler<SetStockRejectedOrderStatusCommand, bool>
+public class SetStockRejectedOrderStatusIdentifiedCommandHandler : IdentifiedCommandHandler<SetStockRejectedOrderStatus, bool>
 {
     public SetStockRejectedOrderStatusIdentifiedCommandHandler(
         IRequestManager requestManager,
