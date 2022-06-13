@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Ordering.Application.Commands;
 
 public class IdentifiedCommandHandler<TCommand, TResponse> : IRequestHandler<IdentifiedCommand<TCommand, TResponse>, TResponse>
-    where TCommand : IRequest<TResponse>
+    where TCommand : Command<TResponse>
 {
     readonly IRequestManager requestManager;
     readonly IMediator mediator;

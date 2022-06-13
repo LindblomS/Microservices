@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-public record CreateOrderDraft(Guid buyerId, IEnumerable<CreateOrderDraft.OrderItem> orderItems) : Command<CreateOrderDraft.Draft>
+public record CreateOrderDraft(Guid BuyerId, IEnumerable<CreateOrderDraft.OrderItem> OrderItems) : Command<CreateOrderDraft.Draft>
 {
     public record Draft(
         IEnumerable<OrderItem> OrderItems,
