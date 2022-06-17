@@ -77,6 +77,15 @@ services:
       - apigateway
     restart: on-failure
     
+  shopping-webapp:
+    image: shopping-webapp:latest
+    build:
+      context: .
+      dockerfile: Clients/Shopping.WebApp/Dockerfile
+    depends_on:
+      - apigateway
+    restart: on-failure
+    
   apigateway:
     image: apigateway:latest
     build:

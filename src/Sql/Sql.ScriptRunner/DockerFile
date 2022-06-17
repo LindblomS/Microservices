@@ -10,5 +10,5 @@ WORKDIR /app
 COPY --from=build /app/out .
 COPY Ordering/Ordering.Infrastructure/Sql/ Scripts/ordering/ 
 COPY Catalog/Catalog.Infrastructure/Sql/ Scripts/catalog/ 
-COPY EventBus/IntegrationEventLogEF/Sql/ Scripts/integrationEventLog/
+COPY EventBus/IntegrationEventLogEF/sql/ Scripts/integrationEventLog/
 ENTRYPOINT ["dotnet", "Sql.ScriptRunner.dll"]

@@ -33,7 +33,7 @@ public class RedisBasketRepository : IBasketRepository
         await database.KeyDeleteAsync(buyerId.ToString());
     }
 
-    public async Task<Basket?> GetBasketAsync(Guid buyerId)
+    public async Task<Basket> GetBasketAsync(Guid buyerId)
     {
         var basket = await database.StringGetAsync(buyerId.ToString());
 

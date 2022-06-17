@@ -28,8 +28,7 @@ public class Startup
     {
         services.AddEventBus(Configuration);
         services
-            .AddTransient<IIntegrationEventHandler<OrderStartedIntegrationEvent>, OrderStartedIntegrationEventHandler>()
-            .AddTransient<IIntegrationEventHandler<ProductPriceChangedIntegrationEvent>, ProductPriceChangedIntegrationEventHandler>();
+            .AddTransient<IIntegrationEventHandler<OrderStartedIntegrationEvent>, OrderStartedIntegrationEventHandler>();
 
         services.AddControllers(options =>
         {

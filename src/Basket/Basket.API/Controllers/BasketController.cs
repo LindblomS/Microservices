@@ -27,9 +27,9 @@ public class BasketController : ControllerBase
 
     [Route("{buyerId}")]
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<Models.BasketItem>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<Contracts.Models.BasketItem>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<IEnumerable<Models.BasketItem>>> GetAsync(string buyerId)
+    public async Task<ActionResult<IEnumerable<Contracts.Models.BasketItem>>> GetAsync(string buyerId)
     {
         if (!Guid.TryParse(buyerId, out var parsedId))
             return BadRequest("Invalid buyer id. Buyer id must be a valid GUID");
@@ -61,7 +61,7 @@ public class BasketController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateCheckout([FromBody] Models.BasketCheckout checkout, [FromHeader(Name = "request_id")] string requestId)
+    public async Task<IActionResult> CreateCheckout([FromBody] Contracts.Models.BasketCheckout checkout, [FromHeader(Name = "request_id")] string requestId)
     {
         if (!Guid.TryParse(checkout.BuyerId, out var buyerId))
             return BadRequest("Buyer id was invalid. Buyer id must be a valid GUID");
@@ -109,7 +109,19 @@ public class BasketController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateAsync(string buyerId, [FromBody] IEnumerable<Models.BasketItem> items)
+    public async Task<IActionResult> AddAsync(string buyerId, [FromBody] string productId)
+    {
+        if (!Guid.TryParse(buyerId, out var parsedBuyerId))
+            return BadRequest("Buyer id was invalid. Buyer id must be a valid GUID");
+
+
+    }
+
+    [Route("{buyerId}")]
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateAsync(string buyerId, [FromBody] IEnumerable<Guid> items)
     {
         if (!Guid.TryParse(buyerId, out var parsedBuyerId))
             return BadRequest("Buyer id was invalid. Buyer id must be a valid GUID");

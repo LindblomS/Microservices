@@ -1,0 +1,26 @@
+﻿@model IReadOnlyCollection<Catalog.Contracts.Queries.Item>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Items</h1>
+</div>
+
+<div>
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li class="list-group-item">
+                <p>Name: @item.Name</p>
+                <p>Description: @item.Description</p>
+                <p>Brand: @item.Brand</p>
+                <p>Type: @item.Type</p>
+                <p>Price: @item.Price</p>
+                <p>AvailableStock: @item.AvailableStock</p>
+                <a class="nav-link text-dark" asp-action>Add</a>
+            </li>
+        }
+    </ul>
+</div>
+

@@ -24,18 +24,11 @@ public class Basket : IAggregateRoot
 
     public void AddBasketItem(BasketItem item)
     {
-        if (item is null)
-            throw new BasketDomainException("Could not add basket item. Item is missing");
+        var existingItem = items.SingleOrDefault(x => x.ProductId == item.ProductId);
 
-        items.Add(item);
-    }
+        if (existingItem is null)
+            items.Add(item);
 
-    public void UpdatePrice(Guid productId, decimal newPrice)
-    {
-        if (productId == default)
-            throw new BasketDomainException("Could not update price. Product id was not valid. Product id must be a valid GUID");
-
-        foreach (var item in items.Where(x => x.ProductId == productId))
-            item.UpdatePrice(newPrice);
+        item.AddUnit();
     }
 }

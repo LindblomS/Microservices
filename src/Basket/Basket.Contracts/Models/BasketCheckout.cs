@@ -1,4 +1,4 @@
-﻿namespace Basket.API.Models;
+﻿namespace Basket.Contracts.Models;
 
 public class BasketCheckout
 {
