@@ -4,7 +4,6 @@ using Basket.API.Mappers;
 using Basket.Contracts.IntegrationEvents;
 using Basket.Domain.AggregateModels;
 using EventBus.EventBus.Abstractions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -114,34 +113,23 @@ public class BasketController : ControllerBase
         if (!Guid.TryParse(buyerId, out var parsedBuyerId))
             return BadRequest("Buyer id was invalid. Buyer id must be a valid GUID");
 
+        if (!Guid.TryParse(productId, out var parsedProductId))
+            return BadRequest("Product id was invalid. Product id must be a valid GUID");
 
-    }
-
-    [Route("{buyerId}")]
-    [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateAsync(string buyerId, [FromBody] IEnumerable<Guid> items)
-    {
-        if (!Guid.TryParse(buyerId, out var parsedBuyerId))
-            return BadRequest("Buyer id was invalid. Buyer id must be a valid GUID");
-
-        var originalBasket = await basketRepository.GetBasketAsync(parsedBuyerId);
-        var originalItems = originalBasket is null 
-            ? new List<BasketItem>() 
-            : originalBasket.Items.ToList();
-
-        var basket = new Basket(parsedBuyerId);
-        foreach (var item in items)
+        var basket = await basketRepository.GetBasketAsync(parsedBuyerId);
+        var basketExists = basket is not null;
+        if (!basketExists)
         {
-            if (!Guid.TryParse(item.ProductId, out var parsedProductId))
-                return BadRequest("ProductId was not valid for one or more items");
-
-            var oldPrice = originalItems.SingleOrDefault(x => x.ProductId == parsedProductId)?.OldUnitPrice ?? 0;
-            basket.AddBasketItem(BasketMapper.Map(item, oldPrice));
+            basket = new Basket(parsedBuyerId);
+            logger.LogInformation("Creating basket with buyerId {BuyerId}", parsedBuyerId);
         }
 
-        logger.LogInformation("Updating basket with buyerId {BuyerId}", parsedBuyerId);
+        basket.AddBasketItem(new BasketItem(parsedProductId));
+        var logMessage = basketExists
+            ? "Updating basket with buyerId {BuyerId}"
+            : "Creating basket with buyerId {BuyerId}";
+
+        logger.LogInformation(logMessage, parsedBuyerId);
         await basketRepository.CreateUpdateBasketAsync(basket);
         return Ok();
     }

@@ -5,18 +5,24 @@ using EventBus.EventBus.Abstractions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Ordering.Application.Commands;
+using Ordering.Application.Services;
 using System;
 using System.Threading.Tasks;
 
 public class UserCheckoutAcceptedIntegrationEventHandler : BaseIntegrationHandler, IIntegrationEventHandler<UserCheckoutAcceptedIntegrationEvent>
 {
     readonly IMediator mediator;
+    readonly ICatalogService catalogService;
     readonly ILogger<UserCheckoutAcceptedIntegrationEventHandler> logger;
 
-    public UserCheckoutAcceptedIntegrationEventHandler(IMediator mediator, ILogger<UserCheckoutAcceptedIntegrationEventHandler> logger)
+    public UserCheckoutAcceptedIntegrationEventHandler(
+        IMediator mediator, 
+        ICatalogService catalogService, 
+        ILogger<UserCheckoutAcceptedIntegrationEventHandler> logger)
         : base(logger)
     {
         this.mediator = mediator;
+        this.catalogService = catalogService;
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -30,12 +36,17 @@ public class UserCheckoutAcceptedIntegrationEventHandler : BaseIntegrationHandle
                 return;
             }
 
+            var items = new List<CreateOrder.OrderItem>();
+            var catalogItems = await catalogService.GetAsync(@event.BasketItems.Select(x => x.ProductId));
+            foreach (var catalogItem in catalogItems)
+                items.Add(Map(catalogItem, @event.BasketItems.Single(x => x.ProductId.ToString() == catalogItem.Id).Units));
+
             var command = new CreateOrder(
                 @event.UserId,
                 @event.Username,
                 Map(@event.Address),
                 Map(@event.Card),
-                @event.BasketItems.Select(x => Map(x)));
+                items);
 
             var identifiedCommand = new IdentifiedCommand<CreateOrder, bool>(command, @event.RequestId);
 
@@ -64,12 +75,12 @@ public class UserCheckoutAcceptedIntegrationEventHandler : BaseIntegrationHandle
             card.Expiration);
     }
 
-    static CreateOrder.OrderItem Map(UserCheckoutAcceptedIntegrationEvent.BasketItem item)
+    static CreateOrder.OrderItem Map(Catalog.Contracts.Queries.Item item, int units)
     {
         return new(
-            item.ProductId,
-            item.ProductName,
-            item.UnitPrice,
-            item.Units);
+            Guid.Parse(item.Id),
+            item.Name,
+            item.Price,
+            units);
     }
 }

@@ -5,6 +5,16 @@ using Basket.Contracts.Models;
 
 public static class BasketMapper
 {
+    public static IEnumerable<BasketItem> Map(IEnumerable<Domain.AggregateModels.BasketItem> items)
+    {
+        var list = new List<BasketItem>();
+
+        foreach (var item in items)
+            list.Add(new(item.ProductId, item.Units));
+
+        return list;
+    }
+
     public static UserCheckoutAcceptedIntegrationEvent.BasketItem MapEventItem(Domain.AggregateModels.BasketItem item)
     {
         return new(

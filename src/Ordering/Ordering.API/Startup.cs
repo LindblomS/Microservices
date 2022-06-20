@@ -18,6 +18,7 @@ using Microsoft.Extensions.Logging;
 using Ordering.API.AutoFac;
 using Ordering.Contracts.IntegrationEvents;
 using Ordering.Infrastructure.EntityFramework;
+using Ordering.Infrastructure.Options;
 using Payment.Contracts.IntegrationEvents;
 using RabbitMQ.Client;
 using Serilog;
@@ -38,7 +39,7 @@ public class Startup
         services.AddCustomDbContext(Configuration);
         services.AddEventBus(Configuration);
         services.AddControllers();
-
+        services.Configure<CatalogApiOptions>(Configuration.GetSection(nameof(CatalogApiOptions)));
         var container = new ContainerBuilder();
 
         container.Populate(services);

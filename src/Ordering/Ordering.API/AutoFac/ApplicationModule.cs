@@ -104,6 +104,7 @@ public class ApplicationModule : Autofac.Module
         builder.RegisterType<DomainEventPublisher>();
         builder.RegisterType<RequestManager>().As<IRequestManager>();
         builder.RegisterType<IntegrationEventService>().As<IIntegrationEventService>().InstancePerLifetimeScope();
+        builder.RegisterType<CatalogService>().As<ICatalogService>();
     }
 
     void RegisterBehaviours(ContainerBuilder builder)
