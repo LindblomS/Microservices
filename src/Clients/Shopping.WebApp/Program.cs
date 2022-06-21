@@ -5,8 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
-builder.Services.AddTransient<BasketService>();
-builder.Services.AddTransient<CatalogService>();
+builder.Services.AddTransient<IBasketService, BasketService>();
+builder.Services.AddTransient<ICatalogService, CatalogService>();
 builder.Services.Configure<ApiOptions>(builder.Configuration.GetSection(nameof(ApiOptions)));
 
 var app = builder.Build();

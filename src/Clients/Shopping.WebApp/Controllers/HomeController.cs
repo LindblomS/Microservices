@@ -7,16 +7,18 @@
 
     public class HomeController : Controller
     {
-        readonly CatalogService service;
+        readonly ICatalogService catalogService;
+        readonly IBasketService basketService;
 
-        public HomeController(CatalogService service)
+        public HomeController(ICatalogService catalogService, IBasketService basketService)
         {
-            this.service = service;
+            this.catalogService = catalogService;
+            this.basketService = basketService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var items = await service.GetAsync();
+            var items = await catalogService.GetAsync();
             return View(items);
         }
 
